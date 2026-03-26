@@ -50,7 +50,7 @@ const ServicesSection = () => {
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/10 rounded-full -mr-32 -mt-32 -z-0" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100/10 rounded-full -ml-32 -mb-32 -z-0" />
 
-      <div className="relative z-10 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full">
         <div className="text-center max-w-4xl mx-auto mb-12 md:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -58,7 +58,7 @@ const ServicesSection = () => {
             viewport={{ once: true }}
           >
              <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Nuestros Servicios</span>
-             <h2 className="text-3xl md:text-5xl font-black text-neutral-800 mb-6 leading-tight">
+             <h2 className="text-3xl md:text-4xl font-black text-neutral-800 mb-6 leading-tight">
                Soluciones Inmobiliarias de <br className="hidden md:block" /> <span className="text-[#0040FF]">Siguiente Generación</span>.
              </h2>
              <p className="text-neutral-500 font-medium text-lg leading-relaxed max-w-2xl mx-auto">

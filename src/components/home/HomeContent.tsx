@@ -14,11 +14,11 @@ export function HomeContent() {
       <Hero />
       
       {/* Featured Properties Section */}
-      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full border-b border-slate-100 relative overflow-hidden">
+      <section className="py-16 md:py-24 max-w-7xl mx-auto px-6 lg:px-12 w-full border-b border-slate-100 relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-20 gap-8">
           <div className="text-left space-y-3 md:space-y-4 max-w-2xl">
             <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] block">Catálogo Exclusivo</span>
-            <h2 className="text-2xl md:text-5xl font-black text-neutral-800 leading-[1.1] tracking-tighter">
+            <h2 className="text-2xl md:text-4xl font-black text-neutral-800 leading-[1.1] tracking-tighter">
               Propiedades <br /> <span className="text-[#0040FF]">Destacadas</span>.
             </h2>
             <p className="text-neutral-500 font-medium text-sm md:text-lg leading-relaxed">
@@ -57,9 +57,10 @@ export function HomeContent() {
       <ServicesSection />
 
       {/* Honecta Network Call to Action */}
-      <section className="py-16 md:py-24 bg-neutral-900 mx-4 lg:mx-8 mb-16 md:mb-24 rounded-[2rem] md:rounded-[4rem] text-white overflow-hidden relative">
-         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#0040FF]/5 rounded-full -mr-64 -mt-64" />
-         <div className="max-w-[1700px] mx-auto px-6 md:px-10 relative z-10">
+      <section className="py-16 md:py-24 max-w-7xl mx-auto px-6 lg:px-12 w-full mb-16 md:mb-24 relative">
+        <div className="bg-neutral-900 rounded-[2rem] md:rounded-[4rem] text-white overflow-hidden relative p-8 md:p-16">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#0040FF]/5 rounded-full -mr-64 -mt-64" />
+          <div className="relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
                <div>
                   <div className="flex items-center gap-3 mb-6 md:mb-8">
@@ -68,7 +69,7 @@ export function HomeContent() {
                      </div>
                      <span className="font-black text-[#0040FF] uppercase tracking-widest text-[10px]">Propulsado por Honecta®</span>
                   </div>
-                  <h2 className="text-3xl md:text-7xl font-black mb-6 md:mb-8 leading-[1] tracking-tighter">
+                  <h2 className="text-3xl md:text-4xl font-black mb-6 md:mb-8 leading-[1] tracking-tighter">
                      Toda la Oferta <br className="hidden md:block" /> de Piura en <span className="text-[#0040FF]">Un Solo Lugar</span>.
                   </h2>
                   <p className="text-slate-400 font-medium text-sm md:text-lg leading-relaxed mb-8 md:mb-12 max-w-lg">
@@ -106,7 +107,8 @@ export function HomeContent() {
                   ))}
                </div>
             </div>
-         </div>
+          </div>
+        </div>
       </section>
     </main>
   );

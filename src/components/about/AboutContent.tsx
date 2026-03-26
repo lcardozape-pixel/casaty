@@ -22,7 +22,7 @@ export function AboutContent() {
   return (
     <main className="flex min-h-screen flex-col bg-white overflow-x-hidden">
       {/* 1. Introductory Header */}
-      <section className="pt-24 md:pt-32 pb-20 md:pb-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full border-b border-slate-100 bg-white rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
+      <section className="pt-24 md:pt-32 pb-20 md:pb-24 max-w-7xl mx-auto px-6 lg:px-12 w-full border-b border-slate-100 bg-white rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -30,7 +30,7 @@ export function AboutContent() {
             transition={{ duration: 0.5 }}
           >
             <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Sobre Nosotros</span>
-            <h1 className="text-3xl md:text-7xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
+            <h1 className="text-3xl md:text-5xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
               Transformando el Sector <br className="hidden md:block" /> Inmobiliario en <span className="text-[#0040FF]">Piura</span>.
             </h1>
             <p className="text-base md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
@@ -51,7 +51,7 @@ export function AboutContent() {
               <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-slate-50 flex items-center justify-center mb-3 md:mb-4 group-hover:bg-[#0040FF] group-hover:scale-110 transition-all">
                 <stat.icon className="h-5 w-5 md:h-6 md:w-6 text-[#0040FF] group-hover:text-white" />
               </div>
-              <span className="text-2xl md:text-3xl font-black text-neutral-800 mb-1">{stat.value}</span>
+              <span className="text-2xl md:text-2xl font-black text-neutral-800 mb-1">{stat.value}</span>
               <span className="text-[9px] md:text-[10px] font-black text-neutral-400 uppercase tracking-widest leading-none">{stat.label}</span>
             </div>
           ))}
@@ -59,7 +59,7 @@ export function AboutContent() {
       </section>
 
       {/* 2. The Story Section */}
-      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full relative overflow-hidden">
+      <section className="py-16 md:py-24 max-w-7xl mx-auto px-6 lg:px-12 w-full relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-blue-100/50 rounded-full blur-[80px] md:blur-[100px] -mr-16 md:-mr-32 -mt-16 md:-mt-32 -z-10" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <motion.div
@@ -71,7 +71,7 @@ export function AboutContent() {
             <div className="h-14 w-14 bg-[#0040FF] rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200">
                <History className="h-7 w-7 text-white" />
             </div>
-            <h2 className="text-3xl md:text-5xl font-black text-neutral-800 leading-tight">
+            <h2 className="text-3xl md:text-4xl font-black text-neutral-800 leading-tight">
               Una visión que nació en el <span className="text-[#0040FF]">corazón de Piura</span>.
             </h2>
             <div className="space-y-6 text-neutral-500 font-medium text-lg leading-relaxed">
@@ -127,11 +127,11 @@ export function AboutContent() {
       {/* 3. Purpose & Values */}
       <section className="py-16 md:py-24 bg-neutral-900 rounded-[3rem] md:rounded-[4rem] mx-4 lg:mx-8 mb-20 md:mb-24 relative overflow-hidden text-white">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#0040FF]/20 rounded-full blur-[120px] -mr-32 -mt-32" />
-        <div className="relative z-10 max-w-[1700px] mx-auto px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-10">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
             <div className="lg:col-span-1">
               <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Nuestro ADN</span>
-              <h2 className="text-3xl md:text-5xl font-black mb-8 leading-tight">Principios <br /> que nos <span className="text-[#0040FF]">mueven</span>.</h2>
+              <h2 className="text-3xl md:text-4xl font-black mb-8 leading-tight">Principios <br /> que nos <span className="text-[#0040FF]">mueven</span>.</h2>
               <p className="text-slate-400 font-medium leading-relaxed italic border-l-4 border-[#0040FF] pl-6 py-2 mb-12">
                 "No solo vendemos casas, ayudamos a familias piuranas a sembrar las bases de su futuro con seguridad legal y comercial."
               </p>
@@ -177,7 +177,7 @@ export function AboutContent() {
       </section>
 
       {/* 4. Team Focus Section */}
-      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
+      <section className="py-16 md:py-24 max-w-7xl mx-auto px-6 lg:px-12 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
            <motion.div
              initial={{ opacity: 0, scale: 0.95 }}
@@ -200,7 +200,7 @@ export function AboutContent() {
            </motion.div>
 
            <div className="space-y-10">
-              <h2 className="text-3xl md:text-5xl font-black text-neutral-800 leading-tight">Un equipo que respira <br /> <span className="text-[#0040FF]">pasión inmobiliaria</span>.</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-neutral-800 leading-tight">Un equipo que respira <br /> <span className="text-[#0040FF]">pasión inmobiliaria</span>.</h2>
               <p className="text-neutral-500 font-medium text-lg leading-relaxed">
                 Nuestros agentes no solo venden metros cuadrados, venden hogares. Contamos con un equipo multidisciplinario de expertos en ventas, derecho inmobiliario y marketing digital.
               </p>
@@ -234,7 +234,7 @@ export function AboutContent() {
       <section className="py-24 bg-white border-t border-slate-100">
         <div className="max-w-4xl mx-auto px-4 text-center">
            <Globe className="h-16 w-16 text-[#0040FF]/20 mx-auto mb-10" />
-           <h2 className="text-3xl md:text-5xl font-black text-neutral-800 mb-8 leading-tight">Mirando hacia el futuro.</h2>
+           <h2 className="text-3xl md:text-4xl font-black text-neutral-800 mb-8 leading-tight">Mirando hacia el futuro.</h2>
            <p className="text-neutral-500 font-medium text-lg leading-relaxed mb-12">
              Nuestra meta es digitalizar por completo la experiencia inmobiliaria en el norte del país, eliminando la burocracia y el miedo, convirtiendo cada compra-venta en un motivo de celebración.
            </p>
@@ -258,8 +258,8 @@ export function AboutContent() {
 
       {/* Final CTA */}
       <section className="py-24 bg-[#0040FF]">
-        <div className="max-w-[1700px] mx-auto px-4 text-center text-white">
-           <h2 className="text-4xl md:text-6xl font-black mb-12">¿Empezamos tu historia hoy?</h2>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center text-white">
+           <h2 className="text-3xl lg:text-5xl font-black mb-12">¿Empezamos tu historia hoy?</h2>
            <div className="flex flex-col md:flex-row justify-center gap-4">
               <Button size="lg" className="bg-white text-[#0040FF] hover:bg-slate-100 px-12" showArrow>
                 Ver Propiedades

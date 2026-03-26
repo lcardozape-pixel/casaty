@@ -23,7 +23,7 @@ export function Hero() {
         />
       </div>
 
-      <div className="relative z-20 max-w-[1700px] mx-auto px-4 w-full">
+      <div className="relative z-20 max-w-6xl mx-auto px-6 lg:px-12 w-full">
         <div className="max-w-4xl mb-8">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -35,7 +35,7 @@ export function Hero() {
               <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">Más de 1,200 Propiedades en la red Honecta®</span>
             </div>
 
-            <h1 className="text-3xl md:text-6xl font-black text-white mb-4 leading-[1.1] tracking-tighter">
+            <h1 className="text-3xl md:text-5xl font-black text-white mb-4 leading-[1.1] tracking-tighter">
               El Hogar de Tus <br /> <span className="text-[#0040FF] drop-shadow-lg">Sueños</span> en Piura.
             </h1>
             <p className="text-sm md:text-xl text-white/90 font-medium max-w-xl leading-relaxed">
@@ -49,7 +49,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="relative group lg:max-w-5xl"
+          className="relative group lg:max-w-4xl"
         >
           {/* Tabs - Segmented Control style for Mobile */}
           <div className="flex p-1.5 bg-black/10 backdrop-blur-md md:backdrop-blur-none rounded-2xl mb-4 md:mb-3 relative z-10 md:ml-4 self-center w-full max-w-[340px] md:max-w-none md:bg-transparent md:p-0 md:rounded-none md:gap-3">

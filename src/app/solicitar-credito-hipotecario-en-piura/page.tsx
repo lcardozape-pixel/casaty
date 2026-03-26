@@ -205,13 +205,13 @@ export default function CreditoPage() {
             filter: "brightness(0.5)"
           }}
         />
-        <div className="relative z-10 max-w-[1700px] mx-auto px-4 text-center">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-12 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-3xl md:text-6xl font-black mb-6 leading-tight">
+            <h1 className="text-3xl md:text-5xl font-black mb-6 leading-tight">
               Consigue el Crédito para tu <br /> <span className="text-[#0040FF]">Próximo Hogar</span>
             </h1>
             <p className="text-sm md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
@@ -231,7 +231,7 @@ export default function CreditoPage() {
       </section>
 
       {/* 2. Trust Stats Bar */}
-      <section className="max-w-[1700px] mx-auto px-4 lg:px-8 -mt-16 relative z-30 w-full mb-12">
+      <section className="max-w-7xl mx-auto px-6 lg:px-12 -mt-16 relative z-30 w-full mb-12">
         <div className="bg-[#eff6ff] rounded-[2.5rem] shadow-2xl p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-12 border border-blue-100">
           <div className="flex flex-col items-center lg:items-start border-b lg:border-b-0 lg:border-r border-blue-200/50 pb-8 lg:pb-0 lg:pr-16 last:border-0 w-full lg:w-auto">
             <h3 className="text-neutral-800 font-black text-2xl mb-1 leading-tight text-center lg:text-left">
@@ -282,10 +282,10 @@ export default function CreditoPage() {
       </section>
 
       {/* 3. Mortgage Calculator Section */}
-      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
+      <section className="py-16 md:py-24 max-w-7xl mx-auto px-6 lg:px-12 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
           <div>
-            <h2 className="text-2xl md:text-5xl font-black text-neutral-800 mb-6 leading-tight">
+            <h2 className="text-2xl md:text-4xl font-black text-neutral-800 mb-6 leading-tight">
               Planifica tu futuro financiero hoy mismo.
             </h2>
             <p className="text-neutral-500 mb-8 md:mb-10 leading-relaxed font-normal text-base md:text-lg">
@@ -323,7 +323,7 @@ export default function CreditoPage() {
 
       {/* 4. Process Step by Step */}
       <section className="py-24 bg-white border-y border-slate-100">
-        <div className="max-w-[1700px] mx-auto px-4 text-center">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
           <h2 className="text-3xl font-black text-neutral-800 mb-4">Tu Crédito en 4 pasos</h2>
           <p className="text-neutral-500 font-medium mb-16 max-w-2xl mx-auto">
             Simplificamos el complejo mundo bancario para que tú solo te preocupes por decorar tu nuevo hogar.
@@ -385,8 +385,8 @@ export default function CreditoPage() {
 
       {/* 5. Benefits Grid */}
       <section className="py-24 bg-slate-50">
-        <div className="max-w-[1700px] mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-5xl font-black text-neutral-800 mb-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
+          <h2 className="text-3xl md:text-4xl font-black text-neutral-800 mb-16">
             ¿Por qué gestionar tu crédito con Casaty?
           </h2>
 
@@ -422,7 +422,7 @@ export default function CreditoPage() {
 
       {/* 6. FAQs */}
       <section className="py-24 bg-white border-t border-slate-100">
-        <div className="max-w-3xl mx-auto px-4 text-center">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
           <h2 className="text-3xl font-black text-neutral-800 mb-16">Preguntas frecuentes sobre Crédito Hipotecario</h2>
 
           <div className="space-y-4 text-left">
@@ -451,7 +451,7 @@ export default function CreditoPage() {
       {/* 7. Final CTA */}
       <section className="py-24 bg-[#eff6ff]">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-6xl font-black text-neutral-800 mb-8 leading-tight">
+          <h2 className="text-4xl md:text-5xl font-black text-neutral-800 mb-8 leading-tight">
             ¿Listo para dar el gran paso?
           </h2>
           <p className="text-neutral-500 font-bold mb-12 text-lg">

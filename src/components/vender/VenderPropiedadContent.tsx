@@ -56,13 +56,13 @@ export function VenderPropiedadContent() {
             filter: "brightness(0.5)"
           }}
         />
-        <div className="relative z-10 max-w-[1700px] mx-auto px-4 text-center">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-12 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-3xl md:text-6xl font-black mb-6 leading-tight">
+            <h1 className="text-3xl md:text-5xl font-black mb-6 leading-tight">
               Vende tu Propiedad Rápido y al <span className="text-[#0040FF]">Mejor Precio</span>
             </h1>
             <p className="text-sm md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
@@ -84,7 +84,7 @@ export function VenderPropiedadContent() {
       </section>
 
       {/* 2. Trust Stats Bar */}
-      <section className="max-w-[1700px] mx-auto px-4 lg:px-8 -mt-10 md:-mt-16 relative z-30 w-full mb-12">
+      <section className="max-w-7xl mx-auto px-6 lg:px-12 -mt-10 md:-mt-16 relative z-30 w-full mb-12">
         <div className="bg-[#eff6ff] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl p-6 md:p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-12 border border-blue-100">
           <div className="flex flex-col items-center lg:items-start border-b lg:border-b-0 lg:border-r border-blue-200/50 pb-8 lg:pb-0 lg:pr-16 last:border-0 w-full lg:w-auto">
             <h3 className="text-neutral-800 font-black text-2xl mb-1 leading-tight text-center lg:text-left">
@@ -132,10 +132,10 @@ export function VenderPropiedadContent() {
       </section>
 
       {/* 3. High Performance Sections */}
-      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full overflow-hidden">
+      <section className="py-16 md:py-24 max-w-7xl mx-auto px-6 lg:px-12 w-full overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center">
           <div>
-            <h2 className="text-2xl md:text-5xl font-black text-neutral-800 mb-6 leading-tight">
+            <h2 className="text-2xl md:text-4xl font-black text-neutral-800 mb-6 leading-tight">
               Cómo te ayudamos a vender tu inmueble.
             </h2>
             <p className="text-neutral-500 mb-8 leading-relaxed font-normal text-base md:text-lg">
@@ -200,8 +200,8 @@ export function VenderPropiedadContent() {
 
       {/* 4. Strategic Grid */}
       <section className="py-16 md:py-24 bg-white border-y border-slate-100">
-        <div className="max-w-[1700px] mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-5xl font-black text-neutral-800 mb-4">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
+          <h2 className="text-2xl md:text-4xl font-black text-neutral-800 mb-4">
             Estrategias que generan resultados
           </h2>
           <p className="text-neutral-500 font-medium mb-12 md:mb-16 max-w-2xl mx-auto text-sm md:text-base">
@@ -248,7 +248,7 @@ export function VenderPropiedadContent() {
 
       {/* 5. Process Step by Step */}
       <section className="py-24 bg-slate-50 border-t border-slate-100">
-        <div className="max-w-[1700px] mx-auto px-4 text-center">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
           <h2 className="text-3xl font-black text-neutral-800 mb-4">El Proceso de Venta Paso a Paso</h2>
           <p className="text-neutral-500 font-medium mb-16 max-w-2xl mx-auto">
             Te guiamos en cada etapa del proceso, garantizando transparencia y comunicación constante.
@@ -311,7 +311,7 @@ export function VenderPropiedadContent() {
 
       {/* 6. Success Grid */}
       <section className="py-24 bg-white overflow-hidden">
-        <div className="max-w-[1700px] mx-auto px-4 lg:px-8 w-full border-b border-slate-200 pb-20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 w-full border-b border-slate-200 pb-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="relative h-[450px]">
               <img
@@ -336,7 +336,7 @@ export function VenderPropiedadContent() {
         </div>
 
         {/* Portales Logos */}
-        <div className="max-w-[1700px] mx-auto px-4 lg:px-8 mt-20 text-center">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-20 text-center">
           <p className="text-xs font-black text-neutral-500 uppercase tracking-widest mb-10">Publicamos en los mejores portales</p>
           <div className="flex flex-wrap justify-center items-center gap-16 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-700">
             <span className="text-2xl font-black text-neutral-800">Urbania</span>
@@ -350,7 +350,7 @@ export function VenderPropiedadContent() {
 
       {/* 7. FAQs */}
       <section className="py-24 bg-white border-t border-slate-100">
-        <div className="max-w-3xl mx-auto px-4 text-center">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
           <h2 className="text-3xl font-black text-neutral-800 mb-16">Preguntas frecuentes para vender tu vivienda</h2>
 
           <div className="space-y-4 text-left">
@@ -379,7 +379,7 @@ export function VenderPropiedadContent() {
       {/* 8. Final CTA Center */}
       <section className="py-16 md:py-24 bg-[#eff6ff]">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-6xl font-black text-neutral-800 mb-8 leading-tight">
+          <h2 className="text-4xl md:text-5xl font-black text-neutral-800 mb-8 leading-tight">
             Vende tu propiedad sin estrés.
           </h2>
           <p className="text-neutral-500 font-bold mb-12 text-lg">

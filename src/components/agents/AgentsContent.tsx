@@ -72,7 +72,7 @@ export function AgentsContent() {
   return (
     <main className="flex min-h-screen flex-col bg-white overflow-x-hidden">
       {/* 1. Header */}
-      <section className="pt-24 md:pt-32 pb-16 md:pb-20 max-w-[1700px] mx-auto px-4 lg:px-8 w-full bg-white border-b border-slate-100 rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
+      <section className="pt-24 md:pt-32 pb-16 md:pb-20 max-w-7xl mx-auto px-6 lg:px-12 w-full bg-white border-b border-slate-100 rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -80,7 +80,7 @@ export function AgentsContent() {
             transition={{ duration: 0.5 }}
           >
             <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Nuestro Equipo</span>
-            <h1 className="text-3xl md:text-7xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
+            <h1 className="text-3xl md:text-5xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
               Asesores de Clase <br className="hidden md:block" /> <span className="text-[#0040FF]">Mundial</span>.
             </h1>
             <p className="text-base md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
@@ -120,7 +120,7 @@ export function AgentsContent() {
       </section>
 
       {/* 3. Agents Grid */}
-      <section className="py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
+      <section className="py-24 max-w-7xl mx-auto px-6 lg:px-12 w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {filteredAgents.map((agent, i) => (
             <motion.div
@@ -206,11 +206,11 @@ export function AgentsContent() {
       {/* 4. Join the Team Section (CTA) */}
       <section className="py-24 bg-neutral-900 rounded-[4rem] mx-4 lg:mx-8 mb-24 relative overflow-hidden text-white">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#0040FF]/20 rounded-full blur-[120px] -mr-32 -mt-32" />
-        <div className="relative z-10 max-w-[1700px] mx-auto px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-10">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
               <div>
                  <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">¿Eres Agente?</span>
-                 <h2 className="text-3xl md:text-5xl font-black mb-8 leading-tight">Únete al Equipo que está <br /> <span className="text-[#0040FF]">Reinventando la Ciudad</span>.</h2>
+                 <h2 className="text-3xl md:text-4xl font-black mb-8 leading-tight">Únete al Equipo que está <br /> <span className="text-[#0040FF]">Reinventando la Ciudad</span>.</h2>
                  <p className="text-slate-400 font-medium text-lg leading-relaxed mb-10 max-w-xl">
                    Si eres un agente profesional buscando las mejores herramientas y comisiones de Piura, queremos hablar contigo.
                  </p>

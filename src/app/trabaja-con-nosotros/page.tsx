@@ -25,7 +25,7 @@ export default function TrabajaNosotrosPage() {
   return (
     <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
       {/* 1. Header (Sin Hero Image como pidió el usuario) */}
-      <section className="pt-24 md:pt-32 pb-16 md:pb-20 max-w-[1700px] mx-auto px-4 lg:px-8 w-full bg-white border-b border-slate-100 rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
+      <section className="pt-24 md:pt-32 pb-16 md:pb-20 max-w-7xl mx-auto px-6 lg:px-12 w-full bg-white border-b border-slate-100 rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -33,7 +33,7 @@ export default function TrabajaNosotrosPage() {
             transition={{ duration: 0.5 }}
           >
             <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Carreras en Casaty</span>
-            <h1 className="text-3xl md:text-7xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
+            <h1 className="text-3xl md:text-5xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
               Lleva tu Carrera al <br className="hidden md:block" /> <span className="text-[#0040FF]">Siguiente Nivel</span>.
             </h1>
             <p className="text-base md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
@@ -62,7 +62,7 @@ export default function TrabajaNosotrosPage() {
       </section>
 
       {/* 2. Value Proposition Section */}
-      <section className="py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full relative overflow-hidden">
+      <section className="py-24 max-w-7xl mx-auto px-6 lg:px-12 w-full relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/50 rounded-full blur-[100px] -mr-32 -mt-32 -z-10" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <motion.div
@@ -74,7 +74,7 @@ export default function TrabajaNosotrosPage() {
             <div className="h-14 w-14 bg-[#0040FF] rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200">
                <Zap className="h-7 w-7 text-white" />
             </div>
-            <h2 className="text-3xl md:text-5xl font-black text-neutral-800 leading-tight">
+            <h2 className="text-3xl md:text-4xl font-black text-neutral-800 leading-tight">
               ¿Por qué unirte a la <br /> <span className="text-[#0040FF]">Red Casaty Honecta®</span>?
             </h2>
             <div className="space-y-6 text-neutral-500 font-medium text-lg leading-relaxed">
@@ -135,10 +135,10 @@ export default function TrabajaNosotrosPage() {
       {/* 3. Perks Section (Dark) */}
       <section className="py-24 bg-neutral-900 rounded-[4rem] mx-4 lg:mx-8 mb-24 relative overflow-hidden text-white">
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#0040FF]/20 rounded-full blur-[120px] -ml-32 -mb-32" />
-        <div className="relative z-10 max-w-[1700px] mx-auto px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 text-center">
           <div className="text-center mb-16">
             <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Beneficios Exclusivos</span>
-            <h2 className="text-3xl md:text-5xl font-black mb-4">Lo que ganas al ser un <span className="text-[#0040FF]">Agente Casaty</span>.</h2>
+            <h2 className="text-3xl md:text-4xl font-black mb-4">Lo que ganas al ser un <span className="text-[#0040FF]">Agente Casaty</span>.</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -164,7 +164,7 @@ export default function TrabajaNosotrosPage() {
                 icon: Heart
               }
             ].map((perk, i) => (
-              <div key={i} className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all group group/card">
+              <div key={i} className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all group group/card text-left">
                  <div className="h-14 w-14 rounded-2xl bg-[#0040FF]/20 flex items-center justify-center mb-8 group-hover/card:bg-[#0040FF] transition-all">
                     <perk.icon className="h-7 w-7 text-[#0040FF] group-hover/card:text-white" />
                  </div>
@@ -177,7 +177,7 @@ export default function TrabajaNosotrosPage() {
       </section>
 
       {/* 4. Requirements Section */}
-      <section className="py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
+      <section className="py-24 max-w-7xl mx-auto px-6 lg:px-12 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
            <motion.div
              initial={{ opacity: 0, scale: 0.95 }}
@@ -194,7 +194,7 @@ export default function TrabajaNosotrosPage() {
            </motion.div>
 
            <div className="space-y-10">
-              <h2 className="text-3xl md:text-5xl font-black text-neutral-800 leading-tight">¿Tienes el <span className="text-[#0040FF]">perfil</span>?</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-neutral-800 leading-tight">¿Tienes el <span className="text-[#0040FF]">perfil</span>?</h2>
               <p className="text-neutral-500 font-medium text-lg leading-relaxed">
                 No buscamos currículums perfectos, buscamos actitudes imparables. Si eres proactivo, te gusta el trato con personas y no le temes a los grandes retos, este es tu sitio.
               </p>
@@ -230,7 +230,7 @@ export default function TrabajaNosotrosPage() {
            <div className="h-20 w-20 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-10 shadow-sm border border-blue-100">
               <Briefcase className="h-10 w-10 text-[#0040FF]" />
            </div>
-           <h2 className="text-3xl md:text-5xl font-black text-neutral-800 mb-8 leading-tight">Tu nueva vida <br /> empieza con un clic.</h2>
+           <h2 className="text-3xl md:text-4xl font-black text-neutral-800 mb-8 leading-tight">Tu nueva vida <br /> empieza con un clic.</h2>
            <p className="text-neutral-500 font-medium text-lg leading-relaxed mb-12">
              No dejes pasar la oportunidad de unirte a la inmobiliaria más movida de Piura. El cielo es el límite y hoy puede ser el primer día de tu éxito.
            </p>

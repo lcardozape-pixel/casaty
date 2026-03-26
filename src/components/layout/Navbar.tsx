@@ -26,7 +26,7 @@ export function Navbar() {
   return (
     <>
       <header className="fixed top-0 z-50 w-full bg-white border-b border-slate-100 shadow-sm h-20">
-        <div className="mx-auto max-w-[1700px] h-full flex items-center justify-between px-6 lg:px-10">
+        <div className="mx-auto max-w-7xl h-full flex items-center justify-between px-6 lg:px-12">
           
           {/* LOGO - Left aligned */}
           <div className="flex-shrink-0">
