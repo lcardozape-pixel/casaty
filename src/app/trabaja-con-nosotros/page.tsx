@@ -216,7 +216,7 @@ export default function TrabajaNosotrosPage() {
               </div>
 
               <div className="pt-6">
-                <Button size="lg" className="h-16 px-12 text-lg w-full md:w-auto" showArrow>
+                <Button size="lg" className="w-full md:w-auto" showArrow>
                   Enviar mi postulación
                 </Button>
               </div>

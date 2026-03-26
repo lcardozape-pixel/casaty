@@ -23,7 +23,7 @@ export default function AboutPage() {
   return (
     <main className="flex min-h-screen flex-col bg-white overflow-x-hidden">
       {/* 1. Introductory Header (Sin Hero Image como pidió el usuario) */}
-      <section className="pt-24 md:pt-32 pb-16 md:pb-20 max-w-[1700px] mx-auto px-4 lg:px-8 w-full border-b border-slate-100 bg-white rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
+      <section className="pt-24 md:pt-32 pb-20 md:pb-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full border-b border-slate-100 bg-white rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -126,7 +126,7 @@ export default function AboutPage() {
       </section>
 
       {/* 3. Purpose & Values */}
-      <section className="py-24 bg-neutral-900 rounded-[4rem] mx-4 lg:mx-8 mb-24 relative overflow-hidden text-white">
+      <section className="py-16 md:py-24 bg-neutral-900 rounded-[3rem] md:rounded-[4rem] mx-4 lg:mx-8 mb-20 md:mb-24 relative overflow-hidden text-white">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#0040FF]/20 rounded-full blur-[120px] -mr-32 -mt-32" />
         <div className="relative z-10 max-w-[1700px] mx-auto px-10">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
@@ -164,7 +164,7 @@ export default function AboutPage() {
                   icon: Target
                 }
               ].map((val, i) => (
-                <div key={i} className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all group">
+                <div key={i} className="bg-white/5 border border-white/10 p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:bg-white/10 transition-all group">
                    <div className="h-12 w-12 rounded-2xl bg-[#0040FF]/20 flex items-center justify-center mb-6 group-hover:bg-[#0040FF] transition-all">
                       <val.icon className="h-6 w-6 text-[#0040FF] group-hover:text-white" />
                    </div>
@@ -178,7 +178,7 @@ export default function AboutPage() {
       </section>
 
       {/* 4. Team Focus Section */}
-      <section className="py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
+      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
            <motion.div
              initial={{ opacity: 0, scale: 0.95 }}
@@ -223,7 +223,7 @@ export default function AboutPage() {
               </div>
 
               <div className="pt-6">
-                <Button size="lg" variant="outline" className="h-16 px-12 text-lg hover:bg-neutral-800 hover:text-white transition-all" showArrow>
+                <Button size="lg" variant="outline" className="px-12 hover:bg-neutral-800 hover:text-white transition-all" showArrow>
                   Trabaja con nosotros
                 </Button>
               </div>
@@ -262,10 +262,10 @@ export default function AboutPage() {
         <div className="max-w-[1700px] mx-auto px-4 text-center text-white">
            <h2 className="text-4xl md:text-6xl font-black mb-12">¿Empezamos tu historia hoy?</h2>
            <div className="flex flex-col md:flex-row justify-center gap-4">
-              <Button size="lg" className="bg-white text-[#0040FF] hover:bg-slate-100 h-16 px-12 text-lg" showArrow>
+              <Button size="lg" className="bg-white text-[#0040FF] hover:bg-slate-100 px-12" showArrow>
                 Ver Propiedades
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 h-16 px-12 text-lg">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-12">
                 Hablar con un Experto
               </Button>
            </div>

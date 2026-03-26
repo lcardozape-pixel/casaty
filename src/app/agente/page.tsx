@@ -194,7 +194,7 @@ export default function AgentesPage() {
                   <div className="mt-auto flex flex-col gap-3">
                      <Button 
                        size="lg" 
-                       className="w-full bg-[#0040FF] rounded-3xl h-16 text-lg font-black group-hover:shadow-blue-200 transition-all"
+                       className="w-full bg-[#0040FF] transition-all"
                        showArrow
                      >
                        WhatsApp de {agent.name.split(' ')[0]}
@@ -202,7 +202,7 @@ export default function AgentesPage() {
                      <Button 
                        variant="outline" 
                        size="lg" 
-                       className="w-full border-slate-200 rounded-3xl h-16 text-xs uppercase tracking-widest font-black text-neutral-500 hover:bg-slate-50"
+                       className="w-full border-slate-200 text-neutral-500 hover:bg-slate-50"
                      >
                        <Mail className="h-4 w-4 mr-2" />
                        Ver Perfil Completo
@@ -260,7 +260,7 @@ export default function AgentesPage() {
            <p className="text-neutral-500 font-medium text-lg leading-relaxed mb-12">
              Habla hoy mismo con nuestra central para que te asignemos al experto ideal según el tipo de propiedad que estás buscando.
            </p>
-           <Button size="lg" className="bg-[#0040FF] h-16 px-12 text-lg" showArrow>
+           <Button size="lg" className="bg-[#0040FF]" showArrow>
              Hablar con Central Casaty
            </Button>
         </div>

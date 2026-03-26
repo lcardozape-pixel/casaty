@@ -14,8 +14,8 @@ export default function Home() {
       <Hero />
       
       {/* Featured Properties Section */}
-      <section className="py-12 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full border-b border-slate-100 relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:20 gap-8">
+      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full border-b border-slate-100 relative overflow-hidden">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-20 gap-8">
           <div className="text-left space-y-3 md:space-y-4 max-w-2xl">
             <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] block">Catálogo Exclusivo</span>
             <h2 className="text-2xl md:text-5xl font-black text-neutral-800 leading-[1.1] tracking-tighter">
@@ -26,7 +26,7 @@ export default function Home() {
             </p>
           </div>
           <div className="flex gap-4">
-             <Button variant="outline" size="lg" className="h-14 md:h-16 px-6 md:px-10 rounded-2xl md:rounded-3xl border-slate-200 text-neutral-800 hover:bg-neutral-800 hover:text-white transition-all font-black text-[10px] md:text-xs tracking-widest uppercase w-full md:w-auto" showArrow>
+             <Button variant="outline" size="lg" className="border-slate-200 text-neutral-800 hover:bg-neutral-800 hover:text-white transition-all font-black" showArrow>
                 Ver todo el Catálogo
              </Button>
           </div>
@@ -47,7 +47,7 @@ export default function Home() {
         </div>
 
         <div className="flex justify-center">
-          <Button variant="outline" size="lg" className="px-8 md:px-12 py-4 md:py-5 border-slate-200 text-neutral-800 rounded-2xl md:rounded-3xl hover:bg-slate-100 h-16 md:h-20 text-base md:text-lg font-black w-full md:w-auto" showArrow>
+          <Button variant="outline" size="lg" className="border-slate-200 text-neutral-800 hover:bg-slate-100 font-black w-full md:w-auto" showArrow>
             Explorar más de 1,000 unidades
           </Button>
         </div>
@@ -75,7 +75,7 @@ export default function Home() {
                      Nuestra red exclusiva conecta más de 50 agencias y 1,000+ propiedades en tiempo real. Si no está en Casaty, no está en el mercado.
                   </p>
                   <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center">
-                     <Button size="lg" className="h-16 md:h-20 px-10 md:px-12 text-base md:text-xl w-full md:w-auto font-black" showArrow>
+                     <Button size="lg" className="w-full md:w-auto font-black" showArrow>
                         Hablar con un Experto
                      </Button>
                      <div className="flex items-center gap-3 md:gap-4">

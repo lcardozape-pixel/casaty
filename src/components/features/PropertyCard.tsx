@@ -13,7 +13,7 @@ export function PropertyCard({ property }: { property: Property }) {
       className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 group relative flex flex-col h-full"
     >
       {/* Image Wrapper */}
-      <div className="relative h-72 overflow-hidden">
+      <div className="relative h-64 md:h-72 overflow-hidden">
         <img
           src={property.image}
           alt={property.title}
@@ -37,15 +37,15 @@ export function PropertyCard({ property }: { property: Property }) {
         </button>
 
         {/* Price Overlay */}
-        <div className="absolute bottom-6 left-6 right-6">
-           <div className="bg-white/95 backdrop-blur-md p-4 rounded-3xl shadow-xl flex justify-between items-center border border-white">
-              <span className="text-[9px] font-black text-neutral-400 uppercase tracking-[0.2em]">Inversión</span>
-              <span className="text-xl font-black text-[#0040FF] leading-none">{property.price}</span>
+        <div className="absolute bottom-4 md:bottom-6 left-4 md:left-6 right-4 md:right-6">
+           <div className="bg-white/95 backdrop-blur-md p-3 md:p-4 rounded-2xl md:rounded-3xl shadow-xl flex justify-between items-center border border-white">
+              <span className="text-[8px] md:text-[9px] font-black text-neutral-400 uppercase tracking-[0.2em]">Inversión</span>
+              <span className="text-lg md:text-xl font-black text-[#0040FF] leading-none">{property.price}</span>
            </div>
         </div>
       </div>
 
-      <div className="p-8 flex flex-col flex-1">
+      <div className="p-6 md:p-8 flex flex-col flex-1">
         <div className="mb-6">
            <div className="flex items-center gap-2 text-neutral-400 text-[10px] font-black uppercase tracking-widest mb-3">
               <MapPin className="h-3 w-3 text-[#0040FF]" />
@@ -56,7 +56,7 @@ export function PropertyCard({ property }: { property: Property }) {
            </h3>
         </div>
 
-        <div className="mt-auto grid grid-cols-4 gap-4 py-6 border-t border-slate-50">
+        <div className="mt-auto grid grid-cols-4 gap-2 md:gap-4 py-5 md:py-6 border-t border-slate-50">
           <div className="flex flex-col items-center gap-1.5">
             <div className="h-8 w-8 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
                <BedDouble className="h-4 w-4 text-[#0040FF]" />

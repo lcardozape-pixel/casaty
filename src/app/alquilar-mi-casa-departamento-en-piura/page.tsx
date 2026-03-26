@@ -330,10 +330,10 @@ export default function AlquilarPage() {
             Únete a las decenas de propietarios que hoy duermen tranquilos gracias a Casaty.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" showArrow className="w-full md:w-auto px-12 h-16 text-lg">
+            <Button size="lg" showArrow className="w-full md:w-auto px-12">
               Alquilar mi Propiedad Ahora
             </Button>
-            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 h-16 text-lg bg-white">
+            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 bg-white">
               Hablar con un asesor
             </Button>
           </div>

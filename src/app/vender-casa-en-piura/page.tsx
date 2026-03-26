@@ -48,7 +48,7 @@ export default function VenderPropiedadPage() {
   return (
     <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
       {/* 1. Hero Section */}
-      <section className="relative h-[500px] md:h-[650px] flex items-center justify-center text-white overflow-hidden">
+      <section className="relative min-h-[600px] md:h-[700px] flex items-center justify-center text-white overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{
@@ -69,7 +69,7 @@ export default function VenderPropiedadPage() {
               Confía en los expertos de Piura. Maximizamos el valor de tu inmueble mediante tecnología Casaty Honecta® y marketing estratégico.
             </p>
 
-            <div className="bg-white rounded-2xl p-2.5 max-w-xl mx-auto shadow-2xl flex flex-col md:flex-row items-center gap-4 border border-white/20">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-2 md:p-2.5 max-w-xl mx-auto shadow-2xl flex flex-col md:flex-row items-center gap-4 border border-white/20">
               <div className="flex-1 text-left px-4">
                 <p className="text-neutral-800 font-bold text-sm">
                   ¿Quieres saber cuánto vale tu casa hoy? 👉
@@ -84,8 +84,8 @@ export default function VenderPropiedadPage() {
       </section>
 
       {/* 2. Trust Stats Bar */}
-      <section className="max-w-[1700px] mx-auto px-4 lg:px-8 -mt-16 relative z-30 w-full mb-12">
-        <div className="bg-[#eff6ff] rounded-[2.5rem] shadow-2xl p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-12 border border-blue-100">
+      <section className="max-w-[1700px] mx-auto px-4 lg:px-8 -mt-10 md:-mt-16 relative z-30 w-full mb-12">
+        <div className="bg-[#eff6ff] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl p-6 md:p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-12 border border-blue-100">
           <div className="flex flex-col items-center lg:items-start border-b lg:border-b-0 lg:border-r border-blue-200/50 pb-8 lg:pb-0 lg:pr-16 last:border-0 w-full lg:w-auto">
             <h3 className="text-neutral-800 font-black text-2xl mb-1 leading-tight text-center lg:text-left">
               +32 operaciones completadas <br className="hidden lg:block" /> con éxito total
@@ -377,7 +377,7 @@ export default function VenderPropiedadPage() {
       </section>
 
       {/* 8. Final CTA Center */}
-      <section className="py-24 bg-[#eff6ff]">
+      <section className="py-16 md:py-24 bg-[#eff6ff]">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-6xl font-black text-neutral-800 mb-8 leading-tight">
             Vende tu propiedad sin estrés.
@@ -386,10 +386,10 @@ export default function VenderPropiedadPage() {
             Estamos listos para encontrar al comprador ideal para tu inmueble en el menor tiempo posible.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" showArrow className="w-full md:w-auto px-12 h-16 text-lg">
+            <Button size="lg" showArrow className="w-full md:w-auto px-12">
               Empezar ahora gratis
             </Button>
-            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 h-16 text-lg bg-white">
+            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 bg-white">
               Hablar con un experto
             </Button>
           </div>

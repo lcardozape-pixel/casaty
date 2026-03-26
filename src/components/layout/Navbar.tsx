@@ -7,27 +7,17 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 
 const navigation = [
-  { name: "Inicio", href: "/" },
-  { name: "Nosotros", href: "/sobre-nosotros" },
-  { 
-    name: "Corretaje", 
-    href: "#", 
-    dropdown: [
-      { name: "Vender", href: "/vender-casa-en-piura" },
-      { name: "Alquilar", href: "/alquilar-mi-casa-departamento-en-piura" },
-    ]
-  },
-  { 
-    name: "Servicios", 
-    href: "#", 
-    dropdown: [
-      { name: "Crédito Hipotecario", href: "/solicitar-credito-hipotecario-en-piura" },
-      { name: "Tasaciones", href: "/valorizar-mi-inmueble-en-piura" },
-      { name: "Contrato de Alquiler", href: "/contrato-de-alquiler" },
-    ]
-  },
+  { name: "Crédito Hipotecario", href: "/solicitar-credito-hipotecario-en-piura" },
+  { name: "Tasaciones", href: "/valorizar-mi-inmueble-en-piura" },
   { name: "Agentes", href: "/agente" },
-  { name: "Trabaja con Nosotros", href: "/trabaja-con-nosotros" },
+  { 
+    name: "Servicio de Corretaje", 
+    href: "#", 
+    dropdown: [
+      { name: "Vender Propiedad", href: "/vender-casa-en-piura" },
+      { name: "Alquilar Propiedad", href: "/alquilar-mi-casa-departamento-en-piura" },
+    ]
+  },
 ];
 
 export function Navbar() {
@@ -49,26 +39,26 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* DESKTOP MENU - Middle */}
-          <div className="hidden lg:flex items-center gap-x-8">
+          {/* DESKTOP MENU - Right Aligned */}
+          <div className="hidden lg:flex items-center gap-x-10">
             {navigation.map((item) => (
               <div key={item.name} className="relative group">
                 {item.dropdown ? (
-                  <button className="text-[12px] font-black uppercase tracking-widest text-neutral-500 group-hover:text-[#0040FF] flex items-center gap-1.5 transition-all outline-none">
+                  <button className="text-[13px] font-bold text-neutral-500 group-hover:text-[#0040FF] flex items-center gap-1.5 transition-all outline-none">
                     {item.name}
                     <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
                   </button>
                 ) : (
                   <Link
                     href={item.href}
-                    className="text-[12px] font-black uppercase tracking-widest text-neutral-500 hover:text-[#0040FF] transition-all"
+                    className="text-[13px] font-bold text-neutral-500 hover:text-[#0040FF] transition-all"
                   >
                     {item.name}
                   </Link>
                 )}
 
                 {item.dropdown && (
-                  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                  <div className="absolute right-0 top-full pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
                     <div className="bg-white rounded-3xl shadow-2xl border border-slate-50 overflow-hidden min-w-[260px] p-3">
                       {item.dropdown.map((subItem) => (
                         <Link
@@ -86,23 +76,15 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* RIGHT SIDE - Desktop (CTA) / Mobile (Trigger) */}
-          <div className="flex items-center gap-4">
-            {/* Desktop CTA */}
-            <div className="hidden lg:block">
-              <Button variant="primary" size="md" className="rounded-2xl h-11 px-8 shadow-lg shadow-blue-100 font-black uppercase tracking-wider text-[10px]">
-                Publicar Propiedad
-              </Button>
-            </div>
-
-            {/* Mobile Trigger */}
+          {/* Mobile Trigger - Only for small screens */}
+          <div className="lg:hidden flex items-center">
             <button
               type="button"
-              className="lg:hidden flex items-center justify-center h-11 w-11 rounded-xl text-neutral-800 bg-slate-50 hover:bg-slate-100 transition-all active:scale-95 border border-slate-100"
+              className="flex items-center justify-center h-10 w-10 rounded-xl text-neutral-800 bg-white hover:bg-slate-50 transition-all active:scale-95 border border-slate-100 shadow-sm"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Abrir menú"
             >
-              <Menu className="h-6 w-6" />
+              <Menu className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -127,58 +109,55 @@ export function Navbar() {
             <img 
               src="/Logo/logo-dark.webp" 
               alt="Casaty Inmobiliaria" 
-              className="h-10 w-auto" 
+              className="h-9 w-auto" 
             />
           </Link>
           <button
             type="button"
-            className="-m-2.5 rounded-md p-2.5 text-neutral-500 hover:text-[#0040FF] transition-colors"
+            className="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-50 text-neutral-500 hover:text-[#0040FF] transition-all"
             onClick={() => setMobileMenuOpen(false)}
           >
             <span className="sr-only">Cerrar menú</span>
-            <X className="h-6 w-6" aria-hidden="true" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
-        <div className="mt-2 flow-root px-6 overflow-y-auto max-h-[calc(100vh-100px)]">
+        <div className="mt-2 flow-root px-6 overflow-y-auto max-h-[calc(100vh-100px)] custom-scrollbar">
           <div className="-my-6 divide-y divide-slate-500/10 pb-20">
             <div className="space-y-1 py-6">
               {navigation.map((item) => (
-                <div key={item.name} className="py-2">
+                <div key={item.name} className="py-1">
                   {item.dropdown ? (
-                    <>
-                      <div className="text-[10px] font-black text-[#0040FF] px-3 py-1 uppercase tracking-[0.2em] opacity-80">
+                    <div className="py-2">
+                      <div className="text-[10px] font-black text-neutral-400 px-4 py-1.5 uppercase tracking-widest opacity-80">
                         {item.name}
                       </div>
-                      <div className="mt-2 space-y-1 pl-4 border-l-2 border-slate-100 ml-3">
+                      <div className="mt-1 space-y-0.5 pl-4 border-l-2 border-slate-100 ml-4">
                         {item.dropdown.map((subItem) => (
                           <Link
                             key={subItem.name}
                             href={subItem.href}
-                            className="block rounded-lg px-3 py-2.5 text-base font-bold text-neutral-800 hover:bg-slate-50 hover:text-[#0040FF] transition-all"
+                            className="block rounded-xl px-4 py-3 text-[15px] font-bold text-neutral-800 active:bg-slate-50 active:text-[#0040FF] transition-all"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             {subItem.name}
                           </Link>
                         ))}
                       </div>
-                    </>
+                    </div>
                   ) : (
                     <Link
                       href={item.href}
-                      className="-mx-0 block rounded-xl px-4 py-3 text-base font-bold text-neutral-800 hover:bg-blue-50 hover:text-[#0040FF] transition-all"
+                      className="block rounded-2xl px-4 py-4 text-[16px] font-bold text-neutral-800 active:bg-blue-50 active:text-[#0040FF] transition-all flex items-center justify-between group"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      {item.name}
+                      <span>{item.name}</span>
+                      <ChevronDown className="-rotate-90 h-4 w-4 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </Link>
                   )}
                 </div>
               ))}
             </div>
-            <div className="py-6 pt-10">
-              <Button variant="primary" size="md" className="w-full h-14 rounded-2xl shadow-lg shadow-blue-200">
-                Publicar Propiedad
-              </Button>
-            </div>
+            {/* Mobile CTA removed for consistency */}
           </div>
         </div>
       </div>

@@ -45,13 +45,13 @@ const services = [
 
 const ServicesSection = () => {
   return (
-    <section className="py-24 bg-slate-50 relative overflow-hidden">
+    <section className="py-16 md:py-24 bg-slate-50 relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/30 rounded-full blur-[100px] -mr-32 -mt-32 -z-0" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100/30 rounded-full blur-[100px] -ml-32 -mb-32 -z-0" />
 
       <div className="relative z-10 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
-        <div className="text-center max-w-4xl mx-auto mb-20">
+        <div className="text-center max-w-4xl mx-auto mb-12 md:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -67,7 +67,7 @@ const ServicesSection = () => {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {services.map((service, index) => (
             <motion.div 
               key={index} 
@@ -75,7 +75,7 @@ const ServicesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 hover:shadow-2xl hover:border-[#0040FF]/20 transition-all duration-500 flex flex-col items-start relative overflow-hidden"
+              className="group bg-white rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-slate-100 hover:shadow-2xl hover:border-[#0040FF]/20 transition-all duration-500 flex flex-col items-start relative overflow-hidden"
             >
                {/* Animated background decoration */}
                <div className="absolute bottom-[-100px] right-[-100px] w-64 h-64 bg-slate-50 rounded-full -z-10 group-hover:bg-blue-50 transition-colors duration-500" />
@@ -108,7 +108,7 @@ const ServicesSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
-            className="group bg-neutral-900 rounded-[2.5rem] p-10 shadow-sm border border-white/5 hover:shadow-2xl transition-all duration-500 flex flex-col items-start relative overflow-hidden col-span-1 md:col-span-1"
+            className="group bg-neutral-900 rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-white/5 hover:shadow-2xl transition-all duration-500 flex flex-col items-start relative overflow-hidden col-span-1 md:col-span-1"
           >
              <div className="absolute top-[-50px] right-[-50px] w-32 h-32 bg-[#0040FF]/20 rounded-full blur-3xl" />
              
@@ -135,7 +135,7 @@ const ServicesSection = () => {
         </div>
 
         {/* Final Trust Text */}
-        <div className="mt-24 pt-16 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-12 opacity-80 filter grayscale brightness-50 contrast-125">
+        <div className="mt-16 md:mt-24 pt-12 md:pt-16 border-t border-slate-200 grid grid-cols-1 md:flex md:items-center md:justify-between gap-8 md:gap-12 opacity-80 filter grayscale brightness-50 contrast-125">
            <div className="flex items-center gap-4">
               <ShieldCheck className="h-6 w-6 text-neutral-800" />
               <span className="text-[10px] font-black uppercase tracking-widest text-neutral-800">Cero Comisiones Ocultas</span>

@@ -48,7 +48,7 @@ export default function ContratoAlquilerPage() {
   return (
     <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
       {/* 1. Hero Section */}
-      <section className="relative h-[500px] md:h-[650px] flex items-center justify-center text-white overflow-hidden">
+      <section className="relative min-h-[600px] md:h-[700px] flex items-center justify-center text-white overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{
@@ -82,8 +82,8 @@ export default function ContratoAlquilerPage() {
       </section>
 
       {/* 2. Trust Stats Bar */}
-      <section className="max-w-[1700px] mx-auto px-4 lg:px-8 -mt-16 relative z-30 w-full mb-12">
-        <div className="bg-[#eff6ff] rounded-[2.5rem] shadow-2xl p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-12 border border-blue-100">
+      <section className="max-w-[1700px] mx-auto px-4 lg:px-8 -mt-10 md:-mt-16 relative z-30 w-full mb-12">
+        <div className="bg-[#eff6ff] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl p-6 md:p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-12 border border-blue-100">
           <div className="flex flex-col items-center lg:items-start border-b lg:border-b-0 lg:border-r border-blue-200/50 pb-8 lg:pb-0 lg:pr-16 last:border-0 w-full lg:w-auto">
             <h3 className="text-neutral-800 font-black text-2xl mb-1 leading-tight text-center lg:text-left">
               +850 Propietarios <br className="hidden lg:block" /> Protegidos en Piura
@@ -199,7 +199,7 @@ export default function ContratoAlquilerPage() {
       </section>
 
       {/* 4. Process Step by Step */}
-      <section className="py-24 bg-white border-y border-slate-100">
+      <section className="py-16 md:py-24 bg-white border-y border-slate-100">
         <div className="max-w-[1700px] mx-auto px-4 text-center">
           <h2 className="text-3xl font-black text-neutral-800 mb-4">¿Cómo blindamos tu contrato?</h2>
           <p className="text-neutral-500 font-medium mb-16 max-w-2xl mx-auto">
@@ -261,7 +261,7 @@ export default function ContratoAlquilerPage() {
       </section>
 
       {/* 5. Benefits Grid */}
-      <section className="py-24 bg-slate-50">
+      <section className="py-16 md:py-24 bg-slate-50">
         <div className="max-w-[1700px] mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-5xl font-black text-neutral-800 mb-16">
             Servicio Legal Inmobiliario Premium
@@ -285,7 +285,7 @@ export default function ContratoAlquilerPage() {
                 icon: UserCheck
               }
             ].map((benefit, i) => (
-              <div key={i} className="bg-white p-12 rounded-[2.5rem] shadow-sm border border-slate-100 text-left hover:shadow-xl transition-all group">
+              <div key={i} className="bg-white p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-sm border border-slate-100 text-left hover:shadow-xl transition-all group">
                 <div className="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-8 group-hover:bg-[#0040FF] transition-colors">
                   <benefit.icon className="h-7 w-7 text-[#0040FF] group-hover:text-white transition-colors" />
                 </div>
@@ -298,7 +298,7 @@ export default function ContratoAlquilerPage() {
       </section>
 
       {/* 6. FAQs */}
-      <section className="py-24 bg-white border-t border-slate-100">
+      <section className="py-16 md:py-24 bg-white border-t border-slate-100">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-black text-neutral-800 mb-16">Preguntas frecuentes sobre Contratos</h2>
 
@@ -326,7 +326,7 @@ export default function ContratoAlquilerPage() {
       </section>
 
       {/* 7. Final CTA */}
-      <section className="py-24 bg-neutral-900">
+      <section className="py-16 md:py-24 bg-neutral-900">
         <div className="max-w-4xl mx-auto px-4 text-center text-white">
           <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
             No dejes tu propiedad <br /> a la suerte.
@@ -335,10 +335,10 @@ export default function ContratoAlquilerPage() {
             Blindar tu contrato es la mejor inversión que puedes hacer como propietario. Habla hoy con nuestro equipo legal.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" showArrow className="w-full md:w-auto px-12 h-16 text-lg bg-[#0040FF]">
+            <Button size="lg" showArrow className="w-full md:w-auto px-12 bg-[#0040FF]">
               Blindar mi contrato ahora
             </Button>
-            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 h-16 text-lg border-white text-white hover:bg-white/10">
+            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 border-white text-white hover:bg-white/10">
               WhatsApp Legal
             </Button>
           </div>

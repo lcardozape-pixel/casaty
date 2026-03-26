@@ -185,7 +185,7 @@ function MortgageCalculator() {
           </p>
         </div>
 
-        <Button size="lg" className="w-full h-16 text-lg" showArrow>
+        <Button size="lg" className="w-full" showArrow>
           Solicitar Pre-Calificación Gratis
         </Button>
       </div>
@@ -458,10 +458,10 @@ export default function CreditoPage() {
             No pierdas tiempo en colas. Deja que nuestros expertos gestionen tu crédito hipotecario de forma gratuita y eficiente.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" showArrow className="w-full md:w-auto px-12 h-16 text-lg">
+            <Button size="lg" showArrow className="w-full md:w-auto px-12">
               Pre-calificar ahora
             </Button>
-            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 h-16 text-lg bg-white">
+            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 bg-white">
               Hablar con asesor
             </Button>
           </div>

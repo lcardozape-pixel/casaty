@@ -56,7 +56,7 @@ export default function TasacionesPage() {
   return (
     <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
       {/* 1. Hero Section */}
-      <section className="relative h-[500px] md:h-[650px] flex items-center justify-center text-white overflow-hidden">
+      <section className="relative min-h-[600px] md:h-[700px] flex items-center justify-center text-white overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{
@@ -90,8 +90,8 @@ export default function TasacionesPage() {
       </section>
 
       {/* 2. Trust Stats Bar */}
-      <section className="max-w-[1700px] mx-auto px-4 lg:px-8 -mt-16 relative z-30 w-full mb-12">
-        <div className="bg-white rounded-[2.5rem] shadow-2xl p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-12 border border-slate-100">
+      <section className="max-w-[1700px] mx-auto px-4 lg:px-8 -mt-10 md:-mt-16 relative z-30 w-full mb-12">
+        <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-2xl p-6 md:p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-12 border border-slate-100">
           <div className="flex flex-col items-center lg:items-start border-b lg:border-b-0 lg:border-r border-slate-100 pb-8 lg:pb-0 lg:pr-16 last:border-0 w-full lg:w-auto">
             <h3 className="text-neutral-800 font-black text-2xl mb-1 leading-tight text-center lg:text-left">
               +1,200 Tasaciones <br className="hidden lg:block" /> Realizadas con Éxito
@@ -196,7 +196,7 @@ export default function TasacionesPage() {
       </section>
 
       {/* 4. Types of Services */}
-      <section className="py-24 bg-neutral-900 text-white rounded-[4rem] mx-4 lg:mx-8 mb-24 overflow-hidden relative">
+      <section className="py-16 md:py-24 bg-neutral-900 text-white rounded-[3rem] md:rounded-[4rem] mx-4 lg:mx-8 mb-20 md:mb-24 overflow-hidden relative">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#0040FF]/20 rounded-full blur-[120px] -mr-32 -mt-32" />
         <div className="relative z-10 max-w-[1700px] mx-auto px-8">
           <div className="text-center mb-16">
@@ -222,7 +222,7 @@ export default function TasacionesPage() {
                 points: ["Análisis de demanda", "Precio de cierre sugerido", "Estrategia de mercado"]
               }
             ].map((service, i) => (
-              <div key={i} className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all group">
+              <div key={i} className="bg-white/5 border border-white/10 p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:bg-white/10 transition-all group">
                 <h3 className="text-2xl font-black mb-6 flex items-center gap-3">
                   <div className="h-2 w-8 bg-[#0040FF] rounded-full" /> {service.title}
                 </h3>
@@ -241,7 +241,7 @@ export default function TasacionesPage() {
       </section>
 
       {/* 5. Process Step by Step */}
-      <section className="py-24 bg-white border-y border-slate-100">
+      <section className="py-16 md:py-24 bg-white border-y border-slate-100">
         <div className="max-w-[1700px] mx-auto px-4 text-center">
           <h2 className="text-3xl font-black text-neutral-800 mb-4">¿Cómo trabajamos tu informe?</h2>
           <p className="text-neutral-500 font-medium mb-16 max-w-2xl mx-auto">
@@ -303,7 +303,7 @@ export default function TasacionesPage() {
       </section>
 
       {/* 6. FAQs */}
-      <section className="py-24 bg-slate-50">
+      <section className="py-16 md:py-24 bg-slate-50">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-black text-neutral-800 mb-16">Preguntas sobre Tasaciones</h2>
 
@@ -331,7 +331,7 @@ export default function TasacionesPage() {
       </section>
 
       {/* 7. Final CTA */}
-      <section className="py-24 bg-[#0040FF]">
+      <section className="py-16 md:py-24 bg-[#0040FF]">
         <div className="max-w-4xl mx-auto px-4 text-center text-white">
           <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
             Valora tu patrimonio con <br /> rigor técnico.
@@ -340,10 +340,10 @@ export default function TasacionesPage() {
             No adivines el precio. Solicita hoy una tasación profesional y negocia con seguridad.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" className="w-full md:w-auto px-12 h-16 text-lg bg-white text-[#0040FF] hover:bg-slate-100" showArrow>
+            <Button size="lg" className="w-full md:w-auto px-12 bg-white text-[#0040FF] hover:bg-slate-100" showArrow>
               Cotizar mi tasación
             </Button>
-            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 h-16 text-lg border-white text-white hover:bg-white/10">
+            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 border-white text-white hover:bg-white/10">
               Ver servicios corporativos
             </Button>
           </div>
