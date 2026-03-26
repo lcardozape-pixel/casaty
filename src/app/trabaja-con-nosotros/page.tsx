@@ -23,9 +23,9 @@ import { motion } from "framer-motion";
 
 export default function TrabajaNosotrosPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-slate-50">
+    <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
       {/* 1. Header (Sin Hero Image como pidió el usuario) */}
-      <section className="pt-32 pb-20 max-w-[1700px] mx-auto px-4 lg:px-8 w-full bg-white border-b border-slate-100 rounded-b-[4rem] shadow-sm">
+      <section className="pt-24 md:pt-32 pb-16 md:pb-20 max-w-[1700px] mx-auto px-4 lg:px-8 w-full bg-white border-b border-slate-100 rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -33,17 +33,17 @@ export default function TrabajaNosotrosPage() {
             transition={{ duration: 0.5 }}
           >
             <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Carreras en Casaty</span>
-            <h1 className="text-4xl md:text-7xl font-black text-neutral-800 mb-8 leading-[1.1] tracking-tighter">
+            <h1 className="text-3xl md:text-7xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
               Lleva tu Carrera al <br className="hidden md:block" /> <span className="text-[#0040FF]">Siguiente Nivel</span>.
             </h1>
-            <p className="text-lg md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
               No buscamos simples empleados, buscamos socios estratégicos apasionados por transformar el mercado inmobiliario de Piura.
             </p>
           </motion.div>
         </div>
 
         {/* Floating Perks Bar in header */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-16 border-t border-slate-50">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mt-12 md:mt-20 pt-10 md:pt-16 border-t border-slate-50">
           {[
             { label: "Comisiones Top", value: "Sin Límite", icon: Coins },
             { label: "Formación", value: "Constante", icon: GraduationCap },
@@ -51,18 +51,18 @@ export default function TrabajaNosotrosPage() {
             { label: "Crecimiento", value: "Acelerado", icon: TrendingUp },
           ].map((stat, i) => (
             <div key={i} className="flex flex-col items-center text-center group">
-              <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 group-hover:bg-[#0040FF] group-hover:scale-110 transition-all">
-                <stat.icon className="h-6 w-6 text-[#0040FF] group-hover:text-white" />
+              <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-slate-50 flex items-center justify-center mb-3 md:mb-4 group-hover:bg-[#0040FF] group-hover:scale-110 transition-all">
+                <stat.icon className="h-5 w-5 md:h-6 md:w-6 text-[#0040FF] group-hover:text-white" />
               </div>
-              <span className="text-2xl font-black text-neutral-800 mb-1 leading-none">{stat.value}</span>
-              <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest leading-none mt-1">{stat.label}</span>
+              <span className="text-xl md:text-2xl font-black text-neutral-800 mb-1 leading-none">{stat.value}</span>
+              <span className="text-[9px] md:text-[10px] font-black text-neutral-400 uppercase tracking-widest leading-none mt-1">{stat.label}</span>
             </div>
           ))}
         </div>
       </section>
 
       {/* 2. Value Proposition Section */}
-      <section className="py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full relative">
+      <section className="py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/50 rounded-full blur-[100px] -mr-32 -mt-32 -z-10" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <motion.div
@@ -108,23 +108,23 @@ export default function TrabajaNosotrosPage() {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="relative group h-[700px]"
+            className="relative group h-[400px] md:h-[700px]"
           >
-            <div className="absolute -inset-4 bg-orange-100/30 rounded-[4rem] blur-2xl group-hover:bg-orange-100/50 transition-all duration-500 -z-10" />
+            <div className="absolute -inset-4 bg-orange-100/30 rounded-[3rem] blur-2xl group-hover:bg-orange-100/50 transition-all duration-500 -z-10" />
             <img 
               src="/Imagenes/reclutamiento-hero.png" 
               alt="Agente con Laptop" 
-              className="w-full h-full object-cover rounded-[3rem] shadow-2xl grayscale-[0.2] transition-all duration-500 group-hover:grayscale-0"
+              className="w-full h-full object-cover rounded-[2rem] md:rounded-[3rem] shadow-2xl grayscale-[0.2] transition-all duration-500 group-hover:grayscale-0"
             />
             {/* Overlay badge */}
-            <div className="absolute top-10 left-10 bg-white/95 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-white/50 animate-bounce-slow">
-               <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-2xl bg-green-500 flex items-center justify-center text-white">
-                    <Target className="h-6 w-6" />
+            <div className="absolute top-6 left-6 md:top-10 md:left-10 bg-white/95 backdrop-blur-md p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-xl border border-white/50 animate-bounce-slow">
+               <div className="flex items-center gap-3 md:gap-4">
+                  <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-green-500 flex items-center justify-center text-white">
+                    <Target className="h-5 w-5 md:h-6 md:w-6" />
                   </div>
                   <div>
-                     <p className="text-sm font-black text-neutral-800">Crecimiento Asegurado</p>
-                     <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest leading-none">Tu éxito es nuestro éxito</p>
+                     <p className="text-xs md:text-sm font-black text-neutral-800">Crecimiento Asegurado</p>
+                     <p className="text-[9px] md:text-[10px] text-neutral-500 font-bold uppercase tracking-widest leading-none">Tu éxito es nuestro éxito</p>
                   </div>
                </div>
             </div>

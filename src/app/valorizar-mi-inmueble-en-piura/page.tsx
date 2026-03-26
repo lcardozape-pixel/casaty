@@ -54,9 +54,9 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
 
 export default function TasacionesPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-slate-50">
+    <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
       {/* 1. Hero Section */}
-      <section className="relative h-[650px] flex items-center justify-center text-white overflow-hidden">
+      <section className="relative h-[500px] md:h-[650px] flex items-center justify-center text-white overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{
@@ -70,10 +70,10 @@ export default function TasacionesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
+            <h1 className="text-3xl md:text-6xl font-black mb-6 leading-tight">
               Conoce el <span className="text-[#0040FF]">Valor Real</span> de tu <br /> Propiedad en Piura
             </h1>
-            <p className="text-base md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-sm md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
               Tasaciones inmobiliarias con rigor técnico y validez legal. Obtén un informe detallado en tiempo récord para vender, hipotecar o procesos legales.
             </p>
 
@@ -141,13 +141,13 @@ export default function TasacionesPage() {
       </section>
 
       {/* 3. Why Valuation Matters */}
-      <section className="py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
           <div className="order-2 lg:order-1">
-            <h2 className="text-3xl md:text-5xl font-black text-neutral-800 mb-6 leading-tight">
+            <h2 className="text-2xl md:text-5xl font-black text-neutral-800 mb-6 leading-tight">
               ¿Vendes o compras? <br /> No pierdas dinero.
             </h2>
-            <p className="text-neutral-500 mb-10 leading-relaxed font-normal text-lg">
+            <p className="text-neutral-500 mb-8 md:mb-10 leading-relaxed font-normal text-base md:text-lg">
               Establecer el precio incorrecto es el error #1 en el sector inmobiliario. Una tasación profesional te permite negociar con autoridad y seguridad.
             </p>
 

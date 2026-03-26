@@ -46,9 +46,9 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
 
 export default function ContratoAlquilerPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-slate-50">
+    <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
       {/* 1. Hero Section */}
-      <section className="relative h-[650px] flex items-center justify-center text-white overflow-hidden">
+      <section className="relative h-[500px] md:h-[650px] flex items-center justify-center text-white overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{
@@ -62,10 +62,10 @@ export default function ContratoAlquilerPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
+            <h1 className="text-3xl md:text-6xl font-black mb-6 leading-tight">
               Tu Inversión Protegida con <br /> <span className="text-[#0040FF]">Criterio Legal</span>
             </h1>
-            <p className="text-base md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-sm md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
               No arriesgues tu propiedad con formatos genéricos. Redactamos contratos de alquiler blindados con las últimas cláusulas de desalojo express.
             </p>
 
@@ -133,13 +133,13 @@ export default function ContratoAlquilerPage() {
       </section>
 
       {/* 3. Safety vs Risk */}
-      <section className="py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
           <div>
-            <h2 className="text-3xl md:text-5xl font-black text-neutral-800 mb-6 leading-tight">
+            <h2 className="text-2xl md:text-5xl font-black text-neutral-800 mb-6 leading-tight">
               ¿Por qué un contrato genérico es un peligro?
             </h2>
-            <p className="text-neutral-500 mb-10 leading-relaxed font-normal text-lg">
+            <p className="text-neutral-500 mb-8 md:mb-10 leading-relaxed font-normal text-base md:text-lg">
               Los contratos estándar no consideran las nuevas leyes de protección al propietario en Perú. Un "mal contrato" puede significar años de juicios y miles de soles perdidos.
             </p>
 

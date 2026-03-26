@@ -34,7 +34,7 @@ export default function RootLayout({
       lang="es"
       className={`${inter.variable} ${outfit.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">
+      <body className="min-h-full flex flex-col font-sans overflow-x-hidden">
         <Navbar />
         <div className="flex-grow pt-20">
           {children}

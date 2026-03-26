@@ -21,9 +21,9 @@ import { motion } from "framer-motion";
 
 export default function AboutPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-slate-50">
+    <main className="flex min-h-screen flex-col bg-white overflow-x-hidden">
       {/* 1. Introductory Header (Sin Hero Image como pidió el usuario) */}
-      <section className="pt-32 pb-20 max-w-[1700px] mx-auto px-4 lg:px-8 w-full border-b border-slate-100 bg-white rounded-b-[4rem] shadow-sm">
+      <section className="pt-24 md:pt-32 pb-16 md:pb-20 max-w-[1700px] mx-auto px-4 lg:px-8 w-full border-b border-slate-100 bg-white rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -31,17 +31,17 @@ export default function AboutPage() {
             transition={{ duration: 0.5 }}
           >
             <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Sobre Nosotros</span>
-            <h1 className="text-4xl md:text-7xl font-black text-neutral-800 mb-8 leading-[1.1] tracking-tighter">
+            <h1 className="text-3xl md:text-7xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
               Transformando el Sector <br className="hidden md:block" /> Inmobiliario en <span className="text-[#0040FF]">Piura</span>.
             </h1>
-            <p className="text-lg md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
               Somos más que una agencia de bienes raíces; somos arquitectos de sueños y facilitadores de inversiones seguras con alma norteña.
             </p>
           </motion.div>
         </div>
 
         {/* Floating Trust Bar inside header */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-16 border-t border-slate-50">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mt-12 md:mt-20 pt-10 md:pt-16 border-t border-slate-50">
           {[
             { label: "Casas Vendidas", value: "350+", icon: Trophy },
             { label: "Clientes Felices", value: "1,200", icon: Heart },
@@ -49,19 +49,19 @@ export default function AboutPage() {
             { label: "Agentes Expertos", value: "15", icon: Users },
           ].map((stat, i) => (
             <div key={i} className="flex flex-col items-center text-center group">
-              <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 group-hover:bg-[#0040FF] group-hover:scale-110 transition-all">
-                <stat.icon className="h-6 w-6 text-[#0040FF] group-hover:text-white" />
+              <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-slate-50 flex items-center justify-center mb-3 md:mb-4 group-hover:bg-[#0040FF] group-hover:scale-110 transition-all">
+                <stat.icon className="h-5 w-5 md:h-6 md:w-6 text-[#0040FF] group-hover:text-white" />
               </div>
-              <span className="text-3xl font-black text-neutral-800 mb-1">{stat.value}</span>
-              <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest leading-none">{stat.label}</span>
+              <span className="text-2xl md:text-3xl font-black text-neutral-800 mb-1">{stat.value}</span>
+              <span className="text-[9px] md:text-[10px] font-black text-neutral-400 uppercase tracking-widest leading-none">{stat.label}</span>
             </div>
           ))}
         </div>
       </section>
 
       {/* 2. The Story Section */}
-      <section className="py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full relative">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/50 rounded-full blur-[100px] -mr-32 -mt-32 -z-10" />
+      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-blue-100/50 rounded-full blur-[80px] md:blur-[100px] -mr-16 md:-mr-32 -mt-16 md:-mt-32 -z-10" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}

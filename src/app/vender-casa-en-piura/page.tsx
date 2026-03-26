@@ -46,9 +46,9 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
 
 export default function VenderPropiedadPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-slate-50">
+    <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
       {/* 1. Hero Section */}
-      <section className="relative h-[650px] flex items-center justify-center text-white overflow-hidden">
+      <section className="relative h-[500px] md:h-[650px] flex items-center justify-center text-white overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{
@@ -62,10 +62,10 @@ export default function VenderPropiedadPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
+            <h1 className="text-3xl md:text-6xl font-black mb-6 leading-tight">
               Vende tu Propiedad Rápido y al <span className="text-[#0040FF]">Mejor Precio</span>
             </h1>
-            <p className="text-base md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-sm md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
               Confía en los expertos de Piura. Maximizamos el valor de tu inmueble mediante tecnología Casaty Honecta® y marketing estratégico.
             </p>
 
@@ -132,13 +132,13 @@ export default function VenderPropiedadPage() {
       </section>
 
       {/* 3. High Performance Sections */}
-      <section className="py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center">
           <div>
-            <h2 className="text-3xl md:text-5xl font-black text-neutral-800 mb-6 leading-tight">
+            <h2 className="text-2xl md:text-5xl font-black text-neutral-800 mb-6 leading-tight">
               Cómo te ayudamos a vender tu inmueble.
             </h2>
-            <p className="text-neutral-500 mb-8 leading-relaxed font-normal text-lg">
+            <p className="text-neutral-500 mb-8 leading-relaxed font-normal text-base md:text-lg">
               Nos encargamos de todo el proceso de venta, aplicando nuestra experiencia y recursos para garantizar el éxito de la operación. Desde la valoración experta hasta el marketing estratégico.
             </p>
 
@@ -199,12 +199,12 @@ export default function VenderPropiedadPage() {
       </section>
 
       {/* 4. Strategic Grid */}
-      <section className="py-24 bg-white border-y border-slate-100">
+      <section className="py-16 md:py-24 bg-white border-y border-slate-100">
         <div className="max-w-[1700px] mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-5xl font-black text-neutral-800 mb-4">
+          <h2 className="text-2xl md:text-5xl font-black text-neutral-800 mb-4">
             Estrategias que generan resultados
           </h2>
-          <p className="text-neutral-500 font-medium mb-16 max-w-2xl mx-auto">
+          <p className="text-neutral-500 font-medium mb-12 md:mb-16 max-w-2xl mx-auto text-sm md:text-base">
             Combinamos técnicas probadas y tecnología de punta para presentar tu propiedad de la mejor manera posible.
           </p>
 

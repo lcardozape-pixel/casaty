@@ -80,9 +80,9 @@ export default function AgentesPage() {
   });
 
   return (
-    <main className="flex min-h-screen flex-col bg-slate-50">
+    <main className="flex min-h-screen flex-col bg-white overflow-x-hidden">
       {/* 1. Header (Sin Hero Image como pidió el usuario) */}
-      <section className="pt-32 pb-20 max-w-[1700px] mx-auto px-4 lg:px-8 w-full bg-white border-b border-slate-100 rounded-b-[4rem] shadow-sm">
+      <section className="pt-24 md:pt-32 pb-16 md:pb-20 max-w-[1700px] mx-auto px-4 lg:px-8 w-full bg-white border-b border-slate-100 rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -90,30 +90,30 @@ export default function AgentesPage() {
             transition={{ duration: 0.5 }}
           >
             <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Nuestro Equipo</span>
-            <h1 className="text-4xl md:text-7xl font-black text-neutral-800 mb-8 leading-[1.1] tracking-tighter">
+            <h1 className="text-3xl md:text-7xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
               Asesores de Clase <br className="hidden md:block" /> <span className="text-[#0040FF]">Mundial</span>.
             </h1>
-            <p className="text-lg md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
               No solo vendemos casas, construimos confianza. Encuentra al agente ideal para tu próxima inversión en Piura.
             </p>
           </motion.div>
         </div>
 
         {/* 2. Filter Bar */}
-        <div className="max-w-4xl mx-auto mt-20 p-4 bg-slate-50 border border-slate-100 rounded-[2.5rem] flex flex-col md:flex-row gap-4 items-center shadow-inner">
+        <div className="max-w-4xl mx-auto mt-12 md:mt-20 p-4 bg-slate-50 border border-slate-100 rounded-[2rem] md:rounded-[2.5rem] flex flex-col md:flex-row gap-4 items-center shadow-inner">
            <div className="relative flex-1 w-full">
               <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
               <input 
                 type="text" 
-                placeholder="Buscar agente por nombre..."
-                className="w-full h-16 pl-14 pr-8 bg-white border-none rounded-3xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all"
+                placeholder="Buscar agente..."
+                className="w-full h-14 md:h-16 pl-14 pr-8 bg-white border-none rounded-2xl md:rounded-3xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
            </div>
            <div className="flex gap-4 w-full md:w-auto">
               <select 
-                className="h-16 px-8 bg-white border-none rounded-3xl font-black text-neutral-800 text-sm focus:ring-2 focus:ring-[#0040FF] transition-all cursor-pointer appearance-none min-w-[180px]"
+                className="h-14 md:h-16 px-6 md:px-8 bg-white border-none rounded-2xl md:rounded-3xl font-black text-neutral-800 text-xs md:text-sm focus:ring-2 focus:ring-[#0040FF] transition-all cursor-pointer appearance-none min-w-[150px] md:min-w-[180px]"
                 value={filterSpecialty}
                 onChange={(e) => setFilterSpecialty(e.target.value)}
               >
@@ -122,8 +122,8 @@ export default function AgentesPage() {
                  <option>Residencial Premium</option>
                  <option>Locales Comerciales</option>
               </select>
-              <div className="h-16 w-16 bg-[#0040FF] rounded-3xl flex items-center justify-center text-white shadow-lg shadow-blue-200 cursor-pointer hover:scale-105 transition-transform">
-                 <Filter className="h-6 w-6" />
+              <div className="h-14 w-14 md:h-16 md:w-16 bg-[#0040FF] rounded-2xl md:rounded-3xl flex items-center justify-center text-white shadow-lg shadow-blue-200 cursor-pointer hover:scale-105 transition-transform">
+                 <Filter className="h-5 w-5 md:h-6 md:w-6" />
               </div>
            </div>
         </div>

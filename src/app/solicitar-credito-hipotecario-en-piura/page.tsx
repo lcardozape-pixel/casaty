@@ -82,15 +82,15 @@ function MortgageCalculator() {
 
   return (
     <div className="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100">
-      <div className="bg-[#0040FF] p-10 text-white text-center">
-        <h3 className="text-2xl font-black mb-2 flex items-center justify-center gap-3">
+      <div className="bg-[#0040FF] p-6 md:p-10 text-white text-center">
+        <h3 className="text-xl md:text-2xl font-black mb-2 flex items-center justify-center gap-3">
           <Calculator className="h-6 w-6" /> Calculadora Hipotecaria
         </h3>
-        <p className="text-blue-100 text-sm font-medium">Estima tu cuota mensual en segundos</p>
+        <p className="text-blue-100 text-xs md:text-sm font-medium">Estima tu cuota mensual en segundos</p>
       </div>
       
-      <div className="p-10 space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="p-6 md:p-10 space-y-6 md:space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <label className="block text-sm font-black text-neutral-800">Precio del Inmueble (S/)</label>
@@ -197,7 +197,7 @@ export default function CreditoPage() {
   return (
     <main className="flex min-h-screen flex-col bg-slate-50">
       {/* 1. Hero Section */}
-      <section className="relative h-[650px] flex items-center justify-center text-white overflow-hidden">
+      <section className="relative h-[500px] md:h-[650px] flex items-center justify-center text-white overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{
@@ -211,10 +211,10 @@ export default function CreditoPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
+            <h1 className="text-3xl md:text-6xl font-black mb-6 leading-tight">
               Consigue el Crédito para tu <br /> <span className="text-[#0040FF]">Próximo Hogar</span>
             </h1>
-            <p className="text-base md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-sm md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
               Asesoría gratuita y pre-calificación digital en 48 horas. Trabajamos con los principales bancos locales para conseguirte la mejor tasa del mercado.
             </p>
 
@@ -282,13 +282,13 @@ export default function CreditoPage() {
       </section>
 
       {/* 3. Mortgage Calculator Section */}
-      <section className="py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      <section className="py-16 md:py-24 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
           <div>
-            <h2 className="text-3xl md:text-5xl font-black text-neutral-800 mb-6 leading-tight">
+            <h2 className="text-2xl md:text-5xl font-black text-neutral-800 mb-6 leading-tight">
               Planifica tu futuro financiero hoy mismo.
             </h2>
-            <p className="text-neutral-500 mb-10 leading-relaxed font-normal text-lg">
+            <p className="text-neutral-500 mb-8 md:mb-10 leading-relaxed font-normal text-base md:text-lg">
               No dejes nada al azar. Nuestra calculadora hipotecaria te ayuda a proyectar tus pagos mensuales para que puedas tomar la mejor decisión sin comprometer tu presupuesto familiar.
             </p>
 
