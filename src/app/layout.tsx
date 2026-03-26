@@ -13,8 +13,20 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Casaty | Inmobiliaria Premium",
-  description: "Migración de alto rendimiento de Casaty a Next.js",
+  title: "Inmobiliaria Casaty | Casas, departamento y terrenos en Piura",
+  description: "Ofrecemos una gama completa de servicios para satisfacer todas tus necesidades inmobiliarias en Piura. Nuestro equipo de expertos está comprometido con brindarte la mejor asesoría en compra, venta y tasación de propiedades.",
+  keywords: ["Inmobiliaria en Piura", "Venta de casas en Piura", "Departamentos en Piura", "Tasaciones en Piura", "Agentes inmobiliarios Piura", "Casaty"],
+  alternates: {
+    canonical: "https://casaty.pe",
+  },
+  openGraph: {
+    title: "Inmobiliaria Casaty | Casas, departamento y terrenos en Piura",
+    description: "Expertos inmobiliarios en Piura. Compra, vende o tasa tu propiedad con los mejores profesionales.",
+    url: "https://casaty.pe",
+    siteName: "Casaty",
+    locale: "es_PE",
+    type: "website",
+  },
   icons: {
     icon: "/Logo/favicon.webp",
   },
@@ -23,6 +35,7 @@ export const metadata: Metadata = {
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ContactWhatsApp } from "@/components/ui/ContactWhatsApp";
+import { SchemaOrg } from "@/components/SEO/SchemaOrg";
 
 export default function RootLayout({
   children,
@@ -36,6 +49,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-sans overflow-x-hidden">
+        <SchemaOrg />
         <Navbar />
         <div className="flex-grow pt-20">
           {children}
