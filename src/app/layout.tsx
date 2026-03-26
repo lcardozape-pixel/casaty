@@ -31,6 +31,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "/Logo/favicon.webp",
   },
+  verification: {
+    google: "roKX5BdaIW1GIuUUHHDI_l6kC2mmAzQgyaZKOjxR250",
+  },
 };
 
 import { Navbar } from "@/components/layout/Navbar";
