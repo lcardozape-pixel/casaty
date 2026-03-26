@@ -16,9 +16,7 @@ export function Hero() {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-slate-50 z-10" />
         <motion.img
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 15, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
+          initial={{ scale: 1 }}
           src="/Imagenes/piura-panorama.png"
           alt="Piura Modern Panorama"
           className="w-full h-full object-cover"
@@ -69,8 +67,8 @@ export function Hero() {
             ))}
           </div>
 
-          {/* Search Box Card */}
-          <div className="bg-white/95 backdrop-blur-sm rounded-[2.5rem] p-3 shadow-2xl shadow-black/20 flex flex-col lg:flex-row items-center gap-3 border border-white">
+          {/* Search Box Card - Optimized without backdrop-blur */}
+          <div className="bg-white rounded-[2.5rem] p-3 shadow-2xl shadow-black/20 flex flex-col lg:flex-row items-center gap-3 border border-white">
             {/* Location Input */}
             <div className="flex-1 min-w-[200px] px-6 py-4 bg-slate-50/50 rounded-[1.8rem] border border-slate-100 flex items-center gap-4 group/input focus-within:ring-2 focus-within:ring-[#0040FF]/20 transition-all">
               <MapPin className="h-5 w-5 text-[#0040FF] shrink-0" />
@@ -128,7 +126,7 @@ export function Hero() {
           <div className="flex flex-wrap gap-3 mt-6 ml-4">
             <span className="text-[10px] font-black text-white/60 uppercase tracking-widest mt-1 mr-2">Filtros Pro:</span>
             {['Los Ejidos', 'Santa María del Valle', 'Castilla', 'Miraflores'].map((tag) => (
-              <button key={tag} className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-[#0040FF] transition-all">
+              <button key={tag} className="px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-[#0040FF] transition-all">
                 {tag}
               </button>
             ))}
