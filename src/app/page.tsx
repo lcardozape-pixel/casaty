@@ -58,7 +58,7 @@ export default function Home() {
 
       {/* Honecta Network Call to Action */}
       <section className="py-16 md:py-24 bg-neutral-900 mx-4 lg:mx-8 mb-16 md:mb-24 rounded-[2rem] md:rounded-[4rem] text-white overflow-hidden relative">
-         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#0040FF]/10 rounded-full blur-[150px] -mr-64 -mt-64" />
+         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#0040FF]/5 rounded-full -mr-64 -mt-64" />
          <div className="max-w-[1700px] mx-auto px-6 md:px-10 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
                <div>

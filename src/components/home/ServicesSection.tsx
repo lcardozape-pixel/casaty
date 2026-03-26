@@ -46,9 +46,9 @@ const services = [
 const ServicesSection = () => {
   return (
     <section className="py-16 md:py-24 bg-slate-50 relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/30 rounded-full blur-[100px] -mr-32 -mt-32 -z-0" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100/30 rounded-full blur-[100px] -ml-32 -mb-32 -z-0" />
+      {/* Decorative background elements - Optimized without blur */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/10 rounded-full -mr-32 -mt-32 -z-0" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100/10 rounded-full -ml-32 -mb-32 -z-0" />
 
       <div className="relative z-10 max-w-[1700px] mx-auto px-4 lg:px-8 w-full">
         <div className="text-center max-w-4xl mx-auto mb-12 md:mb-20">
