@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Disallow legal and administrative pages
+Disallow: /terminos-y-condiciones
+Disallow: /politica-de-privacidad
+Disallow: /politica-de-cookies
+Disallow: /libro-de-reclamaciones
+
+Sitemap: https://casaty.pe/sitemap_index.xml
