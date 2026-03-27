@@ -17,16 +17,24 @@ export async function POST(request: Request) {
       const pool = await getDb();
       const detailsJson = JSON.stringify(otherData);
       
-      await pool.execute(
+      // Crear un tiempo límite de 2.5 segundos para la base de datos
+      const dbPromise = pool.execute(
         'INSERT INTO Lead (name, phone, email, serviceName, details, createdAt) VALUES (?, ?, ?, ?, ?, NOW())',
         [name, phone, email, serviceName, detailsJson]
       );
+
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout de base de datos")), 2500)
+      );
+
+      // Ejecutar con límite de tiempo
+      await Promise.race([dbPromise, timeoutPromise]);
       
       dbSaved = true;
       console.log("Lead guardado con mysql2 correctamente.");
     } catch (dbError: any) {
       dbErrorDetail = dbError instanceof Error ? dbError.message : String(dbError);
-      console.error("Error al guardar lead con mysql2:", dbError);
+      console.error("Fallo resiliente en DB (continuando con correo):", dbErrorDetail);
     }
 
     const summaryHtml = Object.entries(otherData)
