@@ -149,13 +149,17 @@ export function LeadWizard({
       const response = await fetchPromise;
       clearTimeout(timeoutId);
 
-      if (!response.ok) {
-        try {
-          const errorData = await response.json();
-          console.error("Error en API:", errorData);
-        } catch (e) {
-          console.error("Respuesta de error no es JSON");
+      const result = await response.json().catch(() => ({}));
+      
+      if (response.ok) {
+        console.log("✅ API enviada con éxito:", result);
+        if (result.dbSaved) {
+          console.log("💾 Guardado en DB: EXITOSO");
+        } else {
+          console.warn("⚠️ Guardado en DB: FALLIDO", result.dbErrorDetail);
         }
+      } else {
+        console.error("❌ Fallo en API:", result);
       }
     } catch (error) {
       console.error("Error submitting lead via API:", error);
