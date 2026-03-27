@@ -11,6 +11,9 @@ export async function POST(request: Request) {
     const { name, phone, email, ...otherData } = formData;
 
     // 1. Guardar en Base de Datos MySQL (Hostinger)
+    let dbSaved = false;
+    let dbErrorDetail = null;
+
     try {
       const prisma = await getPrisma();
       await prisma.lead.create({
@@ -22,18 +25,18 @@ export async function POST(request: Request) {
           details: otherData as any,
         },
       });
+      dbSaved = true;
       console.log("Lead guardado en base de datos correctamente.");
-    } catch (dbError) {
+    } catch (dbError: any) {
+      dbErrorDetail = dbError instanceof Error ? dbError.message : String(dbError);
       console.error("Error al guardar lead en base de datos:", dbError);
-      // Continuamos con el envío del correo aunque falle la base de datos para no bloquear el lead
     }
 
     const summaryHtml = Object.entries(otherData)
       .map(([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`)
       .join('');
 
-    console.log(`Intentando enviar correo para: ${serviceName} a casaty.pe@gmail.com`);
-
+    // 2. Enviar Correo con Resend
     const { data, error } = await resend.emails.send({
       from: 'Casaty <notificaciones@casaty.pe>',
       to: ['casaty.pe@gmail.com'],
@@ -65,13 +68,16 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error("Error de Resend:", error);
-      return NextResponse.json({ error }, { status: 400 });
+      return NextResponse.json({ error, dbSaved, dbErrorDetail }, { status: 400 });
     }
 
     console.log("Correo enviado exitosamente:", data?.id);
-    return NextResponse.json({ data });
+    return NextResponse.json({ success: true, dbSaved, dbErrorDetail, data });
   } catch (err) {
     console.error("Error crítico en API send-lead:", err);
-    return NextResponse.json({ error: 'Fallo al enviar el correo', details: err instanceof Error ? err.message : String(err) }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Fallo al enviar el correo', 
+      details: err instanceof Error ? err.message : String(err) 
+    }, { status: 500 });
   }
 }
