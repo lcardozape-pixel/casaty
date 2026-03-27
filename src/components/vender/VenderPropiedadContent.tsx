@@ -232,7 +232,7 @@ export function VenderPropiedadContent() {
               ))}
             </div>
 
-            <Button size="lg" showArrow>
+            <Button size="lg" showArrow onClick={() => setShowWizard(true)}>
               Quiero saber todos los detalles
             </Button>
           </div>
@@ -373,7 +373,7 @@ export function VenderPropiedadContent() {
                 <div className="pt-1">
                   <h3 className="text-xl font-black text-green-600 leading-tight mb-2">¡Vendido!</h3>
                   <p className="text-sm text-neutral-500 font-bold mb-8">Ya puedes respirar, un dolor de cabeza menos 🙂</p>
-                  <Button size="lg" showArrow>
+                  <Button size="lg" showArrow onClick={() => setShowWizard(true)}>
                     Vende tu casa hoy mismo
                   </Button>
                 </div>
@@ -402,7 +402,7 @@ export function VenderPropiedadContent() {
               <h2 className="text-3xl md:text-5xl font-black text-neutral-800 mb-8 leading-tight">
                 Ayudamos a más de 240 familias a cumplir sus objetivos inmobiliarios.
               </h2>
-              <Button size="lg" showArrow>
+              <Button size="lg" showArrow onClick={() => setShowWizard(true)}>
                 Quiero unirme a ellos
               </Button>
             </div>
@@ -460,7 +460,7 @@ export function VenderPropiedadContent() {
             Estamos listos para encontrar al comprador ideal para tu inmueble en el menor tiempo posible.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" showArrow className="w-full md:w-auto px-12">
+            <Button size="lg" showArrow className="w-full md:w-auto px-12" onClick={() => setShowWizard(true)}>
               Empezar ahora gratis
             </Button>
             <Button variant="outline" size="lg" className="w-full md:w-auto px-12 bg-white">

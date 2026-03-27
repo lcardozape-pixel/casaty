@@ -95,7 +95,7 @@ export function HomeContent() {
             </p>
           </div>
           <div className="flex gap-4">
-             <Button variant="outline" size="lg" className="border-slate-200 text-neutral-800 hover:bg-neutral-800 hover:text-white transition-all font-black" showArrow>
+             <Button variant="outline" size="lg" className="border-slate-200 text-neutral-800 hover:bg-neutral-800 hover:text-white transition-all font-black" showArrow onClick={() => setShowWizard(true)}>
                 Ver todo el Catálogo
              </Button>
           </div>
@@ -116,7 +116,7 @@ export function HomeContent() {
         </div>
 
         <div className="flex justify-center">
-          <Button variant="outline" size="lg" className="border-slate-200 text-neutral-800 hover:bg-slate-100 font-black w-full md:w-auto" showArrow>
+          <Button variant="outline" size="lg" className="border-slate-200 text-neutral-800 hover:bg-slate-100 font-black w-full md:w-auto" showArrow onClick={() => setShowWizard(true)}>
             Explorar más de 1,000 unidades
           </Button>
         </div>

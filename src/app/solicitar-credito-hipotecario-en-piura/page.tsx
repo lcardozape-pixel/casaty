@@ -442,7 +442,7 @@ export default function CreditoPage() {
                 <div className="pt-1">
                   <h3 className="text-xl font-black text-green-600 leading-tight mb-2">¡Saca las llaves!</h3>
                   <p className="text-sm text-neutral-500 font-bold mb-8">Felicidades, tu propiedad ya cuenta con financiamiento seguro 🙂</p>
-                  <Button size="lg" showArrow>
+                  <Button size="lg" showArrow onClick={() => setShowWizard(true)}>
                     Empezar evaluación ahora
                   </Button>
                 </div>
@@ -527,7 +527,7 @@ export default function CreditoPage() {
             No pierdas tiempo en colas. Deja que nuestros expertos gestionen tu crédito hipotecario de forma gratuita y eficiente.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" showArrow className="w-full md:w-auto px-12">
+            <Button size="lg" showArrow className="w-full md:w-auto px-12" onClick={() => setShowWizard(true)}>
               Pre-calificar ahora
             </Button>
             <Button variant="outline" size="lg" className="w-full md:w-auto px-12 bg-white">

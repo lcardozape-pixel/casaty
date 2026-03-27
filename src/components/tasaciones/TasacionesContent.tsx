@@ -357,7 +357,7 @@ export function TasacionesContent() {
                 <div className="pt-1">
                   <h3 className="text-xl font-black text-green-600 leading-tight mb-2">¡Todo Listo!</h3>
                   <p className="text-sm text-neutral-500 font-bold mb-8">Ya tienes el respaldo técnico que necesitas 🤝</p>
-                  <Button size="lg" showArrow>
+                  <Button size="lg" showArrow onClick={() => setShowWizard(true)}>
                     Agendar inspección ahora
                   </Button>
                 </div>
@@ -405,7 +405,7 @@ export function TasacionesContent() {
             No adivines el precio. Solicita hoy una tasación profesional y negocia con seguridad.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" className="w-full md:w-auto px-12 bg-white text-[#0040FF] hover:bg-slate-100" showArrow>
+            <Button size="lg" className="w-full md:w-auto px-12 bg-white text-[#0040FF] hover:bg-slate-100" showArrow onClick={() => setShowWizard(true)}>
               Cotizar mi tasación
             </Button>
             <Button variant="outline" size="lg" className="w-full md:w-auto px-12 border-white text-white hover:bg-white/10">

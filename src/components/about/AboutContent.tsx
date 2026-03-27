@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/Button";
 import {
   ShieldCheck,
@@ -14,13 +14,74 @@ import {
   Briefcase,
   History,
   TrendingUp,
-  MapPin
+  MapPin,
+  User,
+  Phone,
+  Mail,
+  Search,
+  MessageSquare,
+  Key,
+  DollarSign
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  LeadWizard, 
+  WizardStep 
+} from "@/components/ui/LeadWizard";
+
+// Definición de pasos para el Wizard General
+const GENERAL_STEPS: WizardStep[] = [
+  {
+    id: "intent",
+    question: "¿En qué podemos ayudarte hoy?",
+    type: "options",
+    options: [
+      { id: "comprar", label: "Quiero Comprar", icon: Search, value: "Compra" },
+      { id: "vender", label: "Quiero Vender", icon: DollarSign, value: "Venta" },
+      { id: "alquilar", label: "Quiero Alquilar", icon: Key, value: "Alquiler" },
+      { id: "asesoria", label: "Asesoría General", icon: MessageSquare, value: "Asesoría" },
+    ]
+  },
+  {
+    id: "location",
+    question: "¿En qué zona de Piura te encuentras o buscas?",
+    type: "options",
+    options: [
+      { id: "piura", label: "Piura / Castilla", icon: MapPin, value: "Piura/Castilla" },
+      { id: "26oc", label: "26 de Octubre", icon: MapPin, value: "26 de Octubre" },
+      { id: "catacaos", label: "Catacaos / Otros", icon: MapPin, value: "Catacaos/Otros" },
+    ]
+  },
+  {
+    id: "contact",
+    question: "¡Excelente! Déjanos tus datos para que un experto te contacte",
+    type: "input",
+    fields: [
+      { id: "name", label: "Nombre Completo", icon: User, placeholder: "Ej. Juan Pérez", type: "text" },
+      { id: "phone", label: "WhatsApp / Celular", icon: Phone, placeholder: "Ej. 941849523", type: "tel" },
+      { id: "email", label: "Correo Electrónico", icon: Mail, placeholder: "Ej. juan@correo.com", type: "email" },
+    ]
+  }
+];
 
 export function AboutContent() {
+  const [showWizard, setShowWizard] = useState(false);
+
   return (
     <main className="flex min-h-screen flex-col bg-white overflow-x-hidden">
+      <AnimatePresence>
+        {showWizard && (
+          <LeadWizard
+            title="Consultoría Inmobiliaria Casaty"
+            serviceName="Asesoría General"
+            steps={GENERAL_STEPS}
+            onClose={() => setShowWizard(false)}
+            onComplete={(data) => {
+              console.log("General lead captured:", data);
+            }}
+          />
+        )}
+      </AnimatePresence>
       {/* 1. Introductory Header */}
       <section className="pt-24 md:pt-32 pb-20 md:pb-24 max-w-7xl mx-auto px-6 lg:px-12 w-full border-b border-slate-100 bg-white rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
         <div className="max-w-4xl mx-auto text-center">
@@ -135,7 +196,7 @@ export function AboutContent() {
               <p className="text-slate-400 font-medium leading-relaxed italic border-l-4 border-[#0040FF] pl-6 py-2 mb-12">
                 "No solo vendemos casas, ayudamos a familias piuranas a sembrar las bases de su futuro con seguridad legal y comercial."
               </p>
-              <Button size="lg" className="w-full md:w-auto bg-white text-neutral-900 hover:bg-slate-100" showArrow>
+              <Button size="lg" className="w-full md:w-auto bg-white text-neutral-900 hover:bg-slate-100" showArrow onClick={() => setShowWizard(true)}>
                 Ver Servicios
               </Button>
             </div>
@@ -222,7 +283,7 @@ export function AboutContent() {
               </div>
 
               <div className="pt-6">
-                <Button size="lg" variant="outline" className="px-12 hover:bg-neutral-800 hover:text-white transition-all" showArrow>
+                <Button size="lg" variant="outline" className="px-12 hover:bg-neutral-800 hover:text-white transition-all" showArrow onClick={() => setShowWizard(true)}>
                   Trabaja con nosotros
                 </Button>
               </div>
@@ -261,10 +322,10 @@ export function AboutContent() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center text-white">
            <h2 className="text-3xl lg:text-5xl font-black mb-12">¿Empezamos tu historia hoy?</h2>
            <div className="flex flex-col md:flex-row justify-center gap-4">
-              <Button size="lg" className="bg-white text-[#0040FF] hover:bg-slate-100 px-12" showArrow>
+              <Button size="lg" className="bg-white text-[#0040FF] hover:bg-slate-100 px-12" showArrow onClick={() => setShowWizard(true)}>
                 Ver Propiedades
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-12">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-12" onClick={() => setShowWizard(true)}>
                 Hablar con un Experto
               </Button>
            </div>

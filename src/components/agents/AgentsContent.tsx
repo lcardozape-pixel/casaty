@@ -13,9 +13,53 @@ import {
   Zap,
   Globe,
   Briefcase,
-  TrendingUp
+  TrendingUp,
+  User,
+  Phone,
+  MessageSquare,
+  Key,
+  DollarSign
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  LeadWizard, 
+  WizardStep 
+} from "@/components/ui/LeadWizard";
+
+// Definición de pasos para el Wizard General (Agentes)
+const GENERAL_STEPS: WizardStep[] = [
+  {
+    id: "intent",
+    question: "¿En qué podemos ayudarte hoy?",
+    type: "options",
+    options: [
+      { id: "comprar", label: "Quiero Comprar", icon: Search, value: "Compra" },
+      { id: "vender", label: "Quiero Vender", icon: DollarSign, value: "Venta" },
+      { id: "alquilar", label: "Quiero Alquilar", icon: Key, value: "Alquiler" },
+      { id: "asesoria", label: "Asesoría General", icon: MessageSquare, value: "Asesoría" },
+    ]
+  },
+  {
+    id: "location",
+    question: "¿En qué zona de Piura te encuentras o buscas?",
+    type: "options",
+    options: [
+      { id: "piura", label: "Piura / Castilla", icon: MapPin, value: "Piura/Castilla" },
+      { id: "26oc", label: "26 de Octubre", icon: MapPin, value: "26 de Octubre" },
+      { id: "catacaos", label: "Catacaos / Otros", icon: MapPin, value: "Catacaos/Otros" },
+    ]
+  },
+  {
+    id: "contact",
+    question: "¡Excelente! Déjanos tus datos para que un experto te contacte",
+    type: "input",
+    fields: [
+      { id: "name", label: "Nombre Completo", icon: User, placeholder: "Ej. Juan Pérez", type: "text" },
+      { id: "phone", label: "WhatsApp / Celular", icon: Phone, placeholder: "Ej. 941849523", type: "tel" },
+      { id: "email", label: "Correo Electrónico", icon: Mail, placeholder: "Ej. juan@correo.com", type: "email" },
+    ]
+  }
+];
 
 // Fictitious data for now
 const INITIAL_AGENTS = [
@@ -55,6 +99,7 @@ const INITIAL_AGENTS = [
 ];
 
 export function AgentsContent() {
+  const [showWizard, setShowWizard] = useState(false);
   const [agents, setAgents] = useState(INITIAL_AGENTS);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSpecialty, setFilterSpecialty] = useState("Todas");
@@ -71,7 +116,20 @@ export function AgentsContent() {
 
   return (
     <main className="flex min-h-screen flex-col bg-white overflow-x-hidden">
-      {/* 1. Header */}
+      <AnimatePresence>
+        {showWizard && (
+          <LeadWizard
+            title="Consultoría Inmobiliaria Casaty"
+            serviceName="Asesoría General"
+            steps={GENERAL_STEPS}
+            onClose={() => setShowWizard(false)}
+            onComplete={(data) => {
+              console.log("General lead captured:", data);
+            }}
+          />
+        )}
+      </AnimatePresence>
+      {/* 1. Header Slice - Adjusted for Wizard */}
       <section className="pt-24 md:pt-32 pb-16 md:pb-20 max-w-7xl mx-auto px-6 lg:px-12 w-full bg-white border-b border-slate-100 rounded-b-[3rem] md:rounded-b-[4rem] shadow-sm">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
@@ -215,7 +273,7 @@ export function AgentsContent() {
                    Si eres un agente profesional buscando las mejores herramientas y comisiones de Piura, queremos hablar contigo.
                  </p>
                  <div className="flex flex-wrap gap-4">
-                    <Button size="lg" className="bg-white text-neutral-900 hover:bg-slate-100 w-full md:w-auto px-12" showArrow>
+                    <Button size="lg" className="bg-white text-neutral-900 hover:bg-slate-100 w-full md:w-auto px-12" showArrow onClick={() => setShowWizard(true)}>
                        Ver Vacantes
                     </Button>
                     <div className="flex items-center gap-4 bg-white/5 border border-white/10 px-8 py-4 rounded-3xl">
@@ -249,7 +307,7 @@ export function AgentsContent() {
            <p className="text-neutral-500 font-medium text-lg leading-relaxed mb-12">
              Habla hoy mismo con nuestra central para que te asignemos al experto ideal según el tipo de propiedad que estás buscando.
            </p>
-           <Button size="lg" className="bg-[#0040FF]" showArrow>
+           <Button size="lg" className="bg-[#0040FF]" showArrow onClick={() => setShowWizard(true)}>
              Hablar con Central Casaty
            </Button>
         </div>

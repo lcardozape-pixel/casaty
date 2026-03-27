@@ -227,7 +227,7 @@ export function AlquilarContent() {
               ))}
             </div>
 
-            <Button size="lg" showArrow>
+            <Button size="lg" showArrow onClick={() => setShowWizard(true)}>
               Me interesa saber más
             </Button>
           </div>
@@ -350,7 +350,7 @@ export function AlquilarContent() {
                 <div className="pt-1">
                   <h3 className="text-xl font-black text-green-600 leading-tight mb-2">¡Inquilino Ideal!</h3>
                   <p className="text-sm text-neutral-500 font-bold mb-8">Disfruta de la tranquilidad de un alquiler seguro 🙂</p>
-                  <Button size="lg" showArrow>
+                  <Button size="lg" showArrow onClick={() => setShowWizard(true)}>
                     Alquila tu propiedad ahora
                   </Button>
                 </div>
@@ -398,7 +398,7 @@ export function AlquilarContent() {
             Únete a las decenas de propietarios que hoy duermen tranquilos gracias a Casaty.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" showArrow className="w-full md:w-auto px-12">
+            <Button size="lg" showArrow className="w-full md:w-auto px-12" onClick={() => setShowWizard(true)}>
               Alquilar mi Propiedad Ahora
             </Button>
             <Button variant="outline" size="lg" className="w-full md:w-auto px-12 bg-white">
