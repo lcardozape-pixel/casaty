@@ -1,6 +1,5 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -9,16 +8,12 @@ export async function POST(request: Request) {
     const { formData, serviceName } = await request.json();
     const { name, phone, email, ...otherData } = formData;
 
-    // 1. Guardar en Base de Datos MySQL (DESACTIVADO TEMPORALMENTE PARA PRUEBAS)
-    let dbSaved = false;
-    let dbErrorDetail = "DB desactivada para depurar 503";
-    console.log("MOCK: DB desactivada temporalmente");
-
+    // Generar resumen de datos adicionales
     const summaryHtml = Object.entries(otherData)
       .map(([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`)
       .join('');
 
-    // 2. Enviar Correo con Resend
+    // Enviar Correo con Resend
     const { data, error } = await resend.emails.send({
       from: 'Casaty <notificaciones@casaty.pe>',
       to: ['casaty.pe@gmail.com'],
@@ -50,11 +45,11 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error("Error de Resend:", error);
-      return NextResponse.json({ error, dbSaved, dbErrorDetail }, { status: 400 });
+      return NextResponse.json({ error }, { status: 400 });
     }
 
     console.log("Correo enviado exitosamente:", data?.id);
-    return NextResponse.json({ success: true, dbSaved, dbErrorDetail, data });
+    return NextResponse.json({ success: true, data });
   } catch (err) {
     console.error("Error crítico en API send-lead:", err);
     return NextResponse.json({ 
