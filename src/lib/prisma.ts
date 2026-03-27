@@ -18,10 +18,11 @@ export async function getPrisma(): Promise<PrismaClient> {
       const url = process.env.DATABASE_URL;
       
       if (url && (url.startsWith('mysql://') || url.startsWith('mariadb://'))) {
-        // En Prisma 7, PrismaMariaDb es una factory que devuelve el adaptador
         const adapterFactory = new PrismaMariaDb(url);
         const adapter = await adapterFactory.connect();
-        prismaInstance = new PrismaClient({ adapter });
+        // Usamos 'as any' para evitar el error de tipado estricto en el build de Hostinger
+        // donde el compilador espera un objeto con 'connect' (Factory) en lugar del adaptador ya conectado.
+        prismaInstance = new PrismaClient({ adapter: adapter as any });
       } else {
         prismaInstance = new PrismaClient();
       }
