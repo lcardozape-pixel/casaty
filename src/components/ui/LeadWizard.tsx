@@ -103,11 +103,38 @@ export function LeadWizard({
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
     
+    // Preparar el mensaje de WhatsApp de antemano para que esté listo independientemente del fetch
+    const summary = steps
+      .filter(s => s.type === "options")
+      .map(s => `• ${s.question}: ${formData[s.id]}`)
+      .join('\n');
+    
+    const contactInfo = `👤 Nombre: ${formData.name}\n📱 WhatsApp: ${formData.phone}\n📧 Email: ${formData.email}`;
+    const message = `*NUEVA SOLICITUD DE ${serviceName.toUpperCase()}*\n\n${summary}\n\n*DATOS DE CONTACTO*\n${contactInfo}`;
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+    // Función para finalizar el proceso en el cliente
+    const finishProcess = () => {
+      onComplete(formData);
+      setIsSubmitting(false);
+      setIsCompleted(true);
+      
+      // Abrir WhatsApp tras un breve retraso para que el usuario vea la pantalla de éxito
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank');
+      }, 1000);
+    };
+
     try {
-      // 1. Send Email via internal API (Resend)
-      const response = await fetch('/api/send-lead', {
+      // 1. Intentar enviar por Email/DB via API interna
+      // Añadimos un AbortController para no esperar más de 10 segundos
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+      const fetchPromise = fetch('/api/send-lead', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -116,45 +143,27 @@ export function LeadWizard({
           formData,
           serviceName,
         }),
+        signal: controller.signal
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Fallo al enviar el lead por correo:", errorData);
-      }
+      const response = await fetchPromise;
+      clearTimeout(timeoutId);
 
-      // 2. Prepare WhatsApp Message
-      const summary = steps
-        .filter(s => s.type === "options")
-        .map(s => `• ${s.question}: ${formData[s.id]}`)
-        .join('\n');
-      
-      const contactInfo = `👤 Nombre: ${formData.name}\n📱 WhatsApp: ${formData.phone}\n📧 Email: ${formData.email}`;
-      const message = `*NUEVA SOLICITUD DE ${serviceName.toUpperCase()}*\n\n${summary}\n\n*DATOS DE CONTACTO*\n${contactInfo}`;
-      
-      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-      
-      onComplete(formData);
-      setIsSubmitting(false);
-      setIsCompleted(true);
-      
-      // 3. Open WhatsApp after a short delay
-      setTimeout(() => {
-        window.open(whatsappUrl, '_blank');
-      }, 1000);
+      if (!response.ok) {
+        try {
+          const errorData = await response.json();
+          console.error("Error en API:", errorData);
+        } catch (e) {
+          console.error("Respuesta de error no es JSON");
+        }
+      }
     } catch (error) {
-      console.error("Error submitting lead:", error);
-      setIsSubmitting(false);
-      // Fallback: at least try to open WhatsApp if email fails
-      const summary = steps
-        .filter(s => s.type === "options")
-        .map(s => `• ${s.question}: ${formData[s.id]}`)
-        .join('\n');
-      const contactInfo = `👤 Nombre: ${formData.name}\n📱 WhatsApp: ${formData.phone}\n📧 Email: ${formData.email}`;
-      const message = `*NUEVA SOLICITUD DE ${serviceName.toUpperCase()}*\n\n${summary}\n\n*DATOS DE CONTACTO*\n${contactInfo}`;
-      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, '_blank');
-      setIsCompleted(true);
+      console.error("Error submitting lead via API:", error);
+      // No lanzamos el error para que el flujo de WhatsApp siga
+    } finally {
+      // Pase lo que pase con el API (éxito, timeout o error), 
+      // pasamos a la pantalla final y abrimos WhatsApp.
+      finishProcess();
     }
   };
 
