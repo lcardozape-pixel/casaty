@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -9,12 +10,31 @@ export async function POST(request: Request) {
 
     const { name, phone, email, ...otherData } = formData;
 
+    // 1. Guardar en Base de Datos MySQL (Hostinger)
+    try {
+      await prisma.lead.create({
+        data: {
+          name,
+          phone,
+          email,
+          serviceName,
+          details: otherData as any,
+        },
+      });
+      console.log("Lead guardado en base de datos correctamente.");
+    } catch (dbError) {
+      console.error("Error al guardar lead en base de datos:", dbError);
+      // Continuamos con el envío del correo aunque falle la base de datos para no bloquear el lead
+    }
+
     const summaryHtml = Object.entries(otherData)
       .map(([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`)
       .join('');
 
+    console.log(`Intentando enviar correo para: ${serviceName} a casaty.pe@gmail.com`);
+
     const { data, error } = await resend.emails.send({
-      from: 'Casaty Leads <onboarding@resend.dev>',
+      from: 'Casaty <notificaciones@casaty.pe>',
       to: ['casaty.pe@gmail.com'],
       subject: `Nuevo Lead: ${serviceName} - ${name}`,
       html: `
@@ -43,11 +63,14 @@ export async function POST(request: Request) {
     });
 
     if (error) {
+      console.error("Error de Resend:", error);
       return NextResponse.json({ error }, { status: 400 });
     }
 
+    console.log("Correo enviado exitosamente:", data?.id);
     return NextResponse.json({ data });
-  } catch (error) {
-    return NextResponse.json({ error: 'Fallo al enviar el correo' }, { status: 500 });
+  } catch (err) {
+    console.error("Error crítico en API send-lead:", err);
+    return NextResponse.json({ error: 'Fallo al enviar el correo', details: err instanceof Error ? err.message : String(err) }, { status: 500 });
   }
 }

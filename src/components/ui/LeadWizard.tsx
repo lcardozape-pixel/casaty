@@ -119,7 +119,8 @@ export function LeadWizard({
       });
 
       if (!response.ok) {
-        console.error("Failed to send email lead");
+        const errorData = await response.json();
+        console.error("Fallo al enviar el lead por correo:", errorData);
       }
 
       // 2. Prepare WhatsApp Message
