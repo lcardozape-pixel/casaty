@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
@@ -66,7 +66,7 @@ export default function RootLayout({
             gtag('config', 'G-4P7MPL1RZP');
           `}
         </Script>
-        
+
         <SchemaOrg />
         <Navbar />
         <div className="flex-grow pt-20">
