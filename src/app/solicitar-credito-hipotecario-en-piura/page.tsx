@@ -2,6 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/Button";
+import { 
+  LeadWizard, 
+  WizardStep 
+} from "@/components/ui/LeadWizard";
 import {
   ShieldCheck,
   TrendingUp,
@@ -20,9 +24,59 @@ import {
   BadgeCheck,
   Building2,
   Clock,
-  Briefcase
+  Briefcase,
+  Wallet,
+  Coins,
+  ArrowUpRight,
+  User,
+  Phone,
+  Mail
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Definición de pasos para el Wizard de Crédito
+const CREDITO_STEPS: WizardStep[] = [
+  {
+    id: "creditType",
+    question: "¿Qué tipo de crédito necesitas hoy?",
+    type: "options",
+    options: [
+      { id: "mivivienda", label: "Nuevo Crédito MiVivienda", icon: Landmark, value: "MiVivienda" },
+      { id: "tradicional", label: "Hipotecario Tradicional", icon: Landmark, value: "Tradicional" },
+      { id: "traslado", label: "Traslado de Deuda", icon: ArrowUpRight, value: "Traslado de Deuda" },
+    ]
+  },
+  {
+    id: "amount",
+    question: "¿Cuál es el monto estimado del inmueble?",
+    type: "options",
+    options: [
+      { id: "r1", label: "Hasta S/ 150,000", icon: Coins, value: "<150k" },
+      { id: "r2", label: "S/ 150,000 - S/ 350,000", icon: Coins, value: "150k-350k" },
+      { id: "r3", label: "Más de S/ 350,000", icon: Coins, value: ">350k" },
+    ]
+  },
+  {
+    id: "situation",
+    question: "¿Cuál es tu situación laboral actual?",
+    type: "options",
+    options: [
+      { id: "planilla", label: "Dependiente (Planilla)", icon: Briefcase, value: "Planilla" },
+      { id: "ruc10", label: "Independiente (RUC 10)", icon: Briefcase, value: "RUC 10" },
+      { id: "ruc20", label: "Empresario (RUC 20)", icon: Briefcase, value: "RUC 20" },
+    ]
+  },
+  {
+    id: "contact",
+    question: "¡Excelente! Déjanos tus datos para iniciar tu pre-calificación gratuita",
+    type: "input",
+    fields: [
+      { id: "name", label: "Nombre Completo", icon: User, placeholder: "Ej. Roberto Carlos", type: "text" },
+      { id: "phone", label: "WhatsApp / Celular", icon: Phone, placeholder: "Ej. 941849523", type: "tel" },
+      { id: "email", label: "Correo Electrónico", icon: Mail, placeholder: "Ej. roberto@correo.com", type: "email" },
+    ]
+  }
+];
 
 function FAQItem({ question, answer }: { question: string, answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +100,7 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
   );
 }
 
-function MortgageCalculator() {
+function MortgageCalculator({ onAction }: { onAction: () => void }) {
   const [price, setPrice] = useState(350000);
   const [initialPercent, setInitialPercent] = useState(10);
   const [initial, setInitial] = useState(35000);
@@ -185,7 +239,7 @@ function MortgageCalculator() {
           </p>
         </div>
 
-        <Button size="lg" className="w-full" showArrow>
+        <Button size="lg" className="w-full" showArrow onClick={onAction}>
           Solicitar Pre-Calificación Gratis
         </Button>
       </div>
@@ -194,8 +248,23 @@ function MortgageCalculator() {
 }
 
 export default function CreditoPage() {
+  const [showWizard, setShowWizard] = useState(false);
+
   return (
     <main className="flex min-h-screen flex-col bg-slate-50">
+      <AnimatePresence>
+        {showWizard && (
+          <LeadWizard
+            title="Pre-calificación Hipotecaria"
+            serviceName="Crédito Hipotecario"
+            steps={CREDITO_STEPS}
+            onClose={() => setShowWizard(false)}
+            onComplete={(data) => {
+              console.log("Credit lead captured:", data);
+            }}
+          />
+        )}
+      </AnimatePresence>
       {/* 1. Hero Section */}
       <section className="relative h-[500px] md:h-[650px] flex items-center justify-center text-white overflow-hidden">
         <div
@@ -219,7 +288,7 @@ export default function CreditoPage() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" showArrow>
+              <Button size="lg" showArrow onClick={() => setShowWizard(true)}>
                 Calificar Ahora
               </Button>
               <Button variant="outline" size="lg" className="bg-white text-neutral-800 border-none">
@@ -316,7 +385,7 @@ export default function CreditoPage() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
           >
-            <MortgageCalculator />
+            <MortgageCalculator onAction={() => setShowWizard(true)} />
           </motion.div>
         </div>
       </section>

@@ -2,6 +2,10 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/Button";
+import { 
+  LeadWizard, 
+  WizardStep 
+} from "@/components/ui/LeadWizard";
 import {
   ShieldCheck,
   Zap,
@@ -18,9 +22,63 @@ import {
   Building2,
   FileSearch,
   Calculator,
-  FileText
+  FileText,
+  Home,
+  LandPlot,
+  Store,
+  Ruler,
+  Gavel,
+  User,
+  Phone,
+  Mail
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Definición de pasos para el Wizard de Tasación
+const TASACIONES_STEPS: WizardStep[] = [
+  {
+    id: "purpose",
+    question: "¿Para qué necesitas la tasación?",
+    type: "options",
+    options: [
+      { id: "venta", label: "Venta de Inmueble", icon: DollarSign, value: "Venta" },
+      { id: "bancaria", label: "Garantía Hipotecaria", icon: Building2, value: "Bancaria" },
+      { id: "judicial", label: "Proceso Judicial / Herencia", icon: Gavel, value: "Judicial/Herencia" },
+      { id: "personal", label: "Personal / Referencial", icon: Search, value: "Personal" },
+    ]
+  },
+  {
+    id: "propertyType",
+    question: "¿Qué tipo de propiedad vamos a tasar?",
+    type: "options",
+    options: [
+      { id: "casa", label: "Casa", icon: Home, value: "Casa" },
+      { id: "depa", label: "Departamento", icon: Building2, value: "Departamento" },
+      { id: "terreno", label: "Terreno", icon: LandPlot, value: "Terreno" },
+      { id: "local", label: "Local / Oficina", icon: Store, value: "Local/Oficina" },
+    ]
+  },
+  {
+    id: "area",
+    question: "¿Cuál es el área aproximada en m²?",
+    type: "options",
+    options: [
+      { id: "a1", label: "Hasta 120 m²", icon: Ruler, value: "<120m2" },
+      { id: "a2", label: "120 m² - 300 m²", icon: Ruler, value: "120-300m2" },
+      { id: "a3", label: "Más de 300 m²", icon: Ruler, value: ">300m2" },
+    ]
+  },
+  {
+    id: "contact",
+    question: "¡Perfecto! Déjanos tus datos para cotizar tu tasación",
+    type: "input",
+    fields: [
+      { id: "name", label: "Nombre Completo", icon: User, placeholder: "Ej. Carlos Morales", type: "text" },
+      { id: "phone", label: "WhatsApp / Celular", icon: Phone, placeholder: "Ej. 941849523", type: "tel" },
+      { id: "email", label: "Correo Electrónico", icon: Mail, placeholder: "Ej. carlos@correo.com", type: "email" },
+    ]
+  }
+];
 
 function FAQItem({ question, answer }: { question: string, answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,8 +103,23 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
 }
 
 export function TasacionesContent() {
+  const [showWizard, setShowWizard] = useState(false);
+
   return (
     <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
+      <AnimatePresence>
+        {showWizard && (
+          <LeadWizard
+            title="Tasación Profesional Casaty"
+            serviceName="Tasación de Inmueble"
+            steps={TASACIONES_STEPS}
+            onClose={() => setShowWizard(false)}
+            onComplete={(data) => {
+              console.log("Valuation lead captured:", data);
+            }}
+          />
+        )}
+      </AnimatePresence>
       {/* 1. Hero Section */}
       <section className="relative min-h-[600px] md:h-[700px] flex items-center justify-center text-white overflow-hidden">
         <div
@@ -70,7 +143,7 @@ export function TasacionesContent() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" showArrow>
+              <Button size="lg" showArrow onClick={() => setShowWizard(true)}>
                 Solicitar Tasación Ahora
               </Button>
               <Button variant="outline" size="lg" className="bg-white text-neutral-800 border-none">

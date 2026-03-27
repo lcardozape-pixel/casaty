@@ -2,6 +2,10 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/Button";
+import { 
+  LeadWizard, 
+  WizardStep 
+} from "@/components/ui/LeadWizard";
 import {
   ShieldCheck,
   UserCheck,
@@ -13,9 +17,64 @@ import {
   Building2,
   FileText,
   Camera,
-  Globe
+  Globe,
+  Home,
+  LandPlot,
+  Store,
+  MapPin,
+  Dog,
+  Armchair,
+  Calendar,
+  User,
+  Phone,
+  Mail
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Definición de pasos para el Wizard de Alquiler
+const ALQUILAR_STEPS: WizardStep[] = [
+  {
+    id: "propertyType",
+    question: "¿Qué tipo de propiedad deseas alquilar?",
+    type: "options",
+    options: [
+      { id: "casa", label: "Casa", icon: Home, value: "Casa" },
+      { id: "depa", label: "Departamento", icon: Building2, value: "Departamento" },
+      { id: "local", label: "Local Comercial", icon: Store, value: "Local Comercial" },
+      { id: "terreno", label: "Terreno", icon: LandPlot, value: "Terreno" },
+    ]
+  },
+  {
+    id: "isFurnished",
+    question: "¿La propiedad está amoblada?",
+    type: "options",
+    options: [
+      { id: "si", label: "Sí, amoblada", icon: Armchair, value: "Amoblada" },
+      { id: "lineablanda", label: "Solo Línea Blanca", icon: Armchair, value: "Línea Blanca" },
+      { id: "no", label: "No, sin amoblar", icon: Armchair, value: "Sin amoblar" },
+    ]
+  },
+  {
+    id: "pets",
+    question: "¿Aceptas mascotas en la propiedad?",
+    type: "options",
+    options: [
+      { id: "si_pet", label: "Sí, acepto", icon: Dog, value: "Sí" },
+      { id: "no_pet", label: "No acepto", icon: Dog, value: "No" },
+      { id: "consultar", label: "A consultar", icon: Dog, value: "A consultar" },
+    ]
+  },
+  {
+    id: "contact",
+    question: "¡Excelente! Déjanos tus datos para encontrar al inquilino ideal",
+    type: "input",
+    fields: [
+      { id: "name", label: "Nombre Completo", icon: User, placeholder: "Ej. María García", type: "text" },
+      { id: "phone", label: "WhatsApp / Celular", icon: Phone, placeholder: "Ej. 941849523", type: "tel" },
+      { id: "email", label: "Correo Electrónico", icon: Mail, placeholder: "Ej. maria@correo.com", type: "email" },
+    ]
+  }
+];
 
 function FAQItem({ question, answer }: { question: string, answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,8 +99,23 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
 }
 
 export function AlquilarContent() {
+  const [showWizard, setShowWizard] = useState(false);
+
   return (
     <main className="flex min-h-screen flex-col bg-slate-50">
+      <AnimatePresence>
+        {showWizard && (
+          <LeadWizard
+            title="Arrendamiento Seguro"
+            serviceName="Alquiler de Propiedad"
+            steps={ALQUILAR_STEPS}
+            onClose={() => setShowWizard(false)}
+            onComplete={(data) => {
+              console.log("Rental lead captured:", data);
+            }}
+          />
+        )}
+      </AnimatePresence>
       {/* 1. Hero Section */}
       <section className="relative h-[500px] md:h-[650px] flex items-center justify-center text-white overflow-hidden">
         <div
@@ -70,7 +144,7 @@ export function AlquilarContent() {
                   ¿Buscas un inquilino puntual y confiable? 👉
                 </p>
               </div>
-              <Button size="lg" showArrow className="w-full md:w-auto">
+              <Button size="lg" showArrow className="w-full md:w-auto" onClick={() => setShowWizard(true)}>
                 Alquila mi Inmueble Ahora
               </Button>
             </div>

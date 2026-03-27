@@ -2,6 +2,10 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/Button";
+import { 
+  LeadWizard, 
+  WizardStep 
+} from "@/components/ui/LeadWizard";
 import {
   ShieldCheck,
   TrendingUp,
@@ -18,9 +22,62 @@ import {
   TrendingDown,
   Coins,
   FileText,
-  Search
+  Search,
+  Home,
+  Building2,
+  LandPlot,
+  Store,
+  User,
+  Phone,
+  Mail
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Definición de pasos para el Wizard de Venta
+const VENDER_STEPS: WizardStep[] = [
+  {
+    id: "propertyType",
+    question: "¿Qué tipo de propiedad deseas vender?",
+    type: "options",
+    options: [
+      { id: "casa", label: "Casa", icon: Home, value: "Casa" },
+      { id: "depa", label: "Departamento", icon: Building2, value: "Departamento" },
+      { id: "terreno", label: "Terreno", icon: LandPlot, value: "Terreno" },
+      { id: "local", label: "Local Comercial", icon: Store, value: "Local Comercial" },
+    ]
+  },
+  {
+    id: "location",
+    question: "¿En qué zona de Piura se encuentra?",
+    type: "options",
+    options: [
+      { id: "castilla", label: "Castilla", icon: MapPin, value: "Castilla" },
+      { id: "piura", label: "Piura Cercado", icon: MapPin, value: "Piura Cercado" },
+      { id: "26oct", label: "26 de Octubre", icon: MapPin, value: "Veintiséis de Octubre" },
+      { id: "otros", label: "Otras zonas", icon: MapPin, value: "Otros / Alrededores" },
+    ]
+  },
+  {
+    id: "urgency",
+    question: "¿Qué tan pronto necesitas vender?",
+    type: "options",
+    options: [
+      { id: "urgente", label: "Lo antes posible", icon: Clock, value: "Inmediata" },
+      { id: "flexible", label: "En 1-3 meses", icon: Clock, value: "1 a 3 meses" },
+      { id: "info", label: "Solo busco información", icon: Clock, value: "Solo información" },
+    ]
+  },
+  {
+    id: "contact",
+    question: "¡Último paso! Déjanos tus datos para contactarte",
+    type: "input",
+    fields: [
+      { id: "name", label: "Nombre Completo", icon: User, placeholder: "Ej. Juan Pérez", type: "text" },
+      { id: "phone", label: "WhatsApp / Celular", icon: Phone, placeholder: "Ej. 941849523", type: "tel" },
+      { id: "email", label: "Correo Electrónico", icon: Mail, placeholder: "Ej. juan@correo.com", type: "email" },
+    ]
+  }
+];
 
 function FAQItem({ question, answer }: { question: string, answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,8 +102,25 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
 }
 
 export function VenderPropiedadContent() {
+  const [showWizard, setShowWizard] = useState(false);
+
   return (
     <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
+      <AnimatePresence>
+        {showWizard && (
+          <LeadWizard
+            title="Wizard de Venta Estratégica"
+            serviceName="Venta de Propiedad"
+            steps={VENDER_STEPS}
+            onClose={() => setShowWizard(false)}
+            onComplete={(data) => {
+              console.log("Lead captured:", data);
+              // Aquí podrías enviar a Supabase si lo deseas
+            }}
+          />
+        )}
+      </AnimatePresence>
+
       {/* 1. Hero Section */}
       <section className="relative min-h-[600px] md:h-[700px] flex items-center justify-center text-white overflow-hidden">
         <div
@@ -75,7 +149,7 @@ export function VenderPropiedadContent() {
                   ¿Quieres saber cuánto vale tu casa hoy? 👉
                 </p>
               </div>
-              <Button size="lg" showArrow className="w-full md:w-auto">
+              <Button size="lg" showArrow className="w-full md:w-auto" onClick={() => setShowWizard(true)}>
                 Vende tu Propiedad Ahora
               </Button>
             </div>

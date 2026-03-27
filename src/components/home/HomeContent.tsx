@@ -5,12 +5,81 @@ import { PropertyCard } from "@/components/features/PropertyCard";
 import { properties } from "@/lib/data";
 import { Button } from "@/components/ui/Button";
 import ServicesSection from "@/components/home/ServicesSection";
-import { motion } from "framer-motion";
-import { Star, ShieldCheck, Zap, Building2, Target } from "lucide-react";
+import { 
+  LeadWizard, 
+  WizardStep 
+} from "@/components/ui/LeadWizard";
+import { 
+  Star, 
+  ShieldCheck, 
+  Zap, 
+  Building2, 
+  Target, 
+  MessageSquare, 
+  Search, 
+  DollarSign, 
+  Key, 
+  MapPin,
+  User,
+  Phone,
+  Mail
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from 'react';
+
+// Definición de pasos para el Wizard General (Home)
+const GENERAL_STEPS: WizardStep[] = [
+  {
+    id: "intent",
+    question: "¿En qué podemos ayudarte hoy?",
+    type: "options",
+    options: [
+      { id: "comprar", label: "Quiero Comprar", icon: Search, value: "Compra" },
+      { id: "vender", label: "Quiero Vender", icon: DollarSign, value: "Venta" },
+      { id: "alquilar", label: "Quiero Alquilar", icon: Key, value: "Alquiler" },
+      { id: "asesoria", label: "Asesoría General", icon: MessageSquare, value: "Asesoría" },
+    ]
+  },
+  {
+    id: "location",
+    question: "¿En qué zona de Piura te encuentras o buscas?",
+    type: "options",
+    options: [
+      { id: "piura", label: "Piura / Castilla", icon: MapPin, value: "Piura/Castilla" },
+      { id: "26oc", label: "26 de Octubre", icon: MapPin, value: "26 de Octubre" },
+      { id: "catacaos", label: "Catacaos / Otros", icon: MapPin, value: "Catacaos/Otros" },
+    ]
+  },
+  {
+    id: "contact",
+    question: "¡Excelente! Déjanos tus datos para que un experto te contacte",
+    type: "input",
+    fields: [
+      { id: "name", label: "Nombre Completo", icon: User, placeholder: "Ej. Juan Pérez", type: "text" },
+      { id: "phone", label: "WhatsApp / Celular", icon: Phone, placeholder: "Ej. 941849523", type: "tel" },
+      { id: "email", label: "Correo Electrónico", icon: Mail, placeholder: "Ej. juan@correo.com", type: "email" },
+    ]
+  }
+];
 
 export function HomeContent() {
+  const [showWizard, setShowWizard] = useState(false);
+
   return (
     <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
+      <AnimatePresence>
+        {showWizard && (
+          <LeadWizard
+            title="Consultoría Inmobiliaria Casaty"
+            serviceName="Asesoría General"
+            steps={GENERAL_STEPS}
+            onClose={() => setShowWizard(false)}
+            onComplete={(data) => {
+              console.log("General lead captured:", data);
+            }}
+          />
+        )}
+      </AnimatePresence>
       <Hero />
       
       {/* Featured Properties Section */}
@@ -76,9 +145,9 @@ export function HomeContent() {
                      Nuestra red exclusiva conecta más de 50 agencias y 1,000+ propiedades en tiempo real. Si no está en Casaty, no está en el mercado.
                   </p>
                   <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center">
-                     <Button size="lg" className="w-full md:w-auto font-black" showArrow>
+                      <Button size="lg" className="w-full md:w-auto font-black" showArrow onClick={() => setShowWizard(true)}>
                         Hablar con un Experto
-                     </Button>
+                      </Button>
                      <div className="flex items-center gap-3 md:gap-4">
                         <div className="flex -space-x-2 md:-space-x-3">
                            {[1,2,3,4].map(i => (
