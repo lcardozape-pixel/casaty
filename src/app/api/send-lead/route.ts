@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { getPrisma } from '@/lib/prisma';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -12,6 +12,7 @@ export async function POST(request: Request) {
 
     // 1. Guardar en Base de Datos MySQL (Hostinger)
     try {
+      const prisma = await getPrisma();
       await prisma.lead.create({
         data: {
           name,
