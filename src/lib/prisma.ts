@@ -1,34 +1,21 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-
-let prismaInstance: PrismaClient | null = null;
-let prismaPromise: Promise<PrismaClient> | null = null;
 
 /**
- * Obtiene la instancia de Prisma de forma asíncrona.
+ * MOCK DE PRISMA PARA DIAGNÓSTICO DE RENDIMIENTO.
+ * Desactivamos la conexión real para ver si el sitio recupera la velocidad en Hostinger.
  */
-export async function getPrisma(): Promise<PrismaClient> {
-  if (prismaInstance) return prismaInstance;
-  if (prismaPromise) return prismaPromise;
-
-  prismaPromise = (async () => {
-    try {
-      const url = process.env.DATABASE_URL;
-      
-      if (url && (url.startsWith('mysql://') || url.startsWith('mariadb://'))) {
-        const adapterFactory = new PrismaMariaDb(url);
-        const adapter = await adapterFactory.connect();
-        prismaInstance = new PrismaClient({ adapter: adapter as any });
-      } else {
-        prismaInstance = new PrismaClient();
+export async function getPrisma(): Promise<any> {
+  console.log("⚠️ MODO DIAGNÓSTICO: Prisma está desactivado para restaurar el sitio.");
+  
+  // Devolvemos un objeto mock que no hace nada para no romper el API
+  return {
+    lead: {
+      create: async () => {
+        console.log("MOCK: Lead no guardado (Prisma off)");
+        return { id: 0 };
       }
-      return prismaInstance;
-    } catch (error) {
-      console.error("Error al inicializar Prisma Client:", error);
-      prismaInstance = new PrismaClient();
-      return prismaInstance;
-    }
-  })();
-
-  return prismaPromise;
+    },
+    $disconnect: async () => {},
+    $connect: async () => {}
+  };
 }
