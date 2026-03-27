@@ -1,35 +1,32 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
-import { getPrisma } from '@/lib/prisma';
+import { getDb } from '@/lib/db';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   try {
     const { formData, serviceName } = await request.json();
-
     const { name, phone, email, ...otherData } = formData;
 
-    // 1. Guardar en Base de Datos MySQL (Hostinger)
+    // 1. Guardar en Base de Datos MySQL (Hostinger) usando mysql2 (NATIVO/LIGERO)
     let dbSaved = false;
     let dbErrorDetail = null;
 
     try {
-      const prisma = await getPrisma();
-      await prisma.lead.create({
-        data: {
-          name,
-          phone,
-          email,
-          serviceName,
-          details: otherData as any,
-        },
-      });
+      const pool = await getDb();
+      const detailsJson = JSON.stringify(otherData);
+      
+      await pool.execute(
+        'INSERT INTO Lead (name, phone, email, serviceName, details, createdAt) VALUES (?, ?, ?, ?, ?, NOW())',
+        [name, phone, email, serviceName, detailsJson]
+      );
+      
       dbSaved = true;
-      console.log("Lead guardado en base de datos correctamente.");
+      console.log("Lead guardado con mysql2 correctamente.");
     } catch (dbError: any) {
       dbErrorDetail = dbError instanceof Error ? dbError.message : String(dbError);
-      console.error("Error al guardar lead en base de datos:", dbError);
+      console.error("Error al guardar lead con mysql2:", dbError);
     }
 
     const summaryHtml = Object.entries(otherData)
