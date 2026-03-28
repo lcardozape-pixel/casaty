@@ -4,32 +4,12 @@ const HONECTA_API_URL = process.env.NEXT_PUBLIC_HONECTA_API_URL || "https://app.
 const HONECTA_AGENT_ID = process.env.NEXT_PUBLIC_HONECTA_AGENT_ID || "46a68490-51ae-40db-b8f7-4ded19c64301";
 const HONECTA_API_KEY = process.env.HONECTA_API_KEY;
 
-// Supabase de Honecta — fuente directa de datos (el endpoint público /api/v1 tiene un bug 500)
+// Supabase de Honecta — fuente de respaldo
 const HONECTA_SUPABASE_URL = "https://rrwluugzhnqpiedloysl.supabase.co/rest/v1";
 const HONECTA_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyd2x1dWd6aG5xcGllZGxveXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3ODYxOTIsImV4cCI6MjA4MDM2MjE5Mn0.f8q2YhYcskBKKNMieSTIwVCt-P4kkvcauyNC__pFpxM";
 
-export interface HonectaProperty {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  currency: "PEN" | "USD";
-  listing_type: "sale" | "rent";
-  property_type: string;
-  address: string;
-  district: string;
-  city: string;
-  bedrooms: number;
-  bathrooms: number;
-  parking_spaces: number;
-  total_area: number;
-  images: { url: string }[] | string[];
-  is_featured?: boolean;
-  status?: string;
-}
-
 /**
- * Mapea una propiedad de Honecta/Supabase al formato de Casaty
+ * Mapea una propiedad de Honecta (API o Supabase) al formato de Casaty
  */
 export function mapHonectaToCasaty(hp: any): Property {
   const currencySymbol = hp.currency === "USD" ? "$" : "S/";
@@ -51,7 +31,10 @@ export function mapHonectaToCasaty(hp: any): Property {
   let allImages: string[] = [];
   if (hp.images) {
     if (Array.isArray(hp.images)) {
-      allImages = hp.images.map((img: any) => typeof img === 'string' ? img : img.url).filter(Boolean);
+      allImages = hp.images.map((img: any) => {
+        if (typeof img === 'string') return img;
+        return img.url || img.literal || img.file_url;
+      }).filter(Boolean);
     }
   }
   const mainImage = allImages.length > 0 ? allImages[0] : defaultImage;
@@ -72,11 +55,15 @@ export function mapHonectaToCasaty(hp: any): Property {
     'local_comercial': 'Local comercial',
   };
 
+  // Determinar si es Alquiler o Venta
+  const rawType = (hp.listing_type || hp.operation_type || '').toLowerCase();
+  const isRent = rawType === 'rent' || rawType === 'alquiler' || rawType === 'renta';
+
   return {
     id: hp.id,
     title: hp.title || 'Propiedad sin título',
     location: `${hp.district || hp.city || "Piura"}`,
-    price: hp.listing_type === "rent" ? `${formattedPrice}/mes` : formattedPrice,
+    price: isRent ? `${formattedPrice}/mes` : formattedPrice,
     priceUsd: priceUsd,
     beds: hp.bedrooms || 0,
     baths: hp.bathrooms || 0,
@@ -84,7 +71,7 @@ export function mapHonectaToCasaty(hp: any): Property {
     area: `${hp.total_area || 0} m²`,
     image: mainImage,
     images: allImages.length > 0 ? allImages : undefined,
-    type: hp.listing_type === "rent" ? "Alquiler" : "Venta",
+    type: isRent ? "Alquiler" : "Venta",
     propertyType: typeMap[(hp.property_type || '').toLowerCase()] || hp.property_type || 'Propiedad',
     description: hp.description || '',
     address: hp.address || '',
@@ -95,64 +82,71 @@ export function mapHonectaToCasaty(hp: any): Property {
 }
 
 /**
- * Obtiene las propiedades activas directamente de Supabase (Honecta)
- * El endpoint público /api/v1/properties/public tiene un bug (Error 500 Database error),
- * así que consumimos Supabase directo como lo hace el dashboard de Honecta.
+ * Obtiene las propiedades de Honecta.
+ * Intenta primero con el API público oficial y usa Supabase como respaldo.
  */
 export async function getPublicProperties(): Promise<Property[]> {
+  // 1. Intentar con el API público oficial (ahora que está corregido)
   try {
-    // Primero intentamos con Supabase directo (funciona siempre)
+    const url = `${HONECTA_API_URL}/api/v1/properties/public?agent_id=${HONECTA_AGENT_ID}`;
+    console.log(`Honecta API: Fetching from ${url}...`);
+    
+    const response = await fetch(url, { 
+      next: { revalidate: 600 } 
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      let rawProperties = [];
+      
+      if (Array.isArray(data)) rawProperties = data;
+      else if (data.data && Array.isArray(data.data)) rawProperties = data.data;
+      else if (data.properties && Array.isArray(data.properties)) rawProperties = data.properties;
+      
+      if (rawProperties.length > 0) {
+        console.log(`Honecta API: ${rawProperties.length} properties loaded successfully.`);
+        return rawProperties.map(mapHonectaToCasaty);
+      }
+    } else {
+      console.warn(`Honecta API failed with status ${response.status}. Trying Supabase fallback...`);
+    }
+  } catch (error) {
+    console.error("Honecta API error, trying Supabase fallback:", error);
+  }
+
+  // 2. Respaldo: Supabase directo (el que usamos cuando el API fallaba)
+  return await fetchFromSupabase();
+}
+
+/**
+ * Obtiene las propiedades directamente de Supabase como respaldo.
+ */
+async function fetchFromSupabase(): Promise<Property[]> {
+  try {
     const supabaseUrl = `${HONECTA_SUPABASE_URL}/properties?select=*&status=eq.active&order=created_at.desc`;
+    console.log("Honecta Supabase: Fetching as fallback...");
     
     const response = await fetch(supabaseUrl, {
       headers: {
         'apikey': HONECTA_SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${HONECTA_SUPABASE_ANON_KEY}`,
       },
-      next: { revalidate: 600 }, // Caché de 10 minutos
+      next: { revalidate: 600 },
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`Honecta Supabase Error (${response.status}):`, errorText);
-      
-      // Fallback al API público de Honecta (puede fallar)
-      return await fetchFromPublicApi();
+      console.error(`Honecta Supabase fallback failed (${response.status})`);
+      return [];
     }
 
     const data = await response.json();
-    
-    if (Array.isArray(data) && data.length > 0) {
-      console.log(`Honecta Supabase: ${data.length} properties loaded`);
+    if (Array.isArray(data)) {
+      console.log(`Honecta Supabase fallback: ${data.length} properties loaded.`);
       return data.map(mapHonectaToCasaty);
     }
-
     return [];
   } catch (error) {
-    console.error("Honecta Supabase Fetch Error:", error);
-    return await fetchFromPublicApi();
-  }
-}
-
-/**
- * Fallback: endpoint público de Honecta (actualmente con bug 500)
- */
-async function fetchFromPublicApi(): Promise<Property[]> {
-  try {
-    const url = `${HONECTA_API_URL}/api/v1/properties/public?agent_id=${HONECTA_AGENT_ID}`;
-    const response = await fetch(url, { next: { revalidate: 600 } });
-
-    if (!response.ok) return [];
-
-    const data = await response.json();
-    let rawProperties = [];
-    if (Array.isArray(data)) rawProperties = data;
-    else if (data.data && Array.isArray(data.data)) rawProperties = data.data;
-    else if (data.properties && Array.isArray(data.properties)) rawProperties = data.properties;
-    
-    return rawProperties.map(mapHonectaToCasaty);
-  } catch (error) {
-    console.error("Honecta Public API Fallback Error:", error);
+    console.error("Honecta Supabase fallback error:", error);
     return [];
   }
 }
