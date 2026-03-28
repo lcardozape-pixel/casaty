@@ -1,7 +1,9 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
+import { sendLeadToHonecta } from '@/lib/honecta';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const HONECTA_AGENT_ID = process.env.NEXT_PUBLIC_HONECTA_AGENT_ID;
 
 export async function POST(request: Request) {
   try {
@@ -49,6 +51,23 @@ export async function POST(request: Request) {
     }
 
     console.log("Correo enviado exitosamente:", data?.id);
+
+    // 2. Sincronizar con Honecta (Opcional, no bloquea el éxito del correo)
+    try {
+      await sendLeadToHonecta({
+        name,
+        phone,
+        email,
+        source: "Casaty.pe Website",
+        notes: `Solicitud de ${serviceName}. Datos adicionales: ${JSON.stringify(otherData)}`,
+        agent_id: HONECTA_AGENT_ID,
+        tags: ["website", "casaty", serviceName.toLowerCase()]
+      });
+      console.log("Sincronización con Honecta exitosa");
+    } catch (hError) {
+      console.error("Fallo al sincronizar con Honecta:", hError);
+    }
+
     return NextResponse.json({ success: true, data });
   } catch (err) {
     console.error("Error crítico en API send-lead:", err);

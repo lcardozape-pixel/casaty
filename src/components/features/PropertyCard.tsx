@@ -3,84 +3,77 @@
 import { BedDouble, Bath, Car, Square, Heart, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { Property } from "@/lib/data";
+import { useRouter } from "next/navigation";
 
 export function PropertyCard({ property }: { property: Property }) {
+  const router = useRouter();
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 group relative flex flex-col h-full will-change-transform"
+      onClick={() => router.push(`/propiedades/${property.id}`)}
+      className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 group relative flex flex-col h-full will-change-transform cursor-pointer"
     >
       {/* Image Wrapper */}
-      <div className="relative h-64 md:h-72 overflow-hidden">
+      <div className="relative h-56 md:h-64 overflow-hidden">
         <img
           src={property.image}
           alt={property.title}
-          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[0.1] group-hover:grayscale-0"
+          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[0.05] group-hover:grayscale-0"
         />
         
-        {/* Labels */}
-        <div className="absolute top-6 left-6 flex flex-col gap-2">
-            {property.label && (
-              <div className="bg-[#0040FF] text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg shadow-blue-500/30 uppercase tracking-widest">
-                {property.label}
-              </div>
-            )}
-            <div className="bg-white/98 text-neutral-800 text-[9px] font-black px-3 py-1.5 rounded-full shadow-xl flex items-center gap-2 border border-slate-100 uppercase tracking-widest">
-                <span>EN {property.type === 'Venta' ? 'VENTA' : 'ALQUILER'}</span>
+        {/* Labels - Honecta Style */}
+        <div className="absolute top-5 left-5 flex items-center gap-2">
+          {property.propertyType && (
+            <div className="bg-neutral-700/80 backdrop-blur-sm text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1.5">
+              <MapPin className="h-2.5 w-2.5" />
+              {property.propertyType}
             </div>
+          )}
+          <div className="bg-[#0040FF] text-white text-[9px] font-black px-3 py-1.5 rounded-full shadow-lg shadow-blue-500/30 uppercase tracking-widest">
+            {property.type === 'Venta' ? 'VENTA' : 'ALQUILER'}
+          </div>
+          {property.label && (
+            <div className="bg-amber-400 text-neutral-900 text-[9px] font-black px-3 py-1.5 rounded-full shadow-lg uppercase tracking-widest">
+              {property.label}
+            </div>
+          )}
         </div>
 
-        <button className="absolute top-6 right-6 h-10 w-10 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-red-500 transition-all border border-white/20">
-           <Heart className="h-5 w-5" />
+        <button 
+          onClick={(e) => { e.stopPropagation(); }}
+          className="absolute top-5 right-5 h-9 w-9 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-red-500 transition-all border border-white/20"
+        >
+           <Heart className="h-4 w-4" />
         </button>
-
-        {/* Price Overlay - Optimized without backdrop-blur */}
-        <div className="absolute bottom-4 md:bottom-6 left-4 md:left-6 right-4 md:right-6">
-           <div className="bg-white/98 p-3 md:p-4 rounded-2xl md:rounded-3xl shadow-xl flex justify-between items-center border border-white">
-              <span className="text-[8px] md:text-[9px] font-black text-neutral-400 uppercase tracking-[0.2em]">Inversión</span>
-              <span className="text-lg md:text-xl font-black text-[#0040FF] leading-none">{property.price}</span>
-           </div>
-        </div>
       </div>
 
-      <div className="p-6 md:p-8 flex flex-col flex-1">
-        <div className="mb-6">
-           <div className="flex items-center gap-2 text-neutral-400 text-[10px] font-black uppercase tracking-widest mb-3">
-              <MapPin className="h-3 w-3 text-[#0040FF]" />
-              <span>{property.location || 'Piura, Perú'}</span>
-           </div>
-           <h3 className="text-neutral-800 font-black text-xl mb-2 leading-tight group-hover:text-[#0040FF] transition-colors line-clamp-2">
-             {property.title}
-           </h3>
+      <div className="p-6 flex flex-col flex-1">
+        {/* Price - Honecta style */}
+        <div className="mb-4">
+          <span className="text-xl font-black text-[#0040FF] leading-none">{property.price}</span>
+          {property.priceUsd && (
+            <span className="text-sm font-bold text-neutral-400 ml-2">/ {property.priceUsd}</span>
+          )}
         </div>
 
-        <div className="mt-auto grid grid-cols-4 gap-2 md:gap-4 py-5 md:py-6 border-t border-slate-50">
-          <div className="flex flex-col items-center gap-1.5">
-            <div className="h-8 w-8 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
-               <BedDouble className="h-4 w-4 text-[#0040FF]" />
-            </div>
-            <span className="text-[10px] font-black text-neutral-800 tracking-widest leading-none">{property.beds}</span>
-          </div>
-          <div className="flex flex-col items-center gap-1.5">
-            <div className="h-8 w-8 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
-               <Bath className="h-4 w-4 text-[#0040FF]" />
-            </div>
-            <span className="text-[10px] font-black text-neutral-800 tracking-widest leading-none">{property.baths}</span>
-          </div>
-          <div className="flex flex-col items-center gap-1.5">
-            <div className="h-8 w-8 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
-               <Car className="h-4 w-4 text-[#0040FF]" />
-            </div>
-            <span className="text-[10px] font-black text-neutral-800 tracking-widest leading-none">{property.garage}</span>
-          </div>
-          <div className="flex flex-col items-center gap-1.5">
-            <div className="h-8 w-8 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
-               <Square className="h-4 w-4 text-[#0040FF]" />
-            </div>
-            <span className="text-[8px] font-black text-neutral-800 tracking-widest leading-none text-nowrap">{property.area}</span>
-          </div>
+        {/* Address */}
+        <div className="flex items-center gap-2 text-neutral-400 text-[11px] font-bold mb-2">
+          <MapPin className="h-3 w-3 text-neutral-400" />
+          <span>{property.address || property.location || 'Piura, Perú'}</span>
+        </div>
+
+        {/* Title */}
+        <h3 className="text-neutral-800 font-black text-base mb-4 leading-tight group-hover:text-[#0040FF] transition-colors line-clamp-2">
+          {property.title}
+        </h3>
+
+        {/* Area Footer */}
+        <div className="mt-auto pt-4 border-t border-slate-50 flex items-center gap-2 text-neutral-500">
+          <Square className="h-3.5 w-3.5" />
+          <span className="text-xs font-bold">{property.area}</span>
         </div>
       </div>
     </motion.div>

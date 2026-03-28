@@ -2,7 +2,7 @@
 
 import { Hero } from "@/components/features/Hero";
 import { PropertyCard } from "@/components/features/PropertyCard";
-import { properties } from "@/lib/data";
+import { getProperties, Property } from "@/lib/data";
 import { Button } from "@/components/ui/Button";
 import ServicesSection from "@/components/home/ServicesSection";
 import { 
@@ -25,7 +25,8 @@ import {
   Mail
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 // Definición de pasos para el Wizard General (Home)
 const GENERAL_STEPS: WizardStep[] = [
@@ -63,7 +64,27 @@ const GENERAL_STEPS: WizardStep[] = [
 ];
 
 export function HomeContent() {
+  const router = useRouter();
   const [showWizard, setShowWizard] = useState(false);
+  const [displayProperties, setDisplayProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProperties() {
+      try {
+        const dynamicProps = await getProperties();
+        if (dynamicProps && dynamicProps.length > 0) {
+          // Solo mostramos las primeras 3 destacadas en el home
+          setDisplayProperties(dynamicProps.slice(0, 3));
+        }
+      } catch (error) {
+        console.error("Error loading properties in HomeContent:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadProperties();
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col bg-slate-50 overflow-x-hidden">
@@ -95,14 +116,14 @@ export function HomeContent() {
             </p>
           </div>
           <div className="flex gap-4">
-             <Button variant="outline" size="lg" className="border-slate-200 text-neutral-800 hover:bg-neutral-800 hover:text-white transition-all font-black" showArrow onClick={() => setShowWizard(true)}>
+             <Button variant="outline" size="lg" className="border-slate-200 text-neutral-800 hover:bg-neutral-800 hover:text-white transition-all font-black" showArrow onClick={() => router.push('/propiedades')}>
                 Ver todo el Catálogo
              </Button>
           </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-12 md:mb-20">
-          {properties.map((property, i) => (
+          {displayProperties.map((property, i) => (
              <motion.div
                key={property.id}
                initial={{ opacity: 0, y: 30 }}
@@ -113,11 +134,21 @@ export function HomeContent() {
                <PropertyCard property={property} />
              </motion.div>
           ))}
+          {loading && displayProperties.length === 0 && (
+            <div className="col-span-full py-20 text-center">
+              <span className="text-neutral-400 font-bold animate-pulse">Cargando catálogo exclusivo...</span>
+            </div>
+          )}
+          {!loading && displayProperties.length === 0 && (
+            <div className="col-span-full py-20 text-center">
+              <span className="text-neutral-400 font-bold">No se encontraron propiedades disponibles actualmente.</span>
+            </div>
+          )}
         </div>
 
         <div className="flex justify-center">
-          <Button variant="outline" size="lg" className="border-slate-200 text-neutral-800 hover:bg-slate-100 font-black w-full md:w-auto" showArrow onClick={() => setShowWizard(true)}>
-            Explorar más de 1,000 unidades
+          <Button variant="outline" size="lg" className="border-slate-200 text-neutral-800 hover:bg-slate-100 font-black w-full md:w-auto" showArrow onClick={() => router.push('/propiedades')}>
+            Explorar todas las propiedades
           </Button>
         </div>
       </section>
