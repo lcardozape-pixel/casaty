@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -31,10 +32,13 @@ export function Navbar() {
           {/* LOGO - Left aligned */}
           <div className="flex-shrink-0">
             <Link href="/" onClick={() => setMobileMenuOpen(false)}>
-              <img 
+              <Image 
                 src="/Logo/logo-dark.webp" 
                 alt="Casaty" 
-                className="h-9 md:h-11 w-auto" 
+                width={150}
+                height={44}
+                priority
+                className="h-9 md:h-11 w-auto object-contain" 
               />
             </Link>
           </div>
@@ -106,10 +110,12 @@ export function Navbar() {
       )}>
         <div className="flex items-center justify-between px-6 py-6 border-b border-slate-50">
           <Link href="/" className="-m-1.5 p-1.5 flex items-center" onClick={() => setMobileMenuOpen(false)}>
-            <img 
+            <Image 
               src="/Logo/logo-dark.webp" 
               alt="Casaty Inmobiliaria" 
-              className="h-9 w-auto" 
+              width={120}
+              height={36}
+              className="h-9 w-auto object-contain" 
             />
           </Link>
           <button

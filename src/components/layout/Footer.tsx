@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Phone, Facebook, Instagram, Youtube, MapPin, ChevronUp } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export function Footer() {
   const scrollToTop = () => {
@@ -72,17 +73,21 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 py-4 border-t border-slate-200">
           <div className="flex flex-col items-center md:items-start gap-1">
             <span className="text-[9px] uppercase font-bold text-neutral-500 tracking-widest">Código: 02172-PJ-MVCS</span>
-            <img 
+            <Image 
               src="/Branding/MVCS.webp" 
               alt="Ministerio de Vivienda" 
+              width={160}
+              height={32}
               className="h-8 w-auto opacity-100"
             />
           </div>
           <div className="flex flex-col items-center md:items-end gap-1">
             <span className="text-[9px] uppercase font-bold text-neutral-500 tracking-widest">Respaldado por</span>
-            <img 
+            <Image 
               src="/Branding/infocorp.webp" 
               alt="Infocorp Equifax" 
+              width={120}
+              height={24}
               className="h-6 w-auto opacity-100"
             />
           </div>
@@ -92,7 +97,13 @@ export function Footer() {
         <div className="pt-4 mt-4 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-4 flex-wrap justify-center md:justify-start">
             <Link href="/">
-              <img src="/Logo/logo-dark.webp" alt="Casaty" className="h-7 w-auto" />
+              <Image 
+                src="/Logo/logo-dark.webp" 
+                alt="Casaty" 
+                width={120}
+                height={28}
+                className="h-7 w-auto" 
+              />
             </Link>
             <span className="text-[10px] text-neutral-500 font-medium">
               © 2025 Todos los derechos reservados a Inmobiliaria Casaty S.A.C | RUC: 20611142979

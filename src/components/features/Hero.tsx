@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Search, MapPin, ChevronDown, SlidersHorizontal, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const PROPERTY_TYPES = [
   { value: '', label: 'Cualquiera' },
@@ -100,13 +101,16 @@ export function Hero() {
   return (
     <section className="relative min-h-[750px] md:h-[700px] flex items-start md:items-center justify-center overflow-hidden pt-18 pb-32 md:pt-0 md:pb-0">
       {/* Background */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 shimmer" suppressHydrationWarning>
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-slate-50 z-10" />
-        <motion.img
-          initial={{ scale: 1 }}
+        <Image
           src="/Imagenes/piura-panorama.png"
           alt="Piura Modern Panorama"
-          className="w-full h-full object-cover"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+          quality={85}
         />
       </div>
 

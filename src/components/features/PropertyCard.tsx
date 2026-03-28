@@ -2,8 +2,9 @@
 
 import { BedDouble, Bath, Car, Square, Heart, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
-import { Property } from "@/lib/data";
+import { Property } from "@/lib/types";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export function PropertyCard({ property }: { property: Property }) {
   const router = useRouter();
@@ -17,11 +18,13 @@ export function PropertyCard({ property }: { property: Property }) {
       className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 group relative flex flex-col h-full will-change-transform cursor-pointer"
     >
       {/* Image Wrapper */}
-      <div className="relative h-56 md:h-64 overflow-hidden">
-        <img
+      <div className="relative h-56 md:h-64 overflow-hidden shimmer" suppressHydrationWarning>
+        <Image
           src={property.image}
           alt={property.title}
+          fill
           className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[0.05] group-hover:grayscale-0"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         
         {/* Labels - Honecta Style */}

@@ -2,8 +2,9 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { getProperties, Property } from "@/lib/data";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useEffect } from 'react';
+import Image from "next/image";
 import { 
   ArrowLeft, 
   MapPin, 
@@ -100,15 +101,16 @@ export default function PropertyDetailPage() {
           >
             <X className="h-5 w-5" />
           </button>
-          <button onClick={prevImage} className="absolute left-6 h-12 w-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors">
-            <ChevronLeft className="h-6 w-6" />
-          </button>
-          <img
-            src={images[currentImageIndex]}
-            alt={property.title}
-            className="max-w-[90vw] max-h-[85vh] object-contain rounded-2xl"
-          />
-          <button onClick={nextImage} className="absolute right-6 h-12 w-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors">
+          <div className="relative w-full max-w-5xl aspect-[16/10] sm:aspect-video">
+            <Image
+              src={images[currentImageIndex]}
+              alt={property.title}
+              fill
+              className="object-contain"
+              sizes="90vw"
+            />
+          </div>
+          <button onClick={nextImage} className="absolute right-6 h-12 w-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10">
             <ChevronRight className="h-6 w-6" />
           </button>
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm font-bold">
@@ -136,13 +138,16 @@ export default function PropertyDetailPage() {
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="relative rounded-3xl overflow-hidden bg-neutral-100 aspect-[16/10] cursor-pointer group"
+              className="relative rounded-3xl overflow-hidden bg-slate-100 aspect-[16/10] cursor-pointer group shimmer"
               onClick={() => setShowGallery(true)}
             >
-              <img
+              <Image
                 src={images[currentImageIndex]}
                 alt={property.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                fill
+                priority
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 50vw"
               />
 
               {/* Labels */}
@@ -181,11 +186,17 @@ export default function PropertyDetailPage() {
                   <button
                     key={i}
                     onClick={() => setCurrentImageIndex(i)}
-                    className={`shrink-0 h-16 w-24 rounded-xl overflow-hidden border-2 transition-all ${
+                    className={`shrink-0 h-16 w-24 rounded-xl overflow-hidden border-2 transition-all relative shimmer ${
                       i === currentImageIndex ? 'border-[#0040FF] shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <Image 
+                      src={img} 
+                      alt={`${property.title} thumbnail ${i + 1}`} 
+                      fill
+                      className="object-cover"
+                      sizes="96px"
+                    />
                   </button>
                 ))}
               </div>

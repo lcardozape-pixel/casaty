@@ -52,7 +52,10 @@ export default function RootLayout({
       className={`${inter.variable} ${outfit.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-sans overflow-x-hidden">
+      <body 
+        className="min-h-full flex flex-col font-sans overflow-x-hidden"
+        suppressHydrationWarning
+      >
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-4P7MPL1RZP"
