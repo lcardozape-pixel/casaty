@@ -5,35 +5,148 @@ import { getProperties, Property } from "@/lib/data";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useEffect } from 'react';
 import Image from "next/image";
-import { 
-  ArrowLeft, 
-  MapPin, 
-  BedDouble, 
-  Bath, 
-  Car, 
-  Square, 
-  Heart, 
-  Share2, 
-  Phone, 
+import {
+  ArrowLeft,
+  MapPin,
+  BedDouble,
+  Bath,
+  Car,
+  Square,
+  Heart,
+  Share2,
+  Phone,
   MessageCircle,
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
   X,
-  LayoutGrid
+  LayoutGrid,
+  User,
+  Bell,
+  Mail,
+  Loader2,
+  Calendar,
+  Video,
+  Monitor,
+  Building2,
+  Clock,
+  Home as HomeIcon,
+  ChevronUp
 } from "lucide-react";
 
 import CalculadoraHipoteca from "@/components/CalculadoraHipoteca";
+import { PropertyCard } from "@/components/features/PropertyCard";
 
 export default function PropertyDetailPage() {
   const params = useParams();
   const router = useRouter();
   const propertyId = params.id as string;
-  
+
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showGallery, setShowGallery] = useState(false);
+
+  // Form states
+  const [formData, setFormData] = useState({
+    docType: 'DNI',
+    docNumber: '',
+    name: '',
+    email: '',
+    phone: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
+
+  const [similarProperties, setSimilarProperties] = useState<Property[]>([]);
+  const [visitType, setVisitType] = useState<'presencial' | 'videollamada'>('presencial');
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string>("");
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setSubmitError("");
+    setSubmitSuccess("");
+  };
+
+  const validateForm = () => {
+    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.docNumber.trim()) {
+      setSubmitError("Por favor completa todos los campos del formulario.");
+      return false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setSubmitError("Ingresa un correo electrónico válido.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleContactAction = async (method: 'whatsapp' | 'email') => {
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const response = await fetch('/api/send-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          formData: {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            document: `${formData.docType} - ${formData.docNumber}`,
+            propertyId: property?.id,
+            propertyTitle: property?.title,
+            propertyUrl: window.location.href,
+            ...(selectedDate && selectedTime ? {
+              'Visita Solicitada': 'SÍ',
+              'Tipo de Visita': visitType.toUpperCase(),
+              'Fecha de Visita': selectedDate.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }),
+              'Hora de Visita': selectedTime
+            } : {})
+          },
+          serviceName: selectedDate && selectedTime ? 'Reserva de Visita' : 'Contacto Web Inmueble'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Ocurrió un error al enviar tus datos. Inténtalo de nuevo.");
+      }
+
+      if (method === 'whatsapp') {
+        let baseMsg = `Hola, estoy interesado en... [${property?.title}]`;
+        if (selectedDate && selectedTime) {
+          baseMsg += `\n\nQuisiera agendar una visita ${visitType} para el ${selectedDate.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} a las ${selectedTime}.`;
+        }
+        const text = encodeURIComponent(baseMsg);
+        window.open(`https://wa.me/51941849523?text=${text}`, '_blank');
+      } else {
+        setSubmitSuccess("¡Tu mensaje ha sido enviado a la agencia de forma exitosa!");
+        setFormData({ docType: 'DNI', docNumber: '', name: '', email: '', phone: '' });
+      }
+
+    } catch (err: any) {
+      setSubmitError(err.message || "Error al contactar a la inmobiliaria");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const upcomingDates = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() + i + 1);
+    return d;
+  });
+
+  const hoursAvailable = [
+    "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
+    "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM"
+  ];
 
   useEffect(() => {
     async function load() {
@@ -41,6 +154,20 @@ export default function PropertyDetailPage() {
         const allProps = await getProperties();
         const found = allProps.find(p => p.id === propertyId);
         setProperty(found || null);
+
+        if (found) {
+          // Filtrar similares: mismo tipo, diferente id, mismo distrito si es posible
+          const filtered = allProps
+            .filter(p => p.id !== found.id && p.propertyType === found.propertyType)
+            .sort((a, b) => {
+               // Priorizar por mismo distrito
+               if (a.district === found.district && b.district !== found.district) return -1;
+               if (a.district !== found.district && b.district === found.district) return 1;
+               return 0;
+            })
+            .slice(0, 3);
+          setSimilarProperties(filtered);
+        }
       } catch (error) {
         console.error("Error loading property:", error);
       } finally {
@@ -78,8 +205,8 @@ export default function PropertyDetailPage() {
     );
   }
 
-  const images = property.images && property.images.length > 0 
-    ? property.images 
+  const images = property.images && property.images.length > 0
+    ? property.images
     : [property.image];
 
   function nextImage() {
@@ -144,7 +271,7 @@ export default function PropertyDetailPage() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-6 pb-32 md:pb-40">
         {/* Galería Tipo Grid (Desktop) o Carrusel (Mobile) */}
         <div className="mb-10">
-          <div 
+          <div
             className="hidden md:grid gap-2 rounded-2xl overflow-hidden relative aspect-[16/7]"
             style={{
               gridTemplateColumns: images.length === 1 ? '1fr' : images.length === 2 ? '1fr 1fr' : 'repeat(4, minmax(0, 1fr))',
@@ -153,17 +280,16 @@ export default function PropertyDetailPage() {
           >
             {/* Imagen Principal */}
             {images.length > 0 && (
-              <div 
-                className={`relative cursor-pointer group ${
-                  images.length === 1 || images.length === 2 ? 'col-span-1 row-span-2' : 'col-span-2 row-span-2'
-                }`}
+              <div
+                className={`relative cursor-pointer group ${images.length === 1 || images.length === 2 ? 'col-span-1 row-span-2' : 'col-span-2 row-span-2'
+                  }`}
                 onClick={() => { setCurrentImageIndex(0); setShowGallery(true); }}
               >
                 <Image src={images[0]} fill className="object-cover" alt={property.title} priority sizes={images.length === 1 ? "100vw" : "50vw"} />
                 <div className="absolute inset-0 bg-transparent group-hover:bg-black/10 transition-colors duration-300 z-10" />
               </div>
             )}
-            
+
             {/* Imagen 2 (cuando son 2 fotos) */}
             {images.length === 2 && (
               <div className="col-span-1 row-span-2 relative cursor-pointer group" onClick={() => { setCurrentImageIndex(1); setShowGallery(true); }}>
@@ -175,19 +301,19 @@ export default function PropertyDetailPage() {
             {/* Cuando son 3 fotos (50% principal, 25% y 25% apiladas) */}
             {images.length === 3 && images.slice(1, 3).map((img, idx) => (
               <div key={idx} className="col-span-2 row-span-1 relative cursor-pointer group" onClick={() => { setCurrentImageIndex(idx + 1); setShowGallery(true); }}>
-                <Image src={img} fill className="object-cover" alt={`${property.title} ${idx+2}`} sizes="50vw" />
+                <Image src={img} fill className="object-cover" alt={`${property.title} ${idx + 2}`} sizes="50vw" />
                 <div className="absolute inset-0 bg-transparent group-hover:bg-black/10 transition-colors duration-300 z-10" />
               </div>
             ))}
 
             {/* Cuando son exactamente 4 fotos (50% principal, dos pequeñas arriba, una alargada abajo) */}
             {images.length === 4 && images.slice(1, 4).map((img, idx) => (
-              <div 
-                key={idx} 
-                className={`relative cursor-pointer group ${idx === 2 ? 'col-span-2 row-span-1' : 'col-span-1 row-span-1'}`} 
+              <div
+                key={idx}
+                className={`relative cursor-pointer group ${idx === 2 ? 'col-span-2 row-span-1' : 'col-span-1 row-span-1'}`}
                 onClick={() => { setCurrentImageIndex(idx + 1); setShowGallery(true); }}
               >
-                <Image src={img} fill className="object-cover" alt={`${property.title} ${idx+2}`} sizes={idx === 2 ? '50vw' : '25vw'} />
+                <Image src={img} fill className="object-cover" alt={`${property.title} ${idx + 2}`} sizes={idx === 2 ? '50vw' : '25vw'} />
                 <div className="absolute inset-0 bg-transparent group-hover:bg-black/10 transition-colors duration-300 z-10" />
               </div>
             ))}
@@ -195,7 +321,7 @@ export default function PropertyDetailPage() {
             {/* Cuando son 5 o más fotos (50% principal, 4 cuadritos a la derecha) */}
             {images.length >= 5 && images.slice(1, 5).map((img, idx) => (
               <div key={idx} className="col-span-1 row-span-1 relative cursor-pointer group" onClick={() => { setCurrentImageIndex(idx + 1); setShowGallery(true); }}>
-                <Image src={img} fill className="object-cover" alt={`${property.title} ${idx+2}`} sizes="25vw" />
+                <Image src={img} fill className="object-cover" alt={`${property.title} ${idx + 2}`} sizes="25vw" />
                 <div className="absolute inset-0 bg-transparent group-hover:bg-black/10 transition-colors duration-300 z-10" />
                 {/* Overlay de '+N fotos' SOLO si hay más de 5 en total */}
                 {(idx === 3 && images.length > 5) && (
@@ -208,7 +334,7 @@ export default function PropertyDetailPage() {
 
             {/* Botón flotante 'Mostrar todas las fotos' (SOLO si hay más de 5) */}
             {images.length > 5 && (
-              <button 
+              <button
                 onClick={() => setShowGallery(true)}
                 className="absolute bottom-4 right-4 bg-white/90 backdrop-blur border border-neutral-200 px-4 py-2 rounded-xl font-bold text-sm shadow-md flex items-center gap-2 hover:bg-white text-neutral-800 z-30 transition-all hover:scale-105"
               >
@@ -219,13 +345,13 @@ export default function PropertyDetailPage() {
 
           {/* Versión Mobile: Carrusel nativo o Imagen Principal sola */}
           <div className="md:hidden relative rounded-2xl overflow-hidden aspect-[4/3] w-full" onClick={() => setShowGallery(true)}>
-             <Image src={images[currentImageIndex]} fill className="object-cover" alt={property.title} priority />
-             
-             {images.length > 1 && (
-               <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold tracking-wider z-20">
-                  {currentImageIndex + 1} / {images.length}
-               </div>
-             )}
+            <Image src={images[currentImageIndex]} fill className="object-cover" alt={property.title} priority />
+
+            {images.length > 1 && (
+              <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold tracking-wider z-20">
+                {currentImageIndex + 1} / {images.length}
+              </div>
+            )}
           </div>
           {/* Thumbnails Mobile */}
           <div className="md:hidden flex gap-2 overflow-x-auto mt-3 pb-2 snap-x">
@@ -240,7 +366,7 @@ export default function PropertyDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Left Column - Details */}
           <div className="lg:col-span-2 space-y-8">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="w-full"
@@ -284,7 +410,7 @@ export default function PropertyDetailPage() {
                       {property.price.replace('/mes', '')}
                     </h2>
                   </div>
-                  
+
                   {/* Precio Dólares */}
                   {property.priceUsd && (
                     <>
@@ -300,7 +426,7 @@ export default function PropertyDetailPage() {
                     </>
                   )}
                 </div>
-                
+
                 {property.maintenance && (
                   <p className="text-neutral-600 font-medium text-[15px] mb-6">
                     Mantenimiento {property.maintenance}
@@ -318,44 +444,47 @@ export default function PropertyDetailPage() {
                 </div>
               </div>
 
-              {/* Stats */}
-              <div className="flex flex-wrap items-center justify-start gap-x-10 md:gap-x-16 gap-y-6 py-8 border-y border-slate-200 w-full mb-8">
-                {!!property.beds && String(property.beds) !== '0' && (
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                      <BedDouble className="h-5 w-5 text-[#0040FF]" />
+              {/* Resumen */}
+              <div className="mb-8">
+                <h3 className="text-xl font-black text-neutral-800 mb-6">Resumen</h3>
+                <div className="py-6 border-t border-b border-slate-200 grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-6">
+                  {!!property.beds && String(property.beds) !== '0' && (
+                    <div className="flex items-center gap-4">
+                      <BedDouble className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
+                      <div className="flex flex-col">
+                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">{property.beds}</span>
+                        <span className="text-[12px] text-neutral-500">{property.beds === 1 ? 'Habitación' : 'Habitaciones'}</span>
+                      </div>
                     </div>
-                    <span className="text-sm font-black text-neutral-800">{property.beds}</span>
-                    <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Hab.</span>
-                  </div>
-                )}
-                {!!property.baths && String(property.baths) !== '0' && (
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                      <Bath className="h-5 w-5 text-[#0040FF]" />
+                  )}
+                  {!!property.baths && String(property.baths) !== '0' && (
+                    <div className="flex items-center gap-4">
+                      <Bath className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
+                      <div className="flex flex-col">
+                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">{property.baths}</span>
+                        <span className="text-[12px] text-neutral-500">{property.baths === 1 ? 'Baño' : 'Baños'}</span>
+                      </div>
                     </div>
-                    <span className="text-sm font-black text-neutral-800">{property.baths}</span>
-                    <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Baños</span>
-                  </div>
-                )}
-                {!!property.garage && String(property.garage) !== '0' && (
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                      <Car className="h-5 w-5 text-[#0040FF]" />
+                  )}
+                  {!!property.garage && String(property.garage) !== '0' && (
+                    <div className="flex items-center gap-4">
+                      <Car className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
+                      <div className="flex flex-col">
+                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">{property.garage}</span>
+                        <span className="text-[12px] text-neutral-500">{property.garage === 1 ? 'Cochera' : 'Cocheras'}</span>
+                      </div>
                     </div>
-                    <span className="text-sm font-black text-neutral-800">{property.garage}</span>
-                    <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Cochera</span>
-                  </div>
-                )}
-                {!!property.area && String(property.area) !== '0' && !String(property.area).startsWith('0 ') && (
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                      <Square className="h-5 w-5 text-[#0040FF]" />
+                  )}
+                  {!!property.area && String(property.area) !== '0' && !String(property.area).startsWith('0 ') && (
+                    <div className="flex items-center gap-4">
+                      <Square className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
+                      <div className="flex flex-col">
+                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">{property.area}</span>
+                        <span className="text-[12px] text-neutral-500">Área de Terreno</span>
+                      </div>
                     </div>
-                    <span className="text-sm font-black text-neutral-800">{property.area}</span>
-                    <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Área</span>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
 
               {/* Description */}
@@ -385,67 +514,290 @@ export default function PropertyDetailPage() {
 
               {/* Calculadora de Hipoteca */}
               {property.type === 'Venta' && (
-                <CalculadoraHipoteca 
+                <CalculadoraHipoteca
                   priceRaw={property.price}
                   currencySymbol={property.price.includes('$') ? '$' : 'S/'}
                 />
+              )}
+
+              {/* Agendar Visita */}
+              <div className="mt-12 pt-10 border-t border-slate-200">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="h-10 w-10 bg-[#0040FF]/10 rounded-xl flex items-center justify-center text-[#0040FF]">
+                    <Calendar className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-neutral-800">Agendar una visita</h3>
+                    <p className="text-sm text-neutral-500 font-medium tracking-tight">Elige el mejor momento para conocer tu próximo hogar</p>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-3xl border border-slate-100 p-6 md:p-8 shadow-sm">
+                  {/* Tipo de Visita */}
+                  <div className="grid grid-cols-2 gap-3 mb-8">
+                    <button 
+                      onClick={() => setVisitType('presencial')}
+                      className={`flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-sm transition-all ${visitType === 'presencial' ? 'bg-[#0040FF] text-white shadow-lg shadow-blue-500/20' : 'bg-slate-50 text-neutral-500 hover:bg-slate-100'}`}
+                    >
+                      <Building2 className="h-4 w-4" /> Presencial
+                    </button>
+                    <button 
+                      onClick={() => setVisitType('videollamada')}
+                      className={`flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-sm transition-all ${visitType === 'videollamada' ? 'bg-[#0040FF] text-white shadow-lg shadow-blue-500/20' : 'bg-slate-50 text-neutral-500 hover:bg-slate-100'}`}
+                    >
+                      <Video className="h-4 w-4" /> Videollamada
+                    </button>
+                  </div>
+
+                  {/* Selector de Fecha */}
+                  <div className="mb-8">
+                    <label className="text-[13px] font-black text-neutral-400 uppercase tracking-widest mb-4 block px-1">Selecciona una fecha (Próximos 7 días)</label>
+                    <div className="flex gap-3 overflow-x-auto pb-4 -mx-1 px-1 snap-x scrollbar-hide">
+                      {upcomingDates.map((date, idx) => {
+                        const isSelected = selectedDate?.toDateString() === date.toDateString();
+                        const dayName = date.toLocaleDateString('es-ES', { weekday: 'short' });
+                        const dayNum = date.getDate();
+                        const monthName = date.toLocaleDateString('es-ES', { month: 'short' });
+
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => setSelectedDate(date)}
+                            className={`flex flex-col items-center justify-center min-w-[75px] py-4 rounded-2xl border transition-all snap-start ${isSelected ? 'border-[#0040FF] bg-[#0040FF]/5 text-[#0040FF] font-bold shadow-sm' : 'border-slate-100 bg-white text-neutral-500 hover:border-slate-300'}`}
+                          >
+                            <span className="text-[11px] uppercase font-black opacity-60 mb-1">{dayName}</span>
+                            <span className="text-xl font-black">{dayNum}</span>
+                            <span className="text-[11px] uppercase font-bold opacity-60">{monthName}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Selector de Hora */}
+                  <div className="mb-8">
+                    <label className="text-[13px] font-black text-neutral-400 uppercase tracking-widest mb-4 block px-1">Selecciona un horario</label>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                      {hoursAvailable.map((time) => {
+                        const isSelected = selectedTime === time;
+                        return (
+                          <button
+                            key={time}
+                            onClick={() => setSelectedTime(time)}
+                            className={`py-2.5 rounded-xl border text-[13px] font-bold transition-all ${isSelected ? 'border-[#0040FF] bg-[#0040FF] text-white shadow-md' : 'border-slate-100 bg-white text-neutral-600 hover:border-slate-300'}`}
+                          >
+                            {time}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Botón de Acción Especial */}
+                  <button 
+                    onClick={() => {
+                      if(!selectedDate || !selectedTime) {
+                          setSubmitError("Por favor selecciona fecha y hora para la visita.");
+                          return;
+                      }
+                      handleContactAction('whatsapp');
+                    }}
+                    className="w-full bg-[#0055B8] hover:bg-[#00408A] text-white py-4 rounded-[18px] font-black text-base transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-500/10 active:scale-[0.98]"
+                  >
+                    <Calendar className="h-5 w-5" />
+                    Agendar Reserva Ahora
+                  </button>
+                  <p className="text-center text-[12px] text-neutral-400 font-medium mt-4">
+                    Confirmaremos tu cita lo antes posible por WhatsApp.
+                  </p>
+                </div>
+              </div>
+
+              {/* Propiedades Similares */}
+              {similarProperties.length > 0 && (
+                <div className="mt-24 pt-10 border-t border-slate-200">
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="h-10 w-10 bg-[#0040FF]/10 rounded-xl flex items-center justify-center text-[#0040FF]">
+                      <HomeIcon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-neutral-800">Propiedades similares</h3>
+                      <p className="text-sm text-neutral-500 font-medium tracking-tight">Otras opciones en {property.city || 'la zona'}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {similarProperties.map((prop) => (
+                      <div key={prop.id} className="transform hover:-translate-y-1 transition-transform duration-300">
+                        <PropertyCard property={prop} />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-10 text-center">
+                    <button 
+                      onClick={() => router.push('/propiedades')}
+                      className="px-8 py-3 bg-white border border-slate-200 text-neutral-800 rounded-2xl font-black text-sm hover:bg-slate-50 transition-all shadow-sm"
+                    >
+                      Ver todas las propiedades
+                    </button>
+                  </div>
+                </div>
               )}
             </motion.div>
           </div>
 
           {/* Right Column - Price & Contact */}
-          <div className="space-y-6">
-            {/* Price Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm sticky top-28"
-            >
-              <div className="mb-6">
-                <p className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em] mb-2">Precio de Inversión</p>
-                <h2 className="text-3xl font-black text-[#0040FF] leading-none">
-                  {property.price}
-                </h2>
-                {property.priceUsd && (
-                  <p className="text-sm font-bold text-neutral-400 mt-1">
-                    / {property.priceUsd}
-                  </p>
-                )}
-              </div>
+          <div className="relative h-full">
+            <div className="sticky top-28 space-y-6">
+            {/* Formulario / Contact Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="bg-white rounded-3xl p-6 lg:p-8 shadow-md border border-slate-100 shadow-sm"
+              >
 
-              <div className="space-y-3">
-                <a
-                  href={`https://wa.me/51941849523?text=${whatsappMessage}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-white py-3 rounded-2xl font-bold text-sm transition-all shadow-lg shadow-green-500/20"
-                >
-                  <MessageCircle className="h-5 w-5" />
-                  Consultar por WhatsApp
-                </a>
-                <a
-                  href="tel:+51941849523"
-                  className="w-full flex items-center justify-center gap-2 bg-[#0040FF] hover:bg-blue-700 text-white py-3 rounded-2xl font-bold text-sm transition-all shadow-lg shadow-blue-500/20"
-                >
-                  <Phone className="h-5 w-5" />
-                  Llamar ahora
-                </a>
-              </div>
+                {/* Agent Info Dinámico */}
+                <div className="flex items-center gap-4 mb-8">
+                  {(() => {
+                    const agencyName = property?.agent?.agency?.trim();
+                    const isCasaty = !agencyName || agencyName.toLowerCase().includes('casaty');
+                    
+                    const displayName = isCasaty 
+                      ? (property?.agent?.name || 'Agente de Casaty') 
+                      : agencyName; // Si no es Casaty, muestra solo la inmobiliaria
 
-              {/* Agent Info */}
-              <div className="mt-6 pt-6 border-t border-slate-100">
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full bg-[#0040FF] flex items-center justify-center text-white font-black text-lg">
-                    C
+                    const displayImage = property?.agent?.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=223345&color=fff`;
+
+                    return (
+                      <>
+                        <div 
+                          className="relative h-16 w-16 rounded-full overflow-hidden shrink-0 shadow-sm bg-cover bg-center border border-slate-100" 
+                          style={{ backgroundImage: `url('${displayImage}')` }} 
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-[17px] font-bold text-neutral-800 tracking-tight leading-snug">
+                            {displayName}
+                          </span>
+                          {isCasaty && (
+                            <span className="text-[14px] text-neutral-500 font-medium">
+                              {agencyName || 'Casaty'}
+                            </span>
+                          )}
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
+
+                {/* Formulario */}
+                <div className="space-y-4 mb-6">
+                  
+                  {/* DNI & Document */}
+                  <div className="flex bg-white border border-slate-200 rounded-xl overflow-hidden focus-within:border-[#0050B3] focus-within:ring-1 focus-within:ring-[#0050B3] transition-all">
+                    <select 
+                      name="docType"
+                      value={formData.docType}
+                      onChange={handleInputChange}
+                      className="w-24 px-3 py-3.5 bg-transparent text-[15px] font-medium text-neutral-700 outline-none border-r border-slate-200 cursor-pointer appearance-none"
+                      style={{ backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.7rem top 50%', backgroundSize: '0.65rem auto' }}
+                    >
+                      <option value="DNI">DNI</option>
+                      <option value="CE">CE</option>
+                      <option value="Pasaporte">PAS</option>
+                    </select>
+                    <input 
+                      name="docNumber"
+                      value={formData.docNumber}
+                      onChange={handleInputChange}
+                      type="text" 
+                      placeholder="Documento" 
+                      className="w-full px-4 py-3.5 bg-transparent text-[15px] text-neutral-800 placeholder:text-neutral-400 outline-none" 
+                    />
                   </div>
-                  <div>
-                    <p className="font-black text-neutral-800 text-sm">Casaty Inmobiliaria</p>
-                    <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Agente Verificado</p>
+
+                  {/* Name */}
+                  <input 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    type="text" 
+                    placeholder="Nombre completo" 
+                    className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-[15px] focus:outline-none focus:border-[#0050B3] focus:ring-1 focus:ring-[#0050B3] text-neutral-800 placeholder:text-neutral-400 transition-all" 
+                  />
+
+                  {/* Email */}
+                  <input 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    type="email" 
+                    placeholder="Correo electrónico" 
+                    className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-[15px] focus:outline-none focus:border-[#0050B3] focus:ring-1 focus:ring-[#0050B3] text-neutral-800 placeholder:text-neutral-400 transition-all" 
+                  />
+
+                  {/* Phone */}
+                  <div className="flex bg-white border border-slate-200 rounded-xl overflow-hidden focus-within:border-[#0050B3] focus-within:ring-1 focus-within:ring-[#0050B3] transition-all">
+                    <div className="w-24 px-3 py-3.5 bg-transparent flex items-center gap-2 border-r border-slate-200">
+                      <img src="https://flagcdn.com/w20/pe.png" alt="Peru flag" className="w-5 h-[15px] object-cover rounded-sm" />
+                      <span className="text-[14px] text-neutral-500 font-medium">+51</span>
+                    </div>
+                    <input 
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      type="tel" 
+                      placeholder="Teléfono" 
+                      className="w-full px-4 py-3.5 bg-transparent text-[15px] text-neutral-800 placeholder:text-neutral-400 outline-none" 
+                    />
                   </div>
                 </div>
+
+                {submitError && (
+                  <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-100 text-red-600 text-[13px] font-medium">
+                    {submitError}
+                  </div>
+                )}
+                {submitSuccess && (
+                  <div className="mb-4 p-3 rounded-lg bg-green-50 border border-green-100 text-green-700 text-[13px] font-medium">
+                    {submitSuccess}
+                  </div>
+                )}
+
+                {/* Botones */}
+                <div className="grid grid-cols-2 gap-3">
+                  <button 
+                    onClick={() => handleContactAction('whatsapp')}
+                    disabled={isSubmitting}
+                    className="w-full bg-[#0055B8] hover:bg-[#00408A] text-white py-3.5 rounded-[14px] font-bold text-[15px] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
+                  >
+                    {isSubmitting ? <Loader2 className="w-[18px] h-[18px] animate-spin" /> : <MessageCircle className="h-[18px] w-[18px] stroke-[2.5]" />}
+                    WhatsApp
+                  </button>
+                  <button 
+                    onClick={() => handleContactAction('email')}
+                    disabled={isSubmitting}
+                    className="w-full bg-[#0055B8] hover:bg-[#00408A] text-white py-3.5 rounded-[14px] font-bold text-[15px] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
+                  >
+                    {isSubmitting ? <Loader2 className="w-[18px] h-[18px] animate-spin" /> : <Mail className="h-[18px] w-[18px] stroke-[2.5]" />}
+                    Correo
+                  </button>
+                </div>
+
+              </motion.div>
+
+              <div className="px-1 text-center">
+                <p className="text-[12px] text-neutral-500 font-medium leading-relaxed mb-6">
+                  Al hacer clic en "WhatsApp" o "Correo" estás aceptando nuestros <a href="/terminos-y-condiciones" className="text-neutral-700 hover:text-[#0055B8] transition-colors">Términos y condiciones</a> y Políticas de privacidad.
+                </p>
+
+                <button className="w-full border border-[#0055B8] text-[#0055B8] hover:bg-[#0055B8]/5 py-3.5 rounded-[14px] font-bold text-[14px] transition-colors flex items-center justify-center gap-2 shadow-sm bg-white">
+                  <Bell className="h-4 w-4 stroke-[2.5]" />
+                  Recibe alertas de inmuebles similares
+                </button>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

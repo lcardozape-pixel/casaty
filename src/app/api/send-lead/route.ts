@@ -8,7 +8,7 @@ const HONECTA_AGENT_ID = process.env.NEXT_PUBLIC_HONECTA_AGENT_ID;
 export async function POST(request: Request) {
   try {
     const { formData, serviceName } = await request.json();
-    const { name, phone, email, ...otherData } = formData;
+    const { name, phone, email, propertyUrl, ...otherData } = formData;
 
     // Generar resumen de datos adicionales
     const summaryHtml = Object.entries(otherData)
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
           <h2 style="color: #0040FF;">Nueva Solicitud de ${serviceName}</h2>
-          <p>Has recibido un nuevo lead desde el Wizard de Casaty.pe:</p>
+          <p>Has recibido un nuevo lead desde el detalle de propiedad en Casaty.pe:</p>
           
           <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
             <h3 style="margin-top: 0;">Datos de Contacto</h3>
@@ -33,7 +33,14 @@ export async function POST(request: Request) {
           </div>
 
           <div style="margin: 20px 0;">
-            <h3>Detalles de la Solicitud</h3>
+            <h3>Detalles de la Propiedad</h3>
+            ${propertyUrl ? `
+              <div style="margin-bottom: 20px;">
+                <a href="${propertyUrl}" style="background-color: #0040FF; color: white; padding: 12px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
+                  Ver Propiedad en la Web
+                </a>
+              </div>
+            ` : ''}
             <ul>
               ${summaryHtml}
             </ul>

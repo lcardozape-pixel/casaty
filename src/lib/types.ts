@@ -20,4 +20,9 @@ export interface Property {
   maintenance?: string;
   subType?: string;
   amenities?: string[];
+  agent?: {
+    name: string;
+    photo?: string;
+    agency?: string;
+  };
 }

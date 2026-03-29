@@ -145,6 +145,11 @@ export function mapHonectaToCasaty(hp: any): Property {
     maintenance: hp.maintenance_fee ? `${currencySymbol} ${Number(hp.maintenance_fee).toLocaleString("en-US")}` : undefined,
     subType: hp.property_sub_type || hp.subtype || features.subType || undefined,
     amenities: finalAmenities.length > 0 ? finalAmenities : undefined,
+    agent: {
+      name: hp.profiles?.full_name || hp.agent?.name || hp.agent?.full_name || hp.agent?.first_name || '',
+      photo: hp.profiles?.avatar_url || hp.agent?.avatar || hp.agent?.photo || hp.agent?.profile_picture || hp.agency?.logo || undefined,
+      agency: hp.profiles?.agency || hp.agency?.name || hp.agent?.agency_name || hp.agency || ''
+    }
   };
 }
 
