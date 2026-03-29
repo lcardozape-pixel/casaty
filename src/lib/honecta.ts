@@ -42,13 +42,13 @@ export function mapHonectaToCasaty(hp: any): Property {
   // Mapeo del tipo de propiedad
   const typeMap: Record<string, string> = {
     'house': 'Casa',
-    'apartment': 'Depa',
+    'apartment': 'Departamento',
     'office': 'Oficina',
     'land': 'Terreno',
     'commercial': 'Local comercial',
     'casa': 'Casa',
-    'depa': 'Depa',
-    'departamento': 'Depa',
+    'depa': 'Departamento',
+    'departamento': 'Departamento',
     'oficina': 'Oficina',
     'terreno': 'Terreno',
     'local': 'Local comercial',
@@ -59,25 +59,92 @@ export function mapHonectaToCasaty(hp: any): Property {
   const rawType = (hp.listing_type || hp.operation_type || '').toLowerCase();
   const isRent = rawType === 'rent' || rawType === 'alquiler' || rawType === 'renta';
 
+  // Extraer información adicional de 'features' por si los campos principales están vacíos
+  const features = hp.features || {};
+  
+  const rawTotalArea = Number(hp.total_area || features.landArea || 0);
+  const rawBuiltArea = Number(hp.built_area || features.sqft || 0);
+
+  let formattedArea = "";
+  if (rawTotalArea > 0 && rawBuiltArea > 0) {
+    if (rawTotalArea !== rawBuiltArea) {
+      formattedArea = `${rawTotalArea} m² / ${rawBuiltArea} m²`;
+    } else {
+      formattedArea = `${rawTotalArea} m²`;
+    }
+  } else if (rawTotalArea > 0) {
+    formattedArea = `${rawTotalArea} m²`;
+  } else if (rawBuiltArea > 0) {
+    formattedArea = `${rawBuiltArea} m²`;
+  } else {
+    formattedArea = "0 m²";
+  }
+
+  const getNum = (val1: any, val2: any) => {
+    const num1 = Number(val1);
+    if (!isNaN(num1) && num1 > 0) return num1;
+    const num2 = Number(val2);
+    if (!isNaN(num2) && num2 > 0) return num2;
+    return 0;
+  };
+
+  const finalBeds = getNum(hp.bedrooms, features.beds);
+  const finalBaths = getNum(hp.bathrooms, features.baths);
+  const finalGarage = getNum(hp.parking_spaces, features.parkingSpaces);
+
+  // Intentar extraer amenidades
+  const extractedAmenities: string[] = [];
+  if (Array.isArray(hp.amenities)) {
+    extractedAmenities.push(...hp.amenities.filter(Boolean).map(String));
+  } else if (typeof hp.amenities === 'string' && hp.amenities.trim() !== '') {
+    extractedAmenities.push(...hp.amenities.split(',').map((s: string) => s.trim()));
+  }
+  
+  if (features && typeof features === 'object') {
+    const skipKeys = ['beds', 'baths', 'parkingSpaces', 'landArea', 'sqft', 'subType'];
+    for (const [key, value] of Object.entries(features)) {
+      if (skipKeys.includes(key)) continue;
+
+      if (Array.isArray(value)) {
+        // e.g., "nearby": ["Colegios", "Parques"], "facilities": ["Agua"]
+        extractedAmenities.push(...value.filter(Boolean).map(String));
+      } else if (typeof value === 'boolean' && value === true) {
+        extractedAmenities.push(key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()));
+      } else if (typeof value === 'string') {
+        const lowerVal = value.trim().toLowerCase();
+        if (lowerVal === 'true' || lowerVal === 'yes' || lowerVal === 'si') {
+          extractedAmenities.push(key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()));
+        } else if (key === 'amenities' && lowerVal !== '') {
+          extractedAmenities.push(...value.split(',').map((s: string) => s.trim()));
+        }
+      }
+    }
+  }
+
+  const finalAmenities = Array.from(new Set(extractedAmenities)).filter(Boolean);
+
   return {
     id: hp.id,
     title: hp.title || 'Propiedad sin título',
     location: `${hp.district || hp.city || "Piura"}`,
     price: isRent ? `${formattedPrice}/mes` : formattedPrice,
     priceUsd: priceUsd,
-    beds: hp.bedrooms || 0,
-    baths: hp.bathrooms || 0,
-    garage: hp.parking_spaces || 0,
-    area: `${hp.total_area || 0} m²`,
+    beds: finalBeds,
+    baths: finalBaths,
+    garage: finalGarage,
+    area: formattedArea,
     image: mainImage,
     images: allImages.length > 0 ? allImages : undefined,
     type: isRent ? "Alquiler" : "Venta",
-    propertyType: typeMap[(hp.property_type || '').toLowerCase()] || hp.property_type || 'Propiedad',
+    propertyType: typeMap[(hp.property_type || hp.type || '').toLowerCase()] || hp.property_type || hp.type || 'Propiedad',
     description: hp.description || '',
     address: hp.address || '',
     city: hp.city || 'Piura',
     district: hp.district || '',
     label: hp.is_featured ? "DESTACADA" : undefined,
+    maintenance: hp.maintenance_fee ? `${currencySymbol} ${Number(hp.maintenance_fee).toLocaleString("en-US")}` : undefined,
+    subType: hp.property_sub_type || hp.subtype || features.subType || undefined,
+    amenities: finalAmenities.length > 0 ? finalAmenities : undefined,
   };
 }
 

@@ -17,4 +17,7 @@ export interface Property {
   city?: string;
   district?: string;
   priceUsd?: string;
+  maintenance?: string;
+  subType?: string;
+  amenities?: string[];
 }

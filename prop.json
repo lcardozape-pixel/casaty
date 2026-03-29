@@ -1,0 +1,66 @@
+{
+  "id": "4af3bfb0-9212-43cf-a2b8-755ae2c070f5",
+  "title": "Vendo Terreno en Colinas del Chipe",
+  "description": "¡Oportunidad única de inversión! Terreno Urbano en venta en Veintiseis de Octubre, Piura, Piura.\n\nEsta propiedad cuenta con , distribuidos en 189.71m² de terreno. Cada espacio ha sido diseñado pensando en el confort y la funcionalidad de sus habitantes.\n\nUbicada en Veintiseis de Octubre, Piura, Piura, disfrutarás de fácil acceso a servicios, centros comerciales, colegios y principales vías de transporte. Una zona consolidada que garantiza tranquilidad y calidad de vida para toda la familia.\n\nExcelente oportunidad para inversionistas o familias que desean construir la casa de sus sueños a su medida.\n\n¡No dejes pasar esta oportunidad de inversión! Agenda tu visita hoy mismo y conoce todos los detalles de esta increíble propiedad.",
+  "price": 168000,
+  "currency": "PEN",
+  "address": "R8HH+727, Piura 20009, Perú",
+  "district": "Veintiseis de Octubre",
+  "province": "Piura",
+  "department": "Piura",
+  "location": "-5.1717424836208465, -80.67202133306579",
+  "bedrooms": 0,
+  "bathrooms": 0,
+  "parking_spaces": 0,
+  "built_area": null,
+  "total_area": null,
+  "images": [
+    "https://rrwluugzhnqpiedloysl.supabase.co/storage/v1/object/public/property-images/4af3bfb0-9212-43cf-a2b8-755ae2c070f5/1772990151143-dwgkc86kj65.jpeg",
+    "https://rrwluugzhnqpiedloysl.supabase.co/storage/v1/object/public/property-images/4af3bfb0-9212-43cf-a2b8-755ae2c070f5/1772990151146-7vvsm37pkmn.jpeg",
+    "https://rrwluugzhnqpiedloysl.supabase.co/storage/v1/object/public/property-images/4af3bfb0-9212-43cf-a2b8-755ae2c070f5/1772990151147-tlh8pk1ggxe.jpeg",
+    "https://rrwluugzhnqpiedloysl.supabase.co/storage/v1/object/public/property-images/4af3bfb0-9212-43cf-a2b8-755ae2c070f5/1772990151147-c0td0amzup9.jpeg"
+  ],
+  "features": {
+    "age": "",
+    "beds": "0",
+    "sqft": "",
+    "baths": "0",
+    "floors": "",
+    "nearby": [
+      "Centros comerciales",
+      "Colegios",
+      "Parques"
+    ],
+    "address": "Urb. Colinas del Chipe",
+    "docHrPu": "",
+    "hasPool": "no",
+    "isFenced": "no",
+    "landArea": "189.71",
+    "videoUrl": "",
+    "docPlanos": "",
+    "facilities": [
+      "Agua"
+    ],
+    "docNoAdeudo": "",
+    "floorNumber": "",
+    "hasElevator": "no",
+    "locationType": "exact",
+    "propertyCode": "ICLC020126",
+    "docParametros": "",
+    "parkingSpaces": "0",
+    "docCopiaLiteral": "https://rrwluugzhnqpiedloysl.supabase.co/storage/v1/object/public/property-images/4af3bfb0-9212-43cf-a2b8-755ae2c070f5/documents/copia_literal-1772989950089.pdf"
+  },
+  "status": "active",
+  "created_at": "2026-03-08T17:12:25.452392+00:00",
+  "agent_id": "46a68490-51ae-40db-b8f7-4ded19c64301",
+  "type": "Terreno",
+  "operation_type": "Venta",
+  "has_pool": false,
+  "has_elevator": false,
+  "profiles": {
+    "email": "lcardoza.pe@gmail.com",
+    "phone": "+51997013070",
+    "full_name": "Luis Cardoza",
+    "avatar_url": "https://rrwluugzhnqpiedloysl.supabase.co/storage/v1/object/public/avatars/46a68490-51ae-40db-b8f7-4ded19c64301-0.16946473555150154.png"
+  }
+}
