@@ -61,6 +61,9 @@ export async function POST(request: Request) {
     console.log("Correo enviado exitosamente:", data?.id);
     
     // 1.5 Guardar Lead en Supabase (Nueva DB)
+    let dbSaved = false;
+    let dbErrorDetail = null;
+
     try {
       const { error: dbError } = await supabase.from('leads').insert([{
         name,
@@ -69,11 +72,17 @@ export async function POST(request: Request) {
         service_name: serviceName,
         details: otherData
       }]);
-      if (dbError) throw dbError;
-      console.log("Lead guardado en Supabase");
-    } catch (dbError) {
-      console.error("Error guardando lead en Supabase:", dbError);
-      // No bloqueamos el flujo principal si falla la base de datos
+      
+      if (dbError) {
+        dbErrorDetail = dbError.message;
+        console.error("Error guardando lead en Supabase:", dbError);
+      } else {
+        dbSaved = true;
+        console.log("Lead guardado en Supabase");
+      }
+    } catch (dbError: any) {
+      dbErrorDetail = dbError.message || String(dbError);
+      console.error("Error crítico guardando lead en Supabase:", dbError);
     }
 
     // 2. Sincronizar con Honecta (Opcional, no bloquea el éxito del correo)
@@ -92,7 +101,12 @@ export async function POST(request: Request) {
       console.error("Fallo al sincronizar con Honecta:", hError);
     }
 
-    return NextResponse.json({ success: true, data });
+    return NextResponse.json({ 
+      success: true, 
+      data, 
+      dbSaved, 
+      dbErrorDetail 
+    });
   } catch (err) {
     console.error("Error crítico en API send-lead:", err);
     return NextResponse.json({ 
