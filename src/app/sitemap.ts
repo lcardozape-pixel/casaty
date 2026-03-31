@@ -15,6 +15,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/solicitar-credito-hipotecario-en-piura',
     '/valorizar-mi-inmueble-en-piura',
     '/inmobiliaria-en-piura',
+    '/contrato-de-alquiler',
+    '/trabaja-con-nosotros',
+    '/agente',
+    '/propiedades/venta',
+    '/propiedades/alquiler',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),

@@ -11,7 +11,7 @@ const HONECTA_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3Mi
 /**
  * Mapea una propiedad de Honecta (API o Supabase) al formato de Casaty
  */
-export function mapHonectaToCasaty(hp: any): Property {
+export function mapHonectaToCasaty(hp: Record<string, any>): Property {
   const currencySymbol = hp.currency === "USD" ? "$" : "S/";
   const price = Number(hp.price || 0);
   const formattedPrice = `${currencySymbol} ${price.toLocaleString("en-US", { minimumFractionDigits: 0 })}`;
@@ -31,10 +31,10 @@ export function mapHonectaToCasaty(hp: any): Property {
   let allImages: string[] = [];
   if (hp.images) {
     if (Array.isArray(hp.images)) {
-      allImages = hp.images.map((img: any) => {
+      allImages = hp.images.map((img: string | { url?: string; literal?: string; file_url?: string }) => {
         if (typeof img === 'string') return img;
         return img.url || img.literal || img.file_url;
-      }).filter(Boolean);
+      }).filter((img): img is string => Boolean(img));
     }
   }
   const mainImage = allImages.length > 0 ? allImages[0] : defaultImage;
@@ -80,7 +80,7 @@ export function mapHonectaToCasaty(hp: any): Property {
     formattedArea = "0 m²";
   }
 
-  const getNum = (val1: any, val2: any) => {
+  const getNum = (val1: unknown, val2: unknown) => {
     const num1 = Number(val1);
     if (!isNaN(num1) && num1 > 0) return num1;
     const num2 = Number(val2);
@@ -226,7 +226,7 @@ async function fetchFromSupabase(): Promise<Property[]> {
 /**
  * Envía un lead al endpoint externo de Honecta
  */
-export async function sendLeadToHonecta(leadData: any) {
+export async function sendLeadToHonecta(leadData: Record<string, any>) {
   if (!HONECTA_API_KEY) {
     console.warn("HONECTA_API_KEY not configured. Skipping external lead sync.");
     return null;

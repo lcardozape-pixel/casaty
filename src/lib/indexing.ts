@@ -12,8 +12,7 @@ export async function notifyGoogle(url: string, type: 'URL_UPDATED' | 'URL_DELET
       scopes: ['https://www.googleapis.com/auth/indexing'],
     });
 
-    const client = await auth.getClient();
-    const indexing = google.indexing({ version: 'v3', auth: client as any });
+    const indexing = google.indexing({ version: 'v3', auth: auth });
 
     const res = await indexing.urlNotifications.publish({
       requestBody: {
