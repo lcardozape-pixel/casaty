@@ -50,8 +50,8 @@ export async function GET() {
 
       results.push({
         id: prop.id,
-        google: googleRes ? 'Success' : 'Failed',
-        bing: bingRes ? 'Success' : 'Failed',
+        google: googleRes.success ? 'Success' : `Failed: ${googleRes.message}`,
+        bing: bingRes.success ? 'Success' : `Failed: ${bingRes.message}`,
         dbSaved: insError ? 'Error' : 'OK'
       });
     }
