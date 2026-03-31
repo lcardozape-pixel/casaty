@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 import { sendLeadToHonecta } from '@/lib/honecta';
+import { supabase } from '@/lib/supabase';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const HONECTA_AGENT_ID = process.env.NEXT_PUBLIC_HONECTA_AGENT_ID;
@@ -58,6 +59,22 @@ export async function POST(request: Request) {
     }
 
     console.log("Correo enviado exitosamente:", data?.id);
+    
+    // 1.5 Guardar Lead en Supabase (Nueva DB)
+    try {
+      const { error: dbError } = await supabase.from('leads').insert([{
+        name,
+        phone,
+        email,
+        service_name: serviceName,
+        details: otherData
+      }]);
+      if (dbError) throw dbError;
+      console.log("Lead guardado en Supabase");
+    } catch (dbError) {
+      console.error("Error guardando lead en Supabase:", dbError);
+      // No bloqueamos el flujo principal si falla la base de datos
+    }
 
     // 2. Sincronizar con Honecta (Opcional, no bloquea el éxito del correo)
     try {
