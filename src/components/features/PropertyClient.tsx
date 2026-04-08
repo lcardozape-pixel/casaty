@@ -182,7 +182,7 @@ export default function PropertyClient({ property, similarProperties }: Property
       {/* Back button */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-6">
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push('/propiedades')}
           className="flex items-center gap-2 text-neutral-500 hover:text-neutral-800 transition-colors font-bold text-sm"
         >
           <ArrowLeft className="h-4 w-4" />
