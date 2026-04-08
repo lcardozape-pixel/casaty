@@ -506,7 +506,7 @@ export default function PropertyClient({ property, similarProperties }: Property
                 className="bg-white rounded-3xl p-6 lg:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-slate-100"
               >
                 {/* Agent Info Estilo Mockup */}
-                <div className="flex items-center gap-4 mb-8">
+                <div className="flex items-center gap-4 mb-4">
                   {(() => {
                     const agencyName = property?.agent?.agency?.trim();
                     const isCasaty = !agencyName || agencyName.toLowerCase().includes('casaty');
@@ -519,7 +519,7 @@ export default function PropertyClient({ property, similarProperties }: Property
 
                     return (
                       <>
-                        <div className="relative h-16 w-16 rounded-full overflow-hidden shrink-0 shadow-sm border border-slate-100">
+                        <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm ring-1 ring-slate-100">
                           <Image src={displayImage} fill className="object-cover" alt={displayName} />
                         </div>
                         <div className="flex flex-col">
