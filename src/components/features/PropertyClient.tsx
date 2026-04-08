@@ -505,57 +505,88 @@ export default function PropertyClient({ property, similarProperties }: Property
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-white rounded-3xl p-6 lg:p-8 shadow-md border border-slate-100 shadow-sm"
+                className="bg-white rounded-3xl p-6 lg:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-slate-100"
               >
-
-                {/* Agent Info Dinámico */}
+                {/* Agent Info Estilo Mockup */}
                 <div className="flex items-center gap-4 mb-8">
                   {(() => {
                     const agencyName = property?.agent?.agency?.trim();
                     const isCasaty = !agencyName || agencyName.toLowerCase().includes('casaty');
                     
                     const displayName = isCasaty 
-                      ? (property?.agent?.name || 'Agente de Casaty') 
-                      : agencyName; // Si no es Casaty, muestra solo la inmobiliaria
+                      ? (property?.agent?.name || 'Luis Cardoza') 
+                      : agencyName;
 
                     const displayImage = property?.agent?.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName || 'Casaty')}&background=223345&color=fff`;
 
                     return (
                       <>
-                        <div 
-                          className="relative h-16 w-16 rounded-full overflow-hidden shrink-0 shadow-sm bg-cover bg-center border border-slate-100" 
-                          style={{ backgroundImage: `url('${displayImage}')` }} 
-                        />
+                        <div className="relative h-16 w-16 rounded-full overflow-hidden shrink-0 shadow-sm border border-slate-100">
+                          <Image src={displayImage} fill className="object-cover" alt={displayName} />
+                        </div>
                         <div className="flex flex-col">
-                          <span className="text-[17px] font-bold text-neutral-800 tracking-tight leading-snug">
+                          <span className="text-[17px] font-bold text-neutral-800 tracking-tight leading-tight">
                             {displayName}
                           </span>
-                          {isCasaty && (
-                            <span className="text-[14px] text-neutral-500 font-medium">
-                              {agencyName || 'Casaty'}
-                            </span>
-                          )}
+                          <span className="text-[13px] text-neutral-500 font-medium mt-1">
+                            {isCasaty ? 'Broker de Inmobiliaria Casaty' : agencyName}
+                          </span>
+                          <span className="text-[13px] text-neutral-500 font-medium">
+                            Codigo MVCS: PN-20719
+                          </span>
                         </div>
                       </>
                     );
                   })()}
                 </div>
 
-                {/* Formulario */}
+                {/* Formulario Estilo Mockup */}
                 <div className="space-y-4 mb-6">
-                  
-                  {/* DNI & Document */}
-                  <div className="flex bg-white border border-slate-200 rounded-xl overflow-hidden focus-within:border-[#0050B3] focus-within:ring-1 focus-within:ring-[#0050B3] transition-all">
+                  {/* Name */}
+                  <input 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    type="text" 
+                    placeholder="Nombre completo" 
+                    className="w-full px-4 py-3.5 rounded-xl border border-slate-100 text-[15px] focus:outline-none focus:border-neutral-300 text-neutral-800 placeholder:text-neutral-400 transition-all bg-white"
+                  />
+
+                  {/* Email */}
+                  <input 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    type="email" 
+                    placeholder="Correo electrónico" 
+                    className="w-full px-4 py-3.5 rounded-xl border border-slate-100 text-[15px] focus:outline-none focus:border-neutral-300 text-neutral-800 placeholder:text-neutral-400 transition-all bg-white" 
+                  />
+
+                  {/* Phone */}
+                  <div className="flex bg-white border border-slate-100 rounded-xl overflow-hidden focus-within:border-neutral-300 transition-all">
+                    <div className="w-24 px-3 py-3.5 bg-transparent flex items-center justify-center gap-2 border-r border-slate-50">
+                      <span className="text-[14px] text-neutral-500 font-bold">PE +51</span>
+                    </div>
+                    <input 
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      type="tel" 
+                      placeholder="Teléfono" 
+                      className="w-full px-4 py-3.5 bg-transparent text-[15px] text-neutral-800 placeholder:text-neutral-400 outline-none" 
+                    />
+                  </div>
+
+                  {/* DNI (Mantenido por petición del usuario) */}
+                  <div className="flex bg-white border border-slate-100 rounded-xl overflow-hidden focus-within:border-neutral-300 transition-all">
                     <select 
                       name="docType"
                       value={formData.docType}
                       onChange={handleInputChange}
-                      className="w-24 px-3 py-3.5 bg-transparent text-[15px] font-medium text-neutral-700 outline-none border-r border-slate-200 cursor-pointer appearance-none"
-                      style={{ backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.7rem top 50%', backgroundSize: '0.65rem auto' }}
+                      className="w-24 px-3 py-3.5 bg-transparent text-[14px] font-bold text-neutral-500 outline-none border-r border-slate-50 cursor-pointer appearance-none"
                     >
                       <option value="DNI">DNI</option>
                       <option value="CE">CE</option>
-                      <option value="Pasaporte">PAS</option>
                     </select>
                     <input 
                       name="docNumber"
@@ -567,86 +598,48 @@ export default function PropertyClient({ property, similarProperties }: Property
                     />
                   </div>
 
-                  {/* Name */}
-                  <input 
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    type="text" 
-                    placeholder="Nombre completo" 
-                    className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-[15px] focus:outline-none focus:border-[#0050B3] focus:ring-1 focus:ring-[#0050B3] text-neutral-800 placeholder:text-neutral-400 transition-all" 
+                  {/* Mensaje Textarea */}
+                  <textarea
+                    rows={4}
+                    className="w-full px-4 py-3.5 rounded-xl border border-slate-100 text-[15px] focus:outline-none focus:border-neutral-300 text-neutral-800 placeholder:text-neutral-400 transition-all bg-[#F9F9F9] resize-none"
+                    placeholder="¡Hola! Me interesa esta propiedad y me gustaría recibir más información."
+                    defaultValue="¡Hola! Me interesa esta propiedad y me gustaría recibir más información."
                   />
-
-                  {/* Email */}
-                  <input 
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    type="email" 
-                    placeholder="Correo electrónico" 
-                    className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-[15px] focus:outline-none focus:border-[#0050B3] focus:ring-1 focus:ring-[#0050B3] text-neutral-800 placeholder:text-neutral-400 transition-all" 
-                  />
-
-                  {/* Phone */}
-                  <div className="flex bg-white border border-slate-200 rounded-xl overflow-hidden focus-within:border-[#0050B3] focus-within:ring-1 focus-within:ring-[#0050B3] transition-all">
-                    <div className="w-24 px-3 py-3.5 bg-transparent flex items-center gap-2 border-r border-slate-200">
-                      <img src="https://flagcdn.com/w20/pe.png" alt="Peru flag" className="w-5 h-[15px] object-cover rounded-sm" />
-                      <span className="text-[14px] text-neutral-500 font-medium">+51</span>
-                    </div>
-                    <input 
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      type="tel" 
-                      placeholder="Teléfono" 
-                      className="w-full px-4 py-3.5 bg-transparent text-[15px] text-neutral-800 placeholder:text-neutral-400 outline-none" 
-                    />
-                  </div>
                 </div>
 
                 {submitError && (
-                  <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-100 text-red-600 text-[13px] font-medium">
+                  <div className="mb-4 p-3 rounded-lg bg-red-50 text-red-600 text-[13px] font-medium text-center">
                     {submitError}
                   </div>
                 )}
-                {submitSuccess && (
-                  <div className="mb-4 p-3 rounded-lg bg-green-50 border border-green-100 text-green-700 text-[13px] font-medium">
-                    {submitSuccess}
-                  </div>
-                )}
 
-                {/* Botones */}
-                <div className="grid grid-cols-2 gap-3">
-                  <button 
-                    onClick={() => handleContactAction('whatsapp')}
-                    disabled={isSubmitting}
-                    className="w-full bg-[#0055B8] hover:bg-[#00408A] text-white py-3.5 rounded-[14px] font-bold text-[15px] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
-                  >
-                    {isSubmitting ? <Loader2 className="w-[18px] h-[18px] animate-spin" /> : <MessageCircle className="h-[18px] w-[18px] stroke-[2.5]" />}
-                    WhatsApp
-                  </button>
-                  <button 
-                    onClick={() => handleContactAction('email')}
-                    disabled={isSubmitting}
-                    className="w-full bg-[#0055B8] hover:bg-[#00408A] text-white py-3.5 rounded-[14px] font-bold text-[15px] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
-                  >
-                    {isSubmitting ? <Loader2 className="w-[18px] h-[18px] animate-spin" /> : <Mail className="h-[18px] w-[18px] stroke-[2.5]" />}
-                    Correo
-                  </button>
+                {/* Botón Principal WhatsApp Verde Mockup */}
+                <button 
+                  onClick={() => handleContactAction('whatsapp')}
+                  disabled={isSubmitting}
+                  className="w-full bg-[#00D179] hover:bg-[#00B86B] text-white py-4 rounded-2xl font-bold text-[16px] transition-all flex items-center justify-center gap-3 disabled:opacity-70"
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      <MessageCircle className="h-5 w-5 fill-white" />
+                      Iniciar conversación
+                    </>
+                  )}
+                </button>
+
+                <div className="mt-6 text-center space-y-1">
+                  <p className="text-[12px] text-neutral-400 font-medium">
+                    Al hacer clic aceptas nuestros <a href="/terminos-y-condiciones" className="text-neutral-500 font-bold hover:underline">Términos y condiciones</a> y 
+                  </p>
+                  <p className="text-[12px] text-neutral-400 font-medium">
+                    <a href="/privacidad" className="text-neutral-500 font-bold hover:underline">Políticas de privacidad</a>.
+                  </p>
                 </div>
 
               </motion.div>
 
-              <div className="px-1 text-center">
-                <p className="text-[12px] text-neutral-500 font-medium leading-relaxed mb-6">
-                  Al hacer clic en "WhatsApp" o "Correo" estás aceptando nuestros <a href="/terminos-y-condiciones" className="text-neutral-700 hover:text-[#0055B8] transition-colors">Términos y condiciones</a> y Políticas de privacidad.
-                </p>
-
-                <button className="w-full border border-[#0055B8] text-[#0055B8] hover:bg-[#0055B8]/5 py-3.5 rounded-[14px] font-bold text-[14px] transition-colors flex items-center justify-center gap-2 shadow-sm bg-white">
-                  <Bell className="h-4 w-4 stroke-[2.5]" />
-                  Recibe alertas de inmuebles similares
-                </button>
-              </div>
             </div>
           </div>
         </div>
