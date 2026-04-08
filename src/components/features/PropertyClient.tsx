@@ -539,7 +539,7 @@ export default function PropertyClient({ property, similarProperties }: Property
                 </div>
 
                 {/* Formulario Estilo Mockup */}
-                <div className="space-y-4 mb-6">
+                <div className="space-y-3">
                   {/* Name */}
                   <input 
                     name="name"
@@ -547,7 +547,7 @@ export default function PropertyClient({ property, similarProperties }: Property
                     onChange={handleInputChange}
                     type="text" 
                     placeholder="Nombre completo" 
-                    className="w-full px-4 py-3.5 rounded-xl border border-slate-100 text-[15px] focus:outline-none focus:border-neutral-300 text-neutral-800 placeholder:text-neutral-400 transition-all bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-100 text-[15px] focus:outline-none focus:border-neutral-300 text-neutral-800 placeholder:text-neutral-400 transition-all bg-white"
                   />
 
                   {/* Email */}
@@ -557,12 +557,12 @@ export default function PropertyClient({ property, similarProperties }: Property
                     onChange={handleInputChange}
                     type="email" 
                     placeholder="Correo electrónico" 
-                    className="w-full px-4 py-3.5 rounded-xl border border-slate-100 text-[15px] focus:outline-none focus:border-neutral-300 text-neutral-800 placeholder:text-neutral-400 transition-all bg-white" 
+                    className="w-full px-4 py-3 rounded-xl border border-slate-100 text-[15px] focus:outline-none focus:border-neutral-300 text-neutral-800 placeholder:text-neutral-400 transition-all bg-white" 
                   />
 
                   {/* Phone */}
                   <div className="flex bg-white border border-slate-100 rounded-xl overflow-hidden focus-within:border-neutral-300 transition-all">
-                    <div className="w-24 px-3 py-3.5 bg-transparent flex items-center justify-center gap-2 border-r border-slate-50">
+                    <div className="w-24 px-3 py-3 bg-transparent flex items-center justify-center gap-2 border-r border-slate-50">
                       <span className="text-[14px] text-neutral-500 font-bold">PE +51</span>
                     </div>
                     <input 
@@ -571,17 +571,17 @@ export default function PropertyClient({ property, similarProperties }: Property
                       onChange={handleInputChange}
                       type="tel" 
                       placeholder="Teléfono" 
-                      className="w-full px-4 py-3.5 bg-transparent text-[15px] text-neutral-800 placeholder:text-neutral-400 outline-none" 
+                      className="w-full px-4 py-3 bg-transparent text-[15px] text-neutral-800 placeholder:text-neutral-400 outline-none" 
                     />
                   </div>
 
-                  {/* DNI (Mantenido por petición del usuario) */}
+                  {/* DNI */}
                   <div className="flex bg-white border border-slate-100 rounded-xl overflow-hidden focus-within:border-neutral-300 transition-all">
                     <select 
                       name="docType"
                       value={formData.docType}
                       onChange={handleInputChange}
-                      className="w-24 px-3 py-3.5 bg-transparent text-[14px] font-bold text-neutral-500 outline-none border-r border-slate-50 cursor-pointer appearance-none"
+                      className="w-24 px-3 py-3 bg-transparent text-[14px] font-bold text-neutral-500 outline-none border-r border-slate-50 cursor-pointer appearance-none"
                     >
                       <option value="DNI">DNI</option>
                       <option value="CE">CE</option>
@@ -592,15 +592,15 @@ export default function PropertyClient({ property, similarProperties }: Property
                       onChange={handleInputChange}
                       type="text" 
                       placeholder="Documento" 
-                      className="w-full px-4 py-3.5 bg-transparent text-[15px] text-neutral-800 placeholder:text-neutral-400 outline-none" 
+                      className="w-full px-4 py-3 bg-transparent text-[15px] text-neutral-800 placeholder:text-neutral-400 outline-none" 
                     />
                   </div>
 
                   {/* Mensaje Textarea */}
                   <textarea
-                    rows={4}
-                    className="w-full px-4 py-3.5 rounded-xl border border-slate-100 text-[15px] focus:outline-none focus:border-neutral-300 text-neutral-800 placeholder:text-neutral-400 transition-all bg-[#F9F9F9] resize-none"
-                    placeholder="¡Hola! Me interesa esta propiedad y me gustaría recibir más información."
+                    rows={3}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-100 text-[15px] focus:outline-none focus:border-neutral-300 text-neutral-800 placeholder:text-neutral-400 transition-all bg-[#F9F9F9] resize-none"
+                    placeholder="¡Hola! Me interesa esta propiedad..."
                     defaultValue="¡Hola! Me interesa esta propiedad y me gustaría recibir más información."
                   />
                 </div>
@@ -615,15 +615,13 @@ export default function PropertyClient({ property, similarProperties }: Property
                 <button 
                   onClick={() => handleContactAction('whatsapp')}
                   disabled={isSubmitting}
-                  className="w-full bg-[#00D179] hover:bg-[#00B86B] text-white py-4 rounded-2xl font-bold text-[16px] transition-all flex items-center justify-center gap-3 disabled:opacity-70"
+                  style={{ backgroundColor: '#00D179' }}
+                  className="w-full mt-3 text-white py-3.5 rounded-2xl font-bold text-[16px] transition-all flex items-center justify-center gap-3 disabled:opacity-70 shadow-lg shadow-green-500/20"
                 >
                   {isSubmitting ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
-                    <>
-                      <MessageCircle className="h-5 w-5 fill-white" />
-                      Iniciar conversación
-                    </>
+                    "Iniciar conversación"
                   )}
                 </button>
 
