@@ -12,26 +12,41 @@ const HONECTA_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3Mi
  * Mapea una propiedad de Honecta (API o Supabase) al formato de Casaty
  */
 export function mapHonectaToCasaty(hp: Record<string, any>): Property {
-  const currencySymbol = hp.currency === "USD" ? "$" : "S/";
+  // Manejo de moneda y precios
+  const currency = hp.currency || hp.price_currency || "USD";
+  const currencySymbol = currency === "USD" ? "$" : "S/";
   const price = Number(hp.price || 0);
   const formattedPrice = `${currencySymbol} ${price.toLocaleString("en-US", { minimumFractionDigits: 0 })}`;
   
-  // Precio en moneda alternativa (tipo de cambio aprox)
-  let priceUsd: string | undefined;
-  if (hp.currency === "PEN" && price > 0) {
-    const usd = Math.round(price / 3.49);
-    priceUsd = `$ ${usd.toLocaleString("en-US")}`;
-  } else if (hp.currency === "USD" && price > 0) {
-    const pen = Math.round(price * 3.49);
-    priceUsd = `S/ ${pen.toLocaleString("en-US")}`;
+  // Precios numéricos para la calculadora
+  const apiPriceAmount = Number(hp.price_amount || 0);
+  const apiPriceAltAmount = Number(hp.price_alt_amount || 0);
+
+  let solesAmount = 0;
+  let dollarsAmount = 0;
+
+  if (currency === "PEN") {
+    solesAmount = price;
+    dollarsAmount = apiPriceAltAmount > 0 ? apiPriceAltAmount : Math.round(price / 3.8);
+  } else {
+    dollarsAmount = price;
+    solesAmount = apiPriceAltAmount > 0 ? apiPriceAltAmount : Math.round(price * 3.8);
   }
 
-  // Manejo de imágenes
+  // Precio secundario
+  let priceUsdFormatted: string | undefined;
+  if (currency === "PEN") {
+    priceUsdFormatted = `$ ${dollarsAmount.toLocaleString("en-US")}`;
+  } else {
+    priceUsdFormatted = `S/ ${solesAmount.toLocaleString("en-US")}`;
+  }
+
+  // Imágenes
   const defaultImage = "/Imagenes/piura-panorama.png";
   let allImages: string[] = [];
   if (hp.images) {
     if (Array.isArray(hp.images)) {
-      allImages = hp.images.map((img: string | { url?: string; literal?: string; file_url?: string }) => {
+      allImages = hp.images.map((img: any) => {
         if (typeof img === 'string') return img;
         return img.url || img.literal || img.file_url;
       }).filter((img): img is string => Boolean(img));
@@ -39,218 +54,201 @@ export function mapHonectaToCasaty(hp: Record<string, any>): Property {
   }
   const mainImage = allImages.length > 0 ? allImages[0] : defaultImage;
 
-  // Mapeo del tipo de propiedad
+  // Tipos
   const typeMap: Record<string, string> = {
-    'house': 'Casa',
-    'apartment': 'Departamento',
-    'office': 'Oficina',
-    'land': 'Terreno',
-    'commercial': 'Local comercial',
-    'casa': 'Casa',
-    'depa': 'Departamento',
-    'departamento': 'Departamento',
-    'oficina': 'Oficina',
-    'terreno': 'Terreno',
-    'local': 'Local comercial',
-    'local_comercial': 'Local comercial',
+    'house': 'Casa', 'apartment': 'Departamento', 'office': 'Oficina',
+    'land': 'Terreno', 'commercial': 'Local comercial', 'casa': 'Casa',
+    'depa': 'Departamento', 'oficina': 'Oficina', 'terreno': 'Terreno',
+    'local': 'Local comercial'
   };
-
-  // Determinar si es Alquiler o Venta
+  const propertyType = typeMap[(hp.property_type || hp.type || '').toLowerCase()] || hp.property_type || hp.type || 'Propiedad';
+  
   const rawType = (hp.listing_type || hp.operation_type || '').toLowerCase();
   const isRent = rawType === 'rent' || rawType === 'alquiler' || rawType === 'renta';
 
-  // Extraer información adicional de 'features' por si los campos principales están vacíos
+  // Características
   const features = hp.features || {};
-  
   const rawTotalArea = Number(hp.total_area || features.landArea || 0);
   const rawBuiltArea = Number(hp.built_area || features.sqft || 0);
 
-  let formattedArea = "";
-  if (rawTotalArea > 0 && rawBuiltArea > 0) {
-    if (rawTotalArea !== rawBuiltArea) {
-      formattedArea = `${rawTotalArea} m² / ${rawBuiltArea} m²`;
-    } else {
-      formattedArea = `${rawTotalArea} m²`;
-    }
-  } else if (rawTotalArea > 0) {
-    formattedArea = `${rawTotalArea} m²`;
-  } else if (rawBuiltArea > 0) {
-    formattedArea = `${rawBuiltArea} m²`;
-  } else {
-    formattedArea = "0 m²";
-  }
+  let formattedArea = rawBuiltArea > 0 ? `${rawBuiltArea} m²` : (rawTotalArea > 0 ? `${rawTotalArea} m²` : "0 m²");
 
-  const getNum = (val1: unknown, val2: unknown) => {
-    const num1 = Number(val1);
-    if (!isNaN(num1) && num1 > 0) return num1;
-    const num2 = Number(val2);
-    if (!isNaN(num2) && num2 > 0) return num2;
+  const getNum = (v1: any, v2: any) => {
+    const n1 = Number(v1); if (!isNaN(n1) && n1 > 0) return n1;
+    const n2 = Number(v2); if (!isNaN(n2) && n2 > 0) return n2;
     return 0;
   };
 
-  const finalBeds = getNum(hp.bedrooms, features.beds);
-  const finalBaths = getNum(hp.bathrooms, features.baths);
-  const finalGarage = getNum(hp.parking_spaces, features.parkingSpaces);
-
-  // Intentar extraer amenidades
-  const extractedAmenities: string[] = [];
-  if (Array.isArray(hp.amenities)) {
-    extractedAmenities.push(...hp.amenities.filter(Boolean).map(String));
-  } else if (typeof hp.amenities === 'string' && hp.amenities.trim() !== '') {
-    extractedAmenities.push(...hp.amenities.split(',').map((s: string) => s.trim()));
-  }
+  // Agente: Manejo robusto para API (objeto) o Supabase (puede ser array)
+  const rawAgent = Array.isArray(hp.agent) ? hp.agent[0] : hp.agent;
   
-  if (features && typeof features === 'object') {
-    const skipKeys = ['beds', 'baths', 'parkingSpaces', 'landArea', 'sqft', 'subType'];
-    for (const [key, value] of Object.entries(features)) {
-      if (skipKeys.includes(key)) continue;
-
-      if (Array.isArray(value)) {
-        // e.g., "nearby": ["Colegios", "Parques"], "facilities": ["Agua"]
-        extractedAmenities.push(...value.filter(Boolean).map(String));
-      } else if (typeof value === 'boolean' && value === true) {
-        extractedAmenities.push(key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()));
-      } else if (typeof value === 'string') {
-        const lowerVal = value.trim().toLowerCase();
-        if (lowerVal === 'true' || lowerVal === 'yes' || lowerVal === 'si') {
-          extractedAmenities.push(key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()));
-        } else if (key === 'amenities' && lowerVal !== '') {
-          extractedAmenities.push(...value.split(',').map((s: string) => s.trim()));
-        }
-      }
-    }
-  }
-
-  const finalAmenities = Array.from(new Set(extractedAmenities)).filter(Boolean);
+  const agentData = {
+    name: rawAgent?.full_name || rawAgent?.name || 'Agente Casaty',
+    photo: rawAgent?.image_url || rawAgent?.photo || rawAgent?.avatar_url || rawAgent?.picture || '',
+    phone: rawAgent?.phone || rawAgent?.mobile || rawAgent?.whatsapp || '',
+    email: rawAgent?.email || '',
+    agency: rawAgent?.agency_name || rawAgent?.agency?.name || 'Casaty'
+  };
 
   return {
     id: hp.id,
     title: hp.title || 'Propiedad sin título',
     location: `${hp.district || hp.city || "Piura"}`,
     price: isRent ? `${formattedPrice}/mes` : formattedPrice,
-    priceUsd: priceUsd,
-    beds: finalBeds,
-    baths: finalBaths,
-    garage: finalGarage,
+    priceAmount: solesAmount,
+    priceAltAmount: dollarsAmount,
+    priceUsd: priceUsdFormatted,
+    beds: getNum(hp.bedrooms, features.beds),
+    baths: getNum(hp.bathrooms, features.baths),
+    garage: getNum(hp.parking_spaces, features.parkingSpaces),
     area: formattedArea,
+    sqft: rawBuiltArea,
+    description: hp.description || hp.summary || '',
     image: mainImage,
-    images: allImages.length > 0 ? allImages : undefined,
-    type: isRent ? "Alquiler" : "Venta",
-    propertyType: typeMap[(hp.property_type || hp.type || '').toLowerCase()] || hp.property_type || hp.type || 'Propiedad',
-    description: hp.description || '',
-    address: hp.address || '',
+    images: allImages,
+    propertyType,
+    type: isRent ? 'Alquiler' : 'Venta',
     city: hp.city || 'Piura',
     district: hp.district || '',
-    label: hp.is_featured ? "DESTACADA" : undefined,
-    maintenance: hp.maintenance_fee ? `${currencySymbol} ${Number(hp.maintenance_fee).toLocaleString("en-US")}` : undefined,
-    subType: hp.property_sub_type || hp.subtype || features.subType || undefined,
-    amenities: finalAmenities.length > 0 ? finalAmenities : undefined,
-    agent: {
-      name: hp.profiles?.full_name || hp.agent?.name || hp.agent?.full_name || hp.agent?.first_name || '',
-      photo: hp.profiles?.avatar_url || hp.agent?.avatar || hp.agent?.photo || hp.agent?.profile_picture || hp.agency?.logo || undefined,
-      agency: hp.profiles?.agency || hp.agency?.name || hp.agent?.agency_name || hp.agency || ''
-    }
+    address: hp.address || '',
+    amenities: Array.isArray(hp.amenities) ? hp.amenities : [],
+    agent: agentData
   };
 }
 
 /**
- * Obtiene las propiedades de Honecta.
- * Intenta primero con el API público oficial y usa Supabase como respaldo.
+ * Backup: Obtiene datos directamente de Supabase de Honecta
  */
-export async function getPublicProperties(): Promise<Property[]> {
-  // 1. Intentar con el API público oficial (ahora que está corregido)
+async function fetchFromHonectaSupabase(): Promise<Property[]> {
   try {
-    const url = `${HONECTA_API_URL}/api/v1/properties/public?agent_id=${HONECTA_AGENT_ID}`;
-    console.log(`Honecta API: Fetching from ${url}...`);
+    console.log(`Honecta Fallback: Fetching properties and agent separately for ID: ${HONECTA_AGENT_ID}`);
     
-    const response = await fetch(url, { 
-      next: { revalidate: 600 } 
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      let rawProperties = [];
-      
-      if (Array.isArray(data)) rawProperties = data;
-      else if (data.data && Array.isArray(data.data)) rawProperties = data.data;
-      else if (data.properties && Array.isArray(data.properties)) rawProperties = data.properties;
-      
-      if (rawProperties.length > 0) {
-        console.log(`Honecta API: ${rawProperties.length} properties loaded successfully.`);
-        return rawProperties.map(mapHonectaToCasaty);
-      }
-    } else {
-      console.warn(`Honecta API failed with status ${response.status}. Trying Supabase fallback...`);
-    }
-  } catch (error) {
-    console.error("Honecta API error, trying Supabase fallback:", error);
-  }
-
-  // 2. Respaldo: Supabase directo (el que usamos cuando el API fallaba)
-  return await fetchFromSupabase();
-}
-
-/**
- * Obtiene las propiedades directamente de Supabase como respaldo.
- */
-async function fetchFromSupabase(): Promise<Property[]> {
-  try {
-    const supabaseUrl = `${HONECTA_SUPABASE_URL}/properties?select=*&status=eq.active&order=created_at.desc`;
-    console.log("Honecta Supabase: Fetching as fallback...");
-    
-    const response = await fetch(supabaseUrl, {
+    // 1. Obtener propiedades
+    const propRes = await fetch(`${HONECTA_SUPABASE_URL}/properties?agent_id=eq.${HONECTA_AGENT_ID}&select=*`, {
       headers: {
         'apikey': HONECTA_SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${HONECTA_SUPABASE_ANON_KEY}`,
-      },
-      next: { revalidate: 600 },
+        'Authorization': `Bearer ${HONECTA_SUPABASE_ANON_KEY}`
+      }
     });
 
-    if (!response.ok) {
-      console.error(`Honecta Supabase fallback failed (${response.status})`);
-      return [];
+    if (!propRes.ok) throw new Error(`Supabase Prop Error: ${propRes.status}`);
+    const propertiesData = await propRes.json();
+
+    // 2. Intentar obtener datos del agente de forma independiente
+    let agentInfo: any = null;
+    const tablesToTry = ['agents', 'profiles', 'agent_profiles'];
+    
+    for (const table of tablesToTry) {
+      try {
+        const agentRes = await fetch(`${HONECTA_SUPABASE_URL}/${table}?id=eq.${HONECTA_AGENT_ID}&select=*`, {
+          headers: {
+            'apikey': HONECTA_SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${HONECTA_SUPABASE_ANON_KEY}`
+          }
+        });
+        if (agentRes.ok) {
+          const result = await agentRes.json();
+          if (result && result.length > 0) {
+            agentInfo = result[0];
+            console.log(`Honecta: Agent found in table '${table}'`);
+            break;
+          }
+        }
+      } catch (e) {
+        // Continue to next table
+      }
     }
 
-    const data = await response.json();
-    if (Array.isArray(data)) {
-      console.log(`Honecta Supabase fallback: ${data.length} properties loaded.`);
-      return data.map(mapHonectaToCasaty);
+    if (!agentInfo) {
+      console.warn("Honecta: Agent photo not found in common tables.");
     }
-    return [];
+
+    // 3. Fusionar y mapear
+    return propertiesData.map((p: any) => {
+      // Inyectamos el agente encontrado si existe
+      if (agentInfo) p.agent = agentInfo;
+      return mapHonectaToCasaty(p);
+    });
+
   } catch (error) {
-    console.error("Honecta Supabase fallback error:", error);
+    console.error("Honecta Fallback Final Failure:", error);
     return [];
   }
 }
 
 /**
- * Envía un lead al endpoint externo de Honecta
+ * Obtiene todas las propiedades (Con fallback)
  */
-export async function sendLeadToHonecta(leadData: Record<string, any>) {
-  if (!HONECTA_API_KEY) {
-    console.warn("HONECTA_API_KEY not configured. Skipping external lead sync.");
-    return null;
-  }
-
+export async function getPublicProperties(): Promise<Property[]> {
   try {
-    const response = await fetch(`${HONECTA_API_URL}/api/v1/leads/external`, {
+    const response = await fetch(`${HONECTA_API_URL}/api/properties?agent_id=${HONECTA_AGENT_ID}`, {
+      headers: {
+        'Accept': 'application/json',
+        'x-api-key': HONECTA_API_KEY || ''
+      },
+      next: { revalidate: 3600 }
+    });
+
+    if (response.status === 404) {
+      console.warn("Honecta API returned 404. Using Supabase fallback.");
+      return await fetchFromHonectaSupabase();
+    }
+
+    if (!response.ok) throw new Error(`API error: ${response.status}`);
+    const data = await response.json();
+    const rawProperties = Array.isArray(data) ? data : (data.data || []);
+    return rawProperties.map(mapHonectaToCasaty);
+  } catch (error) {
+    console.error("Using Supabase fallback due to exception:", error);
+    return await fetchFromHonectaSupabase();
+  }
+}
+
+export async function getHonectaPropertyById(id: string): Promise<Property | null> {
+  const all = await getPublicProperties();
+  return all.find(p => p.id === id) || null;
+}
+
+/**
+ * Envía un lead a la API de Honecta
+ */
+export async function sendLeadToHonecta(lead: {
+  name: string;
+  phone: string;
+  email: string;
+  source: string;
+  notes?: string;
+  agent_id?: string;
+  tags?: string[];
+}) {
+  try {
+    const response = await fetch(`${HONECTA_API_URL}/api/leads`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${HONECTA_API_KEY}`,
+        "x-api-key": HONECTA_API_KEY || ""
       },
-      body: JSON.stringify(leadData),
+      body: JSON.stringify({
+        full_name: lead.name,
+        phone: lead.phone,
+        email: lead.email,
+        source: lead.source,
+        notes: lead.notes,
+        agent_id: lead.agent_id || HONECTA_AGENT_ID,
+        tags: lead.tags || ["website"]
+      })
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Error sending lead to Honecta:", errorText);
+      console.error("Honecta Lead Error:", await response.text());
       return null;
     }
 
     return await response.json();
   } catch (error) {
-    console.error("Network error sending lead to Honecta:", error);
+    console.error("Error sending lead to Honecta:", error);
     return null;
   }
 }
+
+export const getHonectaProperties = getPublicProperties;

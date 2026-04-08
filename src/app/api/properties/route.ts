@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getPublicProperties } from '@/lib/honecta';
+import { getPublicProperties } from '@/lib/honecta'; 
 
 export async function GET() {
   try {

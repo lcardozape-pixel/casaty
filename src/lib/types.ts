@@ -3,12 +3,15 @@ export interface Property {
   title: string;
   location: string;
   price: string;
+  priceAmount: number;
+  priceAltAmount?: number;
   beds: number;
   baths: number;
   garage: number;
   area: string;
   image: string;
   images?: string[];
+  sqft?: number;
   label?: string;
   type: "Venta" | "Alquiler";
   propertyType?: string;
@@ -20,9 +23,12 @@ export interface Property {
   maintenance?: string;
   subType?: string;
   amenities?: string[];
+  age?: string;
   agent?: {
     name: string;
     photo?: string;
     agency?: string;
+    phone?: string;
+    email?: string;
   };
 }

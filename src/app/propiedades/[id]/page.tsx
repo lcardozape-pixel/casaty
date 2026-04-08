@@ -36,6 +36,7 @@ import {
 
 import CalculadoraHipoteca from "@/components/CalculadoraHipoteca";
 import { PropertyCard } from "@/components/features/PropertyCard";
+import { ScheduleVisitSection } from "@/components/features/ScheduleVisitSection";
 
 export default function PropertyDetailPage() {
   const params = useParams();
@@ -156,16 +157,23 @@ export default function PropertyDetailPage() {
         setProperty(found || null);
 
         if (found) {
-          // Filtrar similares: mismo tipo, diferente id, mismo distrito si es posible
+          // Filtrar similares: mismo tipo o mismo distrito, diferente id
           const filtered = allProps
-            .filter(p => p.id !== found.id && p.propertyType === found.propertyType)
+            .filter(p => p.id !== found.id)
             .sort((a, b) => {
-               // Priorizar por mismo distrito
-               if (a.district === found.district && b.district !== found.district) return -1;
-               if (a.district !== found.district && b.district === found.district) return 1;
-               return 0;
+               // Puntuación de similitud
+               let scoreA = 0;
+               let scoreB = 0;
+               
+               if (a.propertyType === found.propertyType) scoreA += 2;
+               if (b.propertyType === found.propertyType) scoreB += 2;
+               
+               if (a.district === found.district) scoreA += 1;
+               if (b.district === found.district) scoreB += 1;
+               
+               return scoreB - scoreA;
             })
-            .slice(0, 3);
+            .slice(0, 2); // Limitamos a 2 como solicitaste
           setSimilarProperties(filtered);
         }
       } catch (error) {
@@ -447,7 +455,7 @@ export default function PropertyDetailPage() {
               {/* Resumen */}
               <div className="mb-8">
                 <h3 className="text-xl font-black text-neutral-800 mb-6">Resumen</h3>
-                <div className="py-6 border-t border-b border-slate-200 grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-6">
+                <div className="py-6 border-t border-b border-slate-200 grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-6">
                   {!!property.beds && String(property.beds) !== '0' && (
                     <div className="flex items-center gap-4">
                       <BedDouble className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
@@ -484,6 +492,15 @@ export default function PropertyDetailPage() {
                       </div>
                     </div>
                   )}
+                  {!!property.age && (
+                    <div className="flex items-center gap-4">
+                      <Clock className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
+                      <div className="flex flex-col">
+                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">{property.age} años</span>
+                        <span className="text-[12px] text-neutral-500">Antigüedad</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -514,103 +531,22 @@ export default function PropertyDetailPage() {
 
               {/* Calculadora de Hipoteca */}
               {property.type === 'Venta' && (
-                <CalculadoraHipoteca
-                  priceRaw={property.price}
-                  currencySymbol={property.price.includes('$') ? '$' : 'S/'}
+                <CalculadoraHipoteca 
+                  priceSoles={property.priceAmount}
+                  priceDollars={property.priceAltAmount || 0}
+                  initialCurrency={property.price.includes('$') ? 'USD' : 'PEN'}
                 />
               )}
 
-              {/* Agendar Visita */}
+              {/* Agendar Visita - Rediseñado */}
               <div className="mt-12 pt-10 border-t border-slate-200">
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="h-10 w-10 bg-[#0040FF]/10 rounded-xl flex items-center justify-center text-[#0040FF]">
-                    <Calendar className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-black text-neutral-800">Agendar una visita</h3>
-                    <p className="text-sm text-neutral-500 font-medium tracking-tight">Elige el mejor momento para conocer tu próximo hogar</p>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-3xl border border-slate-100 p-6 md:p-8 shadow-sm">
-                  {/* Tipo de Visita */}
-                  <div className="grid grid-cols-2 gap-3 mb-8">
-                    <button 
-                      onClick={() => setVisitType('presencial')}
-                      className={`flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-sm transition-all ${visitType === 'presencial' ? 'bg-[#0040FF] text-white shadow-lg shadow-blue-500/20' : 'bg-slate-50 text-neutral-500 hover:bg-slate-100'}`}
-                    >
-                      <Building2 className="h-4 w-4" /> Presencial
-                    </button>
-                    <button 
-                      onClick={() => setVisitType('videollamada')}
-                      className={`flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-sm transition-all ${visitType === 'videollamada' ? 'bg-[#0040FF] text-white shadow-lg shadow-blue-500/20' : 'bg-slate-50 text-neutral-500 hover:bg-slate-100'}`}
-                    >
-                      <Video className="h-4 w-4" /> Videollamada
-                    </button>
-                  </div>
-
-                  {/* Selector de Fecha */}
-                  <div className="mb-8">
-                    <label className="text-[13px] font-black text-neutral-400 uppercase tracking-widest mb-4 block px-1">Selecciona una fecha (Próximos 7 días)</label>
-                    <div className="flex gap-3 overflow-x-auto pb-4 -mx-1 px-1 snap-x scrollbar-hide">
-                      {upcomingDates.map((date, idx) => {
-                        const isSelected = selectedDate?.toDateString() === date.toDateString();
-                        const dayName = date.toLocaleDateString('es-ES', { weekday: 'short' });
-                        const dayNum = date.getDate();
-                        const monthName = date.toLocaleDateString('es-ES', { month: 'short' });
-
-                        return (
-                          <button
-                            key={idx}
-                            onClick={() => setSelectedDate(date)}
-                            className={`flex flex-col items-center justify-center min-w-[75px] py-4 rounded-2xl border transition-all snap-start ${isSelected ? 'border-[#0040FF] bg-[#0040FF]/5 text-[#0040FF] font-bold shadow-sm' : 'border-slate-100 bg-white text-neutral-500 hover:border-slate-300'}`}
-                          >
-                            <span className="text-[11px] uppercase font-black opacity-60 mb-1">{dayName}</span>
-                            <span className="text-xl font-black">{dayNum}</span>
-                            <span className="text-[11px] uppercase font-bold opacity-60">{monthName}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Selector de Hora */}
-                  <div className="mb-8">
-                    <label className="text-[13px] font-black text-neutral-400 uppercase tracking-widest mb-4 block px-1">Selecciona un horario</label>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                      {hoursAvailable.map((time) => {
-                        const isSelected = selectedTime === time;
-                        return (
-                          <button
-                            key={time}
-                            onClick={() => setSelectedTime(time)}
-                            className={`py-2.5 rounded-xl border text-[13px] font-bold transition-all ${isSelected ? 'border-[#0040FF] bg-[#0040FF] text-white shadow-md' : 'border-slate-100 bg-white text-neutral-600 hover:border-slate-300'}`}
-                          >
-                            {time}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Botón de Acción Especial */}
-                  <button 
-                    onClick={() => {
-                      if(!selectedDate || !selectedTime) {
-                          setSubmitError("Por favor selecciona fecha y hora para la visita.");
-                          return;
-                      }
-                      handleContactAction('whatsapp');
-                    }}
-                    className="w-full bg-[#0055B8] hover:bg-[#00408A] text-white py-4 rounded-[18px] font-black text-base transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-500/10 active:scale-[0.98]"
-                  >
-                    <Calendar className="h-5 w-5" />
-                    Agendar Reserva Ahora
-                  </button>
-                  <p className="text-center text-[12px] text-neutral-400 font-medium mt-4">
-                    Confirmaremos tu cita lo antes posible por WhatsApp.
-                  </p>
-                </div>
+                <ScheduleVisitSection 
+                  onSchedule={(date, time) => {
+                    setSelectedDate(date);
+                    setSelectedTime(time);
+                    handleContactAction('whatsapp');
+                  }}
+                />
               </div>
 
               {/* Propiedades Similares */}
@@ -626,7 +562,7 @@ export default function PropertyDetailPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                     {similarProperties.map((prop) => (
                       <div key={prop.id} className="transform hover:-translate-y-1 transition-transform duration-300">
                         <PropertyCard property={prop} />

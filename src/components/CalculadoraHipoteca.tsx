@@ -1,156 +1,230 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Calculator } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface CalculadoraHipotecaProps {
-  priceRaw: string;
-  currencySymbol: string;
+  priceSoles: number;
+  priceDollars: number;
+  initialCurrency: 'PEN' | 'USD';
 }
 
-export default function CalculadoraHipoteca({ priceRaw, currencySymbol }: CalculadoraHipotecaProps) {
-  const [propertyPrice, setPropertyPrice] = useState(0);
-  const [downPaymentPercent, setDownPaymentPercent] = useState(20);
-  const [years, setYears] = useState(20);
-  const [interestRate, setInterestRate] = useState(8.5);
-  const [monthlyPayment, setMonthlyPayment] = useState(0);
-
-  useEffect(() => {
-    // Extraer solo números de la cadena de precio (ej: "S/ 168,000" -> 168000)
-    const numPrice = Number(priceRaw.replace(/[^0-9.]/g, ""));
-    if (!isNaN(numPrice) && numPrice > 0) {
-      setPropertyPrice(numPrice);
-    }
-  }, [priceRaw]);
-
-  useEffect(() => {
-    if (propertyPrice === 0) return;
-
-    const principal = propertyPrice - (propertyPrice * (downPaymentPercent / 100));
-    const monthlyRate = interestRate / 100 / 12;
-    const numberOfPayments = years * 12;
-
-    if (monthlyRate === 0) {
-      setMonthlyPayment(principal / numberOfPayments);
-      return;
-    }
-
-    // Fórmula de amortización
-    const payment =
-      (principal * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
-      (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
-
-    setMonthlyPayment(payment);
-  }, [propertyPrice, downPaymentPercent, years, interestRate]);
-
-  if (propertyPrice === 0) return null; // No muestra si no hay precio numérico
-
-  const formatCurrency = (val: number) => {
-    return `${currencySymbol} ${Math.round(val).toLocaleString("en-US")}`;
-  };
-
-  const downPaymentAmount = propertyPrice * (downPaymentPercent / 100);
-  const principalAmount = propertyPrice - downPaymentAmount;
+function Slider({
+  label,
+  value,
+  min,
+  max,
+  step = 1,
+  onChange,
+  display,
+}: {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step?: number;
+  onChange: (v: number) => void;
+  display: string;
+}) {
+  const pct = Math.min(((value - min) / (max - min)) * 100, 100);
 
   return (
-    <div className="bg-neutral-50 rounded-3xl p-6 lg:p-8 border border-slate-200 mt-12 w-full">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="bg-[#0040FF]/10 p-3 rounded-2xl">
-          <Calculator className="h-6 w-6 text-[#0040FF]" />
-        </div>
-        <h3 className="text-xl md:text-2xl font-black text-neutral-800">
-          Calculadora de Hipoteca
-        </h3>
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-[14px] text-slate-500 font-medium">{label}</span>
+        <span className="text-[14px] font-black text-neutral-800 tabular-nums">{display}</span>
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        {/* Sliders de Controles */}
-        <div className="space-y-8">
-          {/* Precio de Propiedad (solo lectura pero clave visual) */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-sm font-semibold text-neutral-600">Precio de la Propiedad</label>
-              <span className="font-bold text-neutral-900">{formatCurrency(propertyPrice)}</span>
-            </div>
-          </div>
-
-          {/* Inicial / Enganche */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-sm font-semibold text-neutral-600">Cuota Inicial ({downPaymentPercent}%)</label>
-              <span className="font-bold text-neutral-900">{formatCurrency(downPaymentAmount)}</span>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="90"
-              step="5"
-              value={downPaymentPercent}
-              onChange={(e) => setDownPaymentPercent(Number(e.target.value))}
-              className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-[#0040FF]"
-            />
-          </div>
-
-          {/* Plazo */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-sm font-semibold text-neutral-600">Plazo (Años)</label>
-              <span className="font-bold text-neutral-900">{years} años</span>
-            </div>
-            <input
-              type="range"
-              min="5"
-              max="30"
-              step="1"
-              value={years}
-              onChange={(e) => setYears(Number(e.target.value))}
-              className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-[#0040FF]"
-            />
-          </div>
-
-          {/* Tasa de Interés */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-sm font-semibold text-neutral-600">Tasa de Interés Anual</label>
-              <span className="font-bold text-neutral-900">{interestRate}%</span>
-            </div>
-            <input
-              type="range"
-              min="1"
-              max="20"
-              step="0.1"
-              value={interestRate}
-              onChange={(e) => setInterestRate(Number(e.target.value))}
-              className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-[#0040FF]"
-            />
-          </div>
-        </div>
-
-        {/* Resumen de Pago */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col justify-center">
-          <p className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-2">
-            Cuota Mensual Estimada
-          </p>
-          <div className="text-4xl lg:text-5xl font-black text-[#0040FF] mb-6">
-            {formatCurrency(monthlyPayment)}
-          </div>
-          
-          <div className="space-y-4 pt-6 border-t border-slate-100">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-neutral-500 font-medium">Monto a financiar</span>
-              <span className="text-sm font-bold text-neutral-800">{formatCurrency(principalAmount)}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-neutral-500 font-medium">Tasa aplicada</span>
-              <span className="text-sm font-bold text-neutral-800">{interestRate}% / {years} años</span>
-            </div>
-          </div>
-
-          <p className="text-xs text-neutral-400 mt-8 text-center bg-slate-50 p-3 rounded-lg">
-            * Estos valores son estimaciones. Las cuotas reales pueden variar según la entidad financiera, seguros obligatorios y gastos administrativos.
-          </p>
-        </div>
-      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="calc-slider w-full"
+        style={{
+          background: `linear-gradient(to right, #0040FF ${pct}%, #f1f5f9 ${pct}%)`,
+        }}
+      />
     </div>
+  );
+}
+
+export default function CalculadoraHipoteca({ priceSoles, priceDollars, initialCurrency }: CalculadoraHipotecaProps) {
+  const [currency, setCurrency] = useState<'PEN' | 'USD'>(initialCurrency || 'PEN');
+  const [propertyPrice, setPropertyPrice] = useState(0);
+  const [interestRate, setInterestRate] = useState(800);
+  const [downPaymentPercent, setDownPaymentPercent] = useState(20);
+  const [years, setYears] = useState(20);
+
+  useEffect(() => {
+    if (currency === 'PEN') {
+      setPropertyPrice(Math.round(priceSoles || 0));
+    } else {
+      setPropertyPrice(Math.round(priceDollars || (priceSoles ? priceSoles / 3.8 : 0)));
+    }
+  }, [currency, priceSoles, priceDollars]);
+
+  const rate = interestRate / 100;
+
+  const { monthlyPayment, financedAmount } = useMemo(() => {
+    const down = propertyPrice * (downPaymentPercent / 100);
+    const principal = propertyPrice - down;
+    const mr = rate / 100 / 12;
+    const n = years * 12;
+
+    if (principal <= 0 || n <= 0) return { monthlyPayment: 0, financedAmount: 0 };
+    if (mr === 0) return { monthlyPayment: principal / n, financedAmount: principal };
+
+    const pmt = (principal * mr * Math.pow(1 + mr, n)) / (Math.pow(1 + mr, n) - 1);
+    return { monthlyPayment: isNaN(pmt) ? 0 : pmt, financedAmount: principal };
+  }, [propertyPrice, rate, downPaymentPercent, years]);
+
+  const sym = currency === 'PEN' ? 'S/' : '$';
+  const fmt = (v: number) => `${sym}${Math.round(isNaN(v) ? 0 : v).toLocaleString("en-US")}`;
+  const maxPrice = currency === 'PEN' ? 5000000 : 1500000;
+  const priceStep = currency === 'PEN' ? 10000 : 5000;
+
+  return (
+    <>
+      <style jsx>{`
+        .calc-slider {
+          -webkit-appearance: none;
+          appearance: none;
+          height: 6px;
+          border-radius: 999px;
+          outline: none;
+          cursor: pointer;
+        }
+        .calc-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: white;
+          border: 3px solid #0040FF;
+          box-shadow: 0 2px 6px rgba(0,64,255,0.2);
+          cursor: pointer;
+        }
+      `}</style>
+
+      {/* Tarjeta con estilo idéntico a ScheduleVisitSection */}
+      <div className="bg-white rounded-[2.5rem] border border-slate-100 p-8 md:p-12 shadow-2xl shadow-slate-200/50 max-w-5xl mx-auto overflow-hidden flex flex-col lg:flex-row mt-12 min-h-[460px]">
+        
+        {/* Lado Izquierdo - Configuración */}
+        <div className="flex-1 flex flex-col pr-0 lg:pr-12">
+          <h3 className="text-2xl font-black text-neutral-800 tracking-tight mb-10">
+            Calcula tu cuota mensual
+          </h3>
+
+          <div className="space-y-8 flex-1">
+            <Slider
+              label="Valor del inmueble"
+              value={propertyPrice}
+              min={0}
+              max={maxPrice}
+              step={priceStep}
+              onChange={setPropertyPrice}
+              display={fmt(propertyPrice)}
+            />
+            <Slider
+              label="Cuota inicial"
+              value={downPaymentPercent}
+              min={0}
+              max={90}
+              step={5}
+              onChange={setDownPaymentPercent}
+              display={`${downPaymentPercent}% (${fmt(propertyPrice * downPaymentPercent / 100)})`}
+            />
+            <Slider
+              label="Tasa de interés (TEA)"
+              value={interestRate}
+              min={100}
+              max={2500}
+              step={25}
+              onChange={setInterestRate}
+              display={`${rate.toFixed(2)}%`}
+            />
+            <Slider
+              label="Plazo del crédito"
+              value={years}
+              min={1}
+              max={30}
+              step={1}
+              onChange={setYears}
+              display={`${years} ${years === 1 ? 'año' : 'años'}`}
+            />
+          </div>
+
+          <p className="text-[11px] text-neutral-400 font-medium mt-10 opacity-70 italic leading-relaxed">
+            * Valor referencial sujeto a evaluación crediticia de tu entidad financiera.
+          </p>
+        </div>
+
+        {/* Lado Derecho - Resultados */}
+        <div className="w-full lg:w-[400px] bg-slate-50/70 p-8 md:p-10 rounded-3xl flex flex-col border border-slate-100 mt-10 lg:mt-0">
+          
+          {/* Selector de Moneda */}
+          <div className="inline-flex bg-white p-1 rounded-xl border border-slate-100 shadow-sm self-start mb-10">
+            <button
+              onClick={() => setCurrency('PEN')}
+              className={cn(
+                "px-6 py-2 rounded-lg text-[11px] font-black transition-all duration-300",
+                currency === 'PEN' ? "bg-slate-50 text-[#0040FF]" : "text-slate-400 hover:text-slate-600"
+              )}
+            >
+              Soles
+            </button>
+            <button
+              onClick={() => setCurrency('USD')}
+              className={cn(
+                "px-6 py-2 rounded-lg text-[11px] font-black transition-all duration-300",
+                currency === 'USD' ? "bg-slate-50 text-[#0040FF]" : "text-slate-400 hover:text-slate-600"
+              )}
+            >
+              Dólares
+            </button>
+          </div>
+
+          <div className="space-y-10 flex-1 flex flex-col justify-center">
+            {/* Monto de Cuota */}
+            <div className="flex items-center gap-5">
+              <div className="h-14 w-14 bg-white border border-blue-50 rounded-2xl flex items-center justify-center text-[#0040FF] shadow-md shrink-0">
+                <Calculator className="h-7 w-7" />
+              </div>
+              <div className="flex items-center gap-2">
+                <p className="text-3xl md:text-4xl font-black text-[#0040FF] tracking-tighter leading-none">
+                  {fmt(monthlyPayment)}
+                </p>
+                <span className="text-[14px] font-bold text-slate-400 lowercase mt-1">mensual</span>
+              </div>
+            </div>
+
+            <div className="h-px bg-slate-200/50 w-full" />
+
+            {/* Detalles */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-[15px] font-medium text-slate-500 tracking-tight">Valor financiado:</span>
+                <span className="text-[15px] font-black text-neutral-800">{fmt(financedAmount)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[15px] font-medium text-slate-500 tracking-tight">Pago mensual:</span>
+                <span className="text-[15px] font-black text-neutral-800">{fmt(monthlyPayment)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[15px] font-medium text-slate-500 tracking-tight">Plazo préstamo:</span>
+                <span className="text-[15px] font-black text-neutral-800">{years} años</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[15px] font-medium text-slate-500 tracking-tight">Tasa (TEA):</span>
+                <span className="text-[15px] font-black text-neutral-800">{rate.toFixed(2)}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
