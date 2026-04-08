@@ -61,7 +61,7 @@ export default function PropertyClient({ property, similarProperties }: Property
   };
 
   const validateForm = () => {
-    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.docNumber.trim()) {
+    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
       setSubmitError("Por favor completa todos los campos del formulario.");
       return false;
     }
@@ -88,7 +88,6 @@ export default function PropertyClient({ property, similarProperties }: Property
           formData: {
             name: formData.name,
             email: formData.email,
-            phone: formData.phone,
             phone: formData.phone,
             propertyId: property?.id,
             propertyTitle: property?.title,
