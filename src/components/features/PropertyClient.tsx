@@ -14,7 +14,6 @@ import {
   Square,
   Heart,
   Share2,
-  Phone,
   MessageCircle,
   ChevronLeft,
   ChevronRight,
@@ -23,7 +22,6 @@ import {
   LayoutGrid,
   Loader2,
   Home as HomeIcon,
-  Mail,
   Bell,
   Clock
 } from "lucide-react";
@@ -639,6 +637,17 @@ export default function PropertyClient({ property, similarProperties }: Property
                 </div>
 
               </motion.div>
+
+              <div className="px-1 text-center">
+                <p className="text-[12px] text-neutral-500 font-medium leading-relaxed mb-6">
+                  Al hacer clic en "WhatsApp" o "Correo" estás aceptando nuestros <a href="/terminos-y-condiciones" className="text-neutral-700 hover:text-[#0055B8] transition-colors">Términos y condiciones</a> y Políticas de privacidad.
+                </p>
+
+                <button className="w-full border border-[#0055B8] text-[#0055B8] hover:bg-[#0055B8]/5 py-3.5 rounded-[14px] font-bold text-[14px] transition-colors flex items-center justify-center gap-2 shadow-sm bg-white">
+                  <Bell className="h-4 w-4 stroke-[2.5]" />
+                  Recibe alertas de inmuebles similares
+                </button>
+              </div>
 
             </div>
           </div>
