@@ -42,8 +42,6 @@ export default function PropertyClient({ property, similarProperties }: Property
 
   // Form states
   const [formData, setFormData] = useState({
-    docType: 'DNI',
-    docNumber: '',
     name: '',
     email: '',
     phone: ''
@@ -91,7 +89,7 @@ export default function PropertyClient({ property, similarProperties }: Property
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
-            document: `${formData.docType} - ${formData.docNumber}`,
+            phone: formData.phone,
             propertyId: property?.id,
             propertyTitle: property?.title,
             propertyUrl: window.location.href,
@@ -119,7 +117,7 @@ export default function PropertyClient({ property, similarProperties }: Property
         window.open(`https://wa.me/51941849523?text=${text}`, '_blank');
       } else {
         setSubmitSuccess("¡Tu mensaje ha sido enviado a la agencia de forma exitosa!");
-        setFormData({ docType: 'DNI', docNumber: '', name: '', email: '', phone: '' });
+        setFormData({ name: '', email: '', phone: '' });
       }
 
     } catch (err: any) {
@@ -575,26 +573,6 @@ export default function PropertyClient({ property, similarProperties }: Property
                     />
                   </div>
 
-                  {/* DNI */}
-                  <div className="flex bg-white border border-slate-100 rounded-xl overflow-hidden focus-within:border-neutral-300 transition-all">
-                    <select 
-                      name="docType"
-                      value={formData.docType}
-                      onChange={handleInputChange}
-                      className="w-24 px-3 py-3 bg-transparent text-[14px] font-bold text-neutral-500 outline-none border-r border-slate-50 cursor-pointer appearance-none"
-                    >
-                      <option value="DNI">DNI</option>
-                      <option value="CE">CE</option>
-                    </select>
-                    <input 
-                      name="docNumber"
-                      value={formData.docNumber}
-                      onChange={handleInputChange}
-                      type="text" 
-                      placeholder="Documento" 
-                      className="w-full px-4 py-3 bg-transparent text-[15px] text-neutral-800 placeholder:text-neutral-400 outline-none" 
-                    />
-                  </div>
 
                   {/* Mensaje Textarea */}
                   <textarea
