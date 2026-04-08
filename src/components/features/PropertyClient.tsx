@@ -627,20 +627,12 @@ export default function PropertyClient({ property, similarProperties }: Property
                   )}
                 </button>
 
-                <div className="mt-6 text-center space-y-1">
-                  <p className="text-[12px] text-neutral-400 font-medium">
-                    Al hacer clic aceptas nuestros <a href="/terminos-y-condiciones" className="text-neutral-500 font-bold hover:underline">Términos y condiciones</a> y 
-                  </p>
-                  <p className="text-[12px] text-neutral-400 font-medium">
-                    <a href="/privacidad" className="text-neutral-500 font-bold hover:underline">Políticas de privacidad</a>.
-                  </p>
-                </div>
 
               </motion.div>
 
               <div className="px-1 text-center">
-                <p className="text-[12px] text-neutral-500 font-medium leading-relaxed mb-6">
-                  Al hacer clic en "WhatsApp" o "Correo" estás aceptando nuestros <a href="/terminos-y-condiciones" className="text-neutral-700 hover:text-[#0055B8] transition-colors">Términos y condiciones</a> y Políticas de privacidad.
+                <p className="text-[11px] text-neutral-400 font-medium leading-relaxed mb-6">
+                  Al hacer clic en "Iniciar conversación" estás aceptando nuestros <a href="/terminos-y-condiciones" className="text-neutral-500 hover:text-[#0055B8] transition-colors underline">Términos y condiciones</a> y Políticas de privacidad.
                 </p>
 
                 <button className="w-full border border-[#0055B8] text-[#0055B8] hover:bg-[#0055B8]/5 py-3.5 rounded-[14px] font-bold text-[14px] transition-colors flex items-center justify-center gap-2 shadow-sm bg-white">
