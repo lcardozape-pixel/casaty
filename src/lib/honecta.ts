@@ -205,8 +205,34 @@ export async function getPublicProperties(): Promise<Property[]> {
 }
 
 export async function getHonectaPropertyById(id: string): Promise<Property | null> {
+  // 1. Intentar encontrar en la lista general de propiedades del agente (rápido y con caché)
   const all = await getPublicProperties();
-  return all.find(p => p.id === id) || null;
+  const directMatch = all.find(p => p.id === id);
+  if (directMatch) return directMatch;
+
+  // 2. Si no está en su lista (ej: propiedad de la red MLS o compartida directa),
+  // intentar buscarla individualmente por ID en la base de datos de Honecta
+  try {
+    console.log(`Honecta: Propiedad no encontrada en catálogo del agente. Buscando individualmente ID: ${id}`);
+    const res = await fetch(`${HONECTA_SUPABASE_URL}/properties?id=eq.${id}&select=*`, {
+      headers: {
+        'apikey': HONECTA_SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${HONECTA_SUPABASE_ANON_KEY}`
+      }
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.length > 0) {
+        console.log(`Honecta: Propiedad encontrada mediante búsqueda individual por ID.`);
+        return mapHonectaToCasaty(data[0]);
+      }
+    }
+  } catch (error) {
+    console.error(`Honecta: Error en búsqueda individual de propiedad ${id}:`, error);
+  }
+
+  return null;
 }
 
 /**

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import PropertyClient from "@/components/features/PropertyClient";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 /**
@@ -15,7 +15,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const id = params.id;
+  const { id } = await params;
   const property = await getHonectaPropertyById(id);
 
   if (!property) {
@@ -61,7 +61,7 @@ export async function generateMetadata(
 }
 
 export default async function PropertyDetailPage({ params }: Props) {
-  const propertyId = params.id;
+  const { id: propertyId } = await params;
   
   // Obtener datos de la propiedad en el servidor
   const property = await getHonectaPropertyById(propertyId);
