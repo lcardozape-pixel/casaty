@@ -6,7 +6,18 @@ import { getProperties } from "@/lib/data";
 import type { Property } from "@/lib/types";
 import { motion } from "framer-motion";
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, SlidersHorizontal, X } from "lucide-react";
+import { Search, MapPin, SlidersHorizontal, X, Bell, List, Map as MapIcon, ChevronDown, ChevronUp, Menu } from "lucide-react";
+import PropertyAlertModal from "@/components/features/PropertyAlertModal";
+import MobileFiltersModal from "@/components/features/MobileFiltersModal";
+import { AnimatePresence } from "framer-motion";
+
+const PRICE_RANGES = [
+  { value: '', label: 'Precio' },
+  { value: '0-100000', label: 'Hasta $100,000' },
+  { value: '100000-300000', label: '$100k - $300k' },
+  { value: '300000-500000', label: '$300k - $500k' },
+  { value: '500000-', label: 'Más de $500k' },
+];
 
 const PROPERTY_TYPES = [
   { value: '', label: 'Cualquiera' },
@@ -18,16 +29,34 @@ const PROPERTY_TYPES = [
 ];
 
 const OPERATION_TYPES = [
-  { value: '', label: 'Todas las Operaciones' },
+  { value: 'Todos', label: 'Todos' },
   { value: 'venta', label: 'Venta' },
   { value: 'alquiler', label: 'Alquiler' },
 ];
 
 const SORT_OPTIONS = [
-  { value: 'recent', label: 'Más Recientes' },
-  { value: 'price_asc', label: 'Menor Precio' },
-  { value: 'price_desc', label: 'Mayor Precio' },
+  { value: 'relevance', label: 'Relevancia' },
+  { value: 'newest', label: 'Publicaciones nuevas' },
+  { value: 'oldest', label: 'Publicaciones antiguas' },
+  { value: 'price_desc', label: 'Precio: Alto a bajo' },
+  { value: 'price_asc', label: 'Precio: Bajo a alto' },
+  { value: 'price_m2_desc', label: 'Precio por m2: Alto a bajo' },
+  { value: 'price_m2_asc', label: 'Precio por m2: Bajo a alto' },
+  { value: 'area_desc', label: 'Área: Alto a bajo' },
+  { value: 'area_asc', label: 'Área: Bajo a alto' },
 ];
+
+function getPriceSuggestions(operation: string, currency: string) {
+  if (operation === 'alquiler') {
+    return currency === 'USD' 
+      ? [100, 500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 10000]
+      : [500, 1500, 2000, 3000, 4000, 5000, 7500, 10000, 15000, 20000];
+  }
+  // Venta o por defecto
+  return currency === 'USD'
+    ? [5000, 50000, 100000, 150000, 200000, 250000, 300000, 400000, 500000, 750000, 1000000, 2000000]
+    : [10000, 150000, 300000, 500000, 750000, 1000000, 1500000, 2000000, 3000000, 5000000];
+}
 
 export default function SearchResults() {
   const searchParams = useSearchParams();
@@ -40,9 +69,40 @@ export default function SearchResults() {
   // Filtros
   const [location, setLocation] = useState(searchParams.get('q') || '');
   const [propertyType, setPropertyType] = useState(searchParams.get('tipo') || '');
-  const [operation, setOperation] = useState(searchParams.get('operacion') || '');
+  const [operation, setOperation] = useState(searchParams.get('operacion') || 'venta');
   const [sortBy, setSortBy] = useState('recent');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
+  // Filtros Avanzados (Nuevos)
+  const [beds, setBeds] = useState<number | null>(null);
+  const [baths, setBaths] = useState<number | null>(null);
+  const [isExactBeds, setIsExactBeds] = useState(false);
+  const [isExactBaths, setIsExactBaths] = useState(false);
+  const [minArea, setMinArea] = useState<number | null>(null);
+  const [maxArea, setMaxArea] = useState<number | null>(null);
+  const [minBuiltArea, setMinBuiltArea] = useState<number | null>(null);
+  const [maxBuiltArea, setMaxBuiltArea] = useState<number | null>(null);
+
+  // Filtro de Precio Avanzado
+  const [minPrice, setMinPrice] = useState<string>('');
+  const [maxPrice, setMaxPrice] = useState<string>('');
+  const [currency, setCurrency] = useState<'USD' | 'PEN'>('PEN');
+  const [showPriceDropdown, setShowPriceDropdown] = useState(false);
+  const [activePriceRange, setActivePriceRange] = useState({ min: '', max: '', cur: 'PEN' });
+  const priceDropdownRef = React.useRef<HTMLDivElement>(null);
+
+  // Cerrar al hacer clic fuera
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (priceDropdownRef.current && !priceDropdownRef.current.contains(event.target as Node)) {
+        setShowPriceDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Cargar propiedades al montar
   useEffect(() => {
@@ -94,29 +154,65 @@ export default function SearchResults() {
     }
 
     // Filtro por operación
-    if (operation) {
+    if (operation && operation !== 'Todos') {
       result = result.filter(p => 
         p.type.toLowerCase() === operation.toLowerCase()
       );
     }
 
-    // Ordenar
-    if (sortBy === 'price_asc') {
-      result.sort((a, b) => {
-        const priceA = parseFloat(a.price.replace(/[^0-9.]/g, '')) || 0;
-        const priceB = parseFloat(b.price.replace(/[^0-9.]/g, '')) || 0;
-        return priceA - priceB;
-      });
-    } else if (sortBy === 'price_desc') {
-      result.sort((a, b) => {
-        const priceA = parseFloat(a.price.replace(/[^0-9.]/g, '')) || 0;
-        const priceB = parseFloat(b.price.replace(/[^0-9.]/g, '')) || 0;
-        return priceB - priceA;
+    // Filtro por Precio Avanzado (Desactivado si es 'Todos')
+    if (operation !== 'Todos' && (activePriceRange.min || activePriceRange.max)) {
+      const min = parseFloat(activePriceRange.min) || 0;
+      const max = parseFloat(activePriceRange.max) || Infinity;
+      
+      result = result.filter(p => {
+        const pPrice = activePriceRange.cur === 'PEN' ? (p.priceAmount || 0) : (p.priceAltAmount || 0);
+        return pPrice >= min && pPrice <= max;
       });
     }
 
+    // Filtros Avanzados Adicionales
+    if (beds !== null) {
+      result = result.filter(p => isExactBeds ? p.beds === beds : p.beds >= beds);
+    }
+    if (baths !== null) {
+      result = result.filter(p => isExactBaths ? p.baths === baths : p.baths >= baths);
+    }
+
+    // Área Total (basada en sqft o parsing de area si sqft no está disponible)
+    if (minArea !== null || maxArea !== null) {
+      result = result.filter(p => {
+        const aVal = parseFloat((p.sqft || 0).toString());
+        if (minArea !== null && aVal < minArea) return false;
+        if (maxArea !== null && aVal > maxArea) return false;
+        return true;
+      });
+    }
+
+    // Ordenar
+    // Sorting Logic
+    const getAreaNum = (areaStr: string) => parseFloat(areaStr.replace(/[^0-9.]/g, '')) || 0;
+
+    if (sortBy === 'price_asc') {
+      result.sort((a, b) => a.priceAmount - b.priceAmount);
+    } else if (sortBy === 'price_desc') {
+      result.sort((a, b) => b.priceAmount - a.priceAmount);
+    } else if (sortBy === 'area_asc') {
+      result.sort((a, b) => getAreaNum(a.area) - getAreaNum(b.area));
+    } else if (sortBy === 'area_desc') {
+      result.sort((a, b) => getAreaNum(b.area) - getAreaNum(a.area));
+    } else if (sortBy === 'price_m2_asc') {
+      result.sort((a, b) => (a.priceAmount / getAreaNum(a.area)) - (b.priceAmount / getAreaNum(b.area)));
+    } else if (sortBy === 'price_m2_desc') {
+      result.sort((a, b) => (b.priceAmount / getAreaNum(b.area)) - (a.priceAmount / getAreaNum(a.area)));
+    } else if (sortBy === 'newest') {
+      result.sort((a, b) => b.id.localeCompare(a.id)); // Fallback a ID si no hay fecha
+    } else if (sortBy === 'oldest') {
+      result.sort((a, b) => a.id.localeCompare(b.id)); 
+    }
+
     setFilteredProperties(result);
-  }, [allProperties, location, propertyType, operation, sortBy]);
+  }, [allProperties, location, propertyType, operation, sortBy, activePriceRange, beds, baths, isExactBeds, isExactBaths, minArea, maxArea]);
 
   function handleSearch() {
     const params = new URLSearchParams();
@@ -137,146 +233,313 @@ export default function SearchResults() {
   const hasActiveFilters = !!(location || propertyType || operation);
 
   return (
-    <main className="flex min-h-screen flex-col bg-slate-50">
-      {/* Header con Buscador estilo Honecta */}
-      <section className="bg-neutral-900 text-white py-12 px-6 lg:px-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900" />
-        <div className="absolute inset-0 opacity-[0.03]" style={{backgroundImage: 'url("/Imagenes/piura-panorama.png")', backgroundSize: 'cover', backgroundPosition: 'center'}} />
-        
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <h1 className="text-2xl md:text-3xl font-black mb-2 text-center">Portal Inmobiliario</h1>
-            <p className="text-slate-400 text-sm md:text-base text-center mb-8 font-medium">
-              Explora oportunidades exclusivas en nuestra red de agentes aliados.
-            </p>
-          </motion.div>
-
-          {/* Search Bar Honecta Style */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ delay: 0.2 }}
-            className="max-w-4xl mx-auto"
-          >
-            <div className="bg-white rounded-xl p-1.5 shadow-2xl flex items-center">
-              {/* Location Input */}
-              <div className="flex-1 min-w-0 flex items-center gap-3 px-5 py-2 border-r border-slate-100">
-                <MapPin className="h-4 w-4 text-neutral-400 shrink-0" />
+    <main className="flex min-h-screen flex-col bg-white">
+      {/* Header con Filtros Premium estilo Imagen */}
+      <section className="bg-white px-4 md:px-6 lg:px-12 py-4 md:py-6 border-b border-slate-100 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto">
+          
+          {/* VERSION MOVIL (3 Niveles) */}
+          <div className="md:hidden space-y-4">
+            {/* Fila 1: Buscador (Logo y Menu eliminados por redundancia) */}
+            <div className="w-full relative">
+              <div className="flex items-center gap-2 px-3 h-11 bg-slate-50 border border-slate-200 rounded-xl focus-within:ring-2 focus-within:ring-[#0127AC]/10 transition-all">
+                <Search className="h-4 w-4 text-neutral-400" />
                 <input
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  placeholder="Ubicación, distrito o calle..."
+                  placeholder="Buscar por distrito"
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  className="w-full bg-transparent border-none p-0 font-medium text-neutral-700 placeholder:text-neutral-400 focus:ring-0 focus:outline-none text-sm"
+                  className="bg-transparent border-none p-0 w-full text-xs font-semibold text-neutral-700 placeholder:text-neutral-400 focus:ring-0 outline-none"
                 />
               </div>
+            </div>
 
-              {/* Property Type */}
-              <div className="hidden md:block border-r border-slate-100">
-                <select
-                  value={propertyType}
-                  onChange={(e) => setPropertyType(e.target.value)}
-                  className="px-4 py-2 text-sm font-medium text-neutral-700 bg-transparent border-none focus:ring-0 focus:outline-none cursor-pointer appearance-none"
-                  style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center', paddingRight: '28px' }}
-                >
-                  {PROPERTY_TYPES.map(t => (
-                    <option key={t.value} value={t.value}>{t.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Operation Type */}
-              <div className="hidden md:block border-r border-slate-100">
-                <select
-                  value={operation}
-                  onChange={(e) => setOperation(e.target.value)}
-                  className="px-4 py-2 text-sm font-medium text-neutral-700 bg-transparent border-none focus:ring-0 focus:outline-none cursor-pointer appearance-none"
-                  style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center', paddingRight: '28px' }}
-                >
-                  {OPERATION_TYPES.map(t => (
-                    <option key={t.value} value={t.value}>{t.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Filters button */}
-              <button className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">
-                <SlidersHorizontal className="h-4 w-4" />
-                <span>Filtros</span>
-              </button>
-
-              {/* Search Button */}
-              <button
-                onClick={handleSearch}
-                className="flex items-center gap-2 bg-[#0127AC] hover:bg-neutral-800 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-black/10 shrink-0"
+            {/* Fila 2: Filtros + Vista + Alerta */}
+            <div className="flex items-center justify-between gap-2">
+              <button 
+                onClick={() => setIsFilterModalOpen(true)}
+                className="flex-1 flex items-center justify-between px-4 h-10 bg-white border border-slate-200 rounded-xl text-xs font-bold text-neutral-600"
               >
-                <Search className="h-4 w-4" />
-                <span className="hidden sm:inline">Buscar</span>
+                <span>Filtros</span>
+                <SlidersHorizontal className="h-3.5 w-3.5" />
+              </button>
+              
+              <div className="flex bg-slate-100 p-0.5 h-10 rounded-xl border border-slate-200">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-[#0127AC]' : 'text-neutral-400'}`}
+                >
+                  <List className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-[#0127AC]' : 'text-neutral-400'}`}
+                >
+                  <MapIcon className="h-4 w-4" />
+                </button>
+              </div>
+
+              <button 
+                onClick={() => setIsAlertModalOpen(true)}
+                className="w-10 h-10 flex items-center justify-center bg-white border-[1.5px] border-[#0127AC] rounded-xl text-[#0127AC]"
+              >
+                <Bell className="h-4 w-4" />
               </button>
             </div>
-          </motion.div>
+
+            {/* Fila 3: Título + Sort */}
+            <div className="flex items-center justify-between gap-2 border-t border-slate-50 pt-3">
+              <h2 className="text-xs font-bold text-neutral-800 line-clamp-1">
+                {propertyType ? PROPERTY_TYPES.find(t => t.value === propertyType)?.label : "Inmuebles"}
+                {operation ? ` en ${OPERATION_TYPES.find(o => o.value === operation)?.label}` : " en venta o alquiler"}
+              </h2>
+              <div className="relative">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="pl-3 pr-8 h-8 bg-white border border-slate-200 rounded-lg text-xs font-bold text-neutral-500 appearance-none outline-none"
+                  style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center' }}
+                >
+                  {SORT_OPTIONS.map(s => (
+                    <option key={s.value} value={s.value}>{s.label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* VERSION ESCRITORIO (Existente Refactorizada) */}
+          <div className="hidden md:block space-y-6">
+            {/* Fila 1: Filtros estilo Pill */}
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-3">
+                
+                {/* Ubicación Integrada (Primera Posición) */}
+                <div className="relative group">
+                  <div className="flex items-center gap-2 px-4 h-11 bg-slate-50 border border-slate-200 rounded-xl focus-within:ring-2 focus-within:ring-[#0127AC]/10 focus-within:border-[#0127AC] transition-all min-w-[200px]">
+                    <MapPin className="h-4 w-4 text-neutral-400" />
+                    <input
+                      type="text"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      placeholder="Piura, Perú..."
+                      onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                      className="bg-transparent border-none p-0 w-full text-sm font-semibold text-neutral-700 placeholder:text-neutral-400 focus:ring-0 outline-none"
+                    />
+                    {location && (
+                      <button onClick={() => setLocation('')} className="p-1 hover:bg-slate-200 rounded-full">
+                        <X className="h-3 w-3 text-neutral-400" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Operación */}
+                <div className="relative">
+                  <select
+                    value={operation}
+                    onChange={(e) => setOperation(e.target.value)}
+                    className="pl-4 pr-10 h-11 bg-[#F0F7FF] border border-[#D0E7FF] rounded-xl text-sm font-semibold text-[#0127AC] appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0127AC]/10 transition-all"
+                  >
+                    {OPERATION_TYPES.map(op => (
+                      <option key={op.value} value={op.value}>{op.label === 'Todas las Operaciones' ? 'Operación' : op.label}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#0127AC] pointer-events-none" />
+                </div>
+
+                {/* Tipo de Inmueble */}
+                <div className="relative">
+                  <select
+                    value={propertyType}
+                    onChange={(e) => setPropertyType(e.target.value)}
+                    className="pl-4 pr-10 h-11 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-neutral-600 appearance-none cursor-pointer hover:border-[#0127AC]/30 focus:outline-none focus:ring-2 focus:ring-[#0127AC]/10 transition-all"
+                  >
+                    {PROPERTY_TYPES.map(t => (
+                      <option key={t.value} value={t.value}>{t.label === 'Cualquiera' ? 'Departamento' : t.label}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none" />
+                </div>
+
+                {/* Selector de Precio Avanzado */}
+                <div className="relative" ref={priceDropdownRef}>
+                  <button 
+                    onClick={() => setShowPriceDropdown(!showPriceDropdown)}
+                    className={`flex items-center gap-2 px-4 h-11 border rounded-xl text-sm font-semibold transition-all ${
+                      showPriceDropdown || activePriceRange.min || activePriceRange.max
+                        ? 'bg-[#F0F7FF] border-[#D0E7FF] text-[#0127AC]'
+                        : 'bg-white border-slate-200 text-neutral-600 hover:border-[#0127AC]/30'
+                    }`}
+                  >
+                    <span>
+                      {activePriceRange.min || activePriceRange.max 
+                        ? `${activePriceRange.cur === 'USD' ? '$' : 'S/'} ${activePriceRange.min || '0'} - ${activePriceRange.max || 'Máx'}`
+                        : 'Precio'}
+                    </span>
+                    {showPriceDropdown ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  </button>
+
+                  <AnimatePresence>
+                    {showPriceDropdown && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute left-0 mt-2 w-[320px] bg-white rounded-2xl shadow-xl border border-slate-100 p-5 z-50"
+                      >
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-sm font-bold text-neutral-700">Precio:</span>
+                          <div className="flex bg-slate-100 p-1 rounded-lg">
+                            <button 
+                              onClick={() => setCurrency('PEN')}
+                              className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${currency === 'PEN' ? 'bg-white text-[#0127AC] shadow-sm' : 'text-neutral-500'}`}
+                            >
+                              Soles
+                            </button>
+                            <button 
+                              onClick={() => setCurrency('USD')}
+                              className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${currency === 'USD' ? 'bg-white text-[#0127AC] shadow-sm' : 'text-neutral-500'}`}
+                            >
+                              Dólares
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3 mb-5">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider ml-1">Mínimo</label>
+                            <div className="relative">
+                              <select 
+                                value={minPrice}
+                                onChange={(e) => setMinPrice(e.target.value)}
+                                className="w-full h-11 pl-3 pr-8 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-neutral-600 appearance-none focus:outline-none focus:border-[#0127AC] transition-all"
+                              >
+                                <option value="">No Min</option>
+                                {getPriceSuggestions(operation, currency).map(v => (
+                                  <option key={`min-${v}`} value={v.toString()}>
+                                    {currency === 'USD' ? '$' : 'S/'} {v.toLocaleString()}
+                                  </option>
+                                ))}
+                              </select>
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none" />
+                            </div>
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider ml-1">Máximo</label>
+                            <div className="relative">
+                              <select 
+                                value={maxPrice}
+                                onChange={(e) => setMaxPrice(e.target.value)}
+                                className="w-full h-11 pl-3 pr-8 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-neutral-600 appearance-none focus:outline-none focus:border-[#0127AC] transition-all"
+                              >
+                                <option value="">No Max</option>
+                                {getPriceSuggestions(operation, currency).map(v => (
+                                  <option key={`max-${v}`} value={v.toString()}>
+                                    {currency === 'USD' ? '$' : 'S/'} {v.toLocaleString()}
+                                  </option>
+                                ))}
+                              </select>
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <button 
+                          onClick={() => {
+                            setActivePriceRange({ min: minPrice, max: maxPrice, cur: currency });
+                            setShowPriceDropdown(false);
+                          }}
+                          className="w-full py-3 bg-[#0127AC] text-white rounded-xl text-sm font-black hover:bg-[#001D8B] transition-all shadow-lg active:scale-[0.98]"
+                        >
+                          Aplicar Filtro
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Más Filtros */}
+                <button 
+                  onClick={() => setIsFilterModalOpen(true)}
+                  className="flex items-center gap-2 px-4 h-11 bg-white border border-slate-200 rounded-xl text-sm font-bold text-neutral-600 hover:bg-slate-50 transition-all"
+                >
+                  <span>Filtros</span>
+                  <SlidersHorizontal className="h-4 w-4" />
+                </button>
+
+              </div>
+
+              {/* Toggle de Vista (SUBIDO A FILA 1) */}
+              <div className="flex bg-slate-100 p-1 h-11 rounded-xl border border-slate-200">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`flex items-center gap-2 px-5 h-full rounded-lg text-xs font-black transition-all ${
+                    viewMode === 'grid' 
+                      ? 'bg-white text-[#0127AC] shadow-sm' 
+                      : 'text-neutral-500 hover:text-neutral-700'
+                  }`}
+                >
+                  <List className="h-3.5 w-3.5" />
+                  Ver listado
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`flex items-center gap-2 px-5 h-full rounded-lg text-xs font-black transition-all ${
+                    viewMode === 'list' 
+                      ? 'bg-white text-[#0127AC] shadow-sm' 
+                      : 'text-neutral-500 hover:text-neutral-700'
+                  }`}
+                >
+                  <MapIcon className="h-3.5 w-3.5" />
+                  Ver mapa
+                </button>
+              </div>
+            </div>
+
+            {/* Fila 2: Título Dinámico e Información */}
+            <div className="flex flex-col md:flex-row items-end justify-between gap-4 pt-2">
+              <div>
+                <h2 className="text-xl md:text-2xl font-black text-neutral-800 tracking-tight">
+                  {propertyType ? PROPERTY_TYPES.find(t => t.value === propertyType)?.label : "Inmuebles"}
+                  {operation ? ` en ${OPERATION_TYPES.find(o => o.value === operation)?.label}` : " en venta o alquiler"}
+                  {location ? ` en ${location}` : " en Perú"}
+                </h2>
+              </div>
+
+              {/* Ordenación y Alerta (DERECHA) */}
+              <div className="flex items-center gap-3">
+                {/* Crear Alerta (BAJADO AL COSTADO DE ORDENAR) */}
+                <button 
+                  onClick={() => setIsAlertModalOpen(true)}
+                  className="flex items-center gap-2 px-5 h-11 bg-white border-[1.5px] border-[#0127AC] rounded-xl text-sm font-black text-[#0127AC] hover:bg-[#0127AC]/5 transition-all shadow-sm"
+                >
+                  <span>Crear alerta</span>
+                  <Bell className="h-3.5 w-3.5" />
+                </button>
+
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="pl-4 pr-10 h-11 bg-white border border-slate-200 rounded-xl text-sm font-bold text-neutral-500 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0127AC]/10 transition-all outline-none"
+                  style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', paddingRight: '36px' }}
+                >
+                  {SORT_OPTIONS.map(s => (
+                    <option key={s.value} value={s.value}>{s.label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Results */}
-      <section className="py-10 max-w-7xl mx-auto px-6 lg:px-12 w-full">
-        {/* Results Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <div>
-            <h2 className="text-lg font-black text-neutral-800">
-              {loading ? "Buscando propiedades..." : (
-                <>{filteredProperties.length} Propiedades encontradas</>
-              )}
-            </h2>
-            <p className="text-sm text-neutral-500 font-medium">
-              Mostrando resultados en Perú
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            {hasActiveFilters && (
-              <button
-                onClick={clearFilters}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-xs font-bold hover:bg-red-100 transition-colors"
-              >
-                <X className="h-3 w-3" />
-                Limpiar filtros
-              </button>
-            )}
-            
-            {/* Sort Dropdown */}
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-neutral-700 bg-white focus:ring-2 focus:ring-[#0127AC]/20 focus:border-[#0127AC] cursor-pointer"
-            >
-              {SORT_OPTIONS.map(s => (
-                <option key={s.value} value={s.value}>{s.label}</option>
-              ))}
-            </select>
-
-            {/* View Toggle */}
-            <div className="hidden md:flex border border-slate-200 rounded-lg overflow-hidden">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 transition-colors ${viewMode === 'grid' ? 'bg-[#0127AC] text-white' : 'bg-white text-neutral-500 hover:bg-slate-50'}`}
-              >
-                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/>
-                </svg>
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 transition-colors ${viewMode === 'list' ? 'bg-[#0127AC] text-white' : 'bg-white text-neutral-500 hover:bg-slate-50'}`}
-              >
-                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 16 16">
-                  <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
+      <section className="px-6 lg:px-12 py-10 w-full min-h-[600px]">
+        <div className="max-w-7xl mx-auto">
+          {/* Results Header (Eliminada redundancia) */}
 
         {/* Property Grid */}
         {filteredProperties.length > 0 ? (
@@ -310,14 +573,52 @@ export default function SearchResults() {
             </button>
           </div>
         ) : null}
-        
+
         {loading && (
           <div className="py-20 text-center">
-            <div className="animate-spin h-10 w-10 border-4 border-[#0127AC] border-t-transparent rounded-full mx-auto mb-4"></div>
-            <span className="text-neutral-400 font-black">Validando inventario actualizado...</span>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0127AC] mx-auto mb-4"></div>
+            <p className="text-neutral-500 font-medium">Buscando propiedades...</p>
           </div>
         )}
+        </div>
       </section>
+      <PropertyAlertModal
+        isOpen={isAlertModalOpen}
+        onClose={() => setIsAlertModalOpen(false)}
+        initialCity={location}
+        initialType={operation}
+      />
+      <AnimatePresence>
+        {isFilterModalOpen && (
+          <MobileFiltersModal
+            isOpen={isFilterModalOpen}
+            onClose={() => setIsFilterModalOpen(false)}
+            operation={operation}
+            setOperation={setOperation}
+            propertyType={propertyType || 'Todos'}
+            setPropertyType={setPropertyType}
+            beds={beds}
+            setBeds={setBeds}
+            baths={baths}
+            setBaths={setBaths}
+            isExactBeds={isExactBeds}
+            setIsExactBeds={setIsExactBeds}
+            isExactBaths={isExactBaths}
+            setIsExactBaths={setIsExactBaths}
+            minArea={minArea}
+            setMinArea={setMinArea}
+            maxArea={maxArea}
+            setMaxArea={setMaxArea}
+            currency={currency}
+            setCurrency={setCurrency}
+            activePriceRange={activePriceRange}
+            onApplyPrice={(min, max, cur) => setActivePriceRange({ min, max, cur })}
+            onClearAll={clearFilters}
+            getPriceSuggestions={getPriceSuggestions}
+            propertyTypes={PROPERTY_TYPES.filter(t => t.value !== '')}
+          />
+        )}
+      </AnimatePresence>
     </main>
   );
 }

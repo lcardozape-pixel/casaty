@@ -1,239 +1,278 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, MapPin, ChevronDown, SlidersHorizontal, Zap } from "lucide-react";
+import { Search, MapPin, ChevronDown, SlidersHorizontal, Zap, Home, Building2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 const PROPERTY_TYPES = [
-  { value: '', label: 'Cualquiera' },
+  { value: '', label: 'Todos los tipos' },
   { value: 'casa', label: 'Casa' },
-  { value: 'depa', label: 'Depa' },
+  { value: 'depa', label: 'Departamento' },
   { value: 'oficina', label: 'Oficina' },
   { value: 'terreno', label: 'Terreno' },
   { value: 'local', label: 'Local comercial' },
 ];
 
-const OPERATION_TYPES = [
-  { value: '', label: 'Todas las Operaciones' },
-  { value: 'venta', label: 'Venta' },
-  { value: 'alquiler', label: 'Alquiler' },
-];
-
-function CustomDropdown({ 
-  options, 
-  value, 
-  onChange, 
-  placeholder 
-}: { 
-  options: { value: string; label: string }[]; 
-  value: string; 
-  onChange: (val: string) => void; 
-  placeholder: string;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const selectedLabel = options.find(o => o.value === value)?.label || placeholder;
-
-  return (
-    <div ref={ref} className="relative">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 transition-colors whitespace-nowrap"
-      >
-        <span className="truncate max-w-[120px]">{selectedLabel}</span>
-        <ChevronDown className={`h-4 w-4 text-neutral-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
-      {isOpen && (
-        <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 py-1.5 z-50 min-w-[180px] animate-in fade-in slide-in-from-top-2 duration-200">
-          {options.map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => { onChange(option.value); setIsOpen(false); }}
-              className={`w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center gap-2 ${
-                value === option.value 
-                  ? 'text-[#0127AC] bg-slate-50 font-semibold' 
-                  : 'text-neutral-700 hover:bg-slate-50 font-medium'
-              }`}
-            >
-              {value === option.value && (
-                <svg className="h-4 w-4 text-[#0127AC]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              )}
-              <span>{option.label}</span>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 export function Hero() {
   const router = useRouter();
   const [location, setLocation] = useState('');
   const [propertyType, setPropertyType] = useState('');
-  const [operation, setOperation] = useState('');
+  const [operation, setOperation] = useState('venta');
 
-  function handleSearch() {
+  function handleSearch(overrides?: { query?: string, type?: string, op?: string }) {
     const params = new URLSearchParams();
-    if (location) params.set('q', location);
-    if (propertyType) params.set('tipo', propertyType);
-    if (operation) params.set('operacion', operation);
+    const finalLocation = overrides?.query !== undefined ? overrides.query : location;
+    const finalType = overrides?.type !== undefined ? overrides.type : propertyType;
+    const finalOp = overrides?.op !== undefined ? overrides.op : operation;
+
+    if (finalLocation) params.set('q', finalLocation);
+    if (finalType) params.set('tipo', finalType);
+    if (finalOp) params.set('operacion', finalOp);
+
     router.push(`/propiedades?${params.toString()}`);
   }
 
+  const tabs = [
+    { id: 'venta', label: 'Comprar', icon: Building2 },
+    { id: 'alquiler', label: 'Alquilar', icon: Home },
+  ];
+
+  const [showAllTags, setShowAllTags] = useState(false);
+  const popularTags = [
+    'Los Ejidos', 'San Eduardo', 'Santa María del Pinar', 'Quinta Ana María',
+    'Miraflores', 'Miraflores Country Club', 'Santa Margarita', 'Casuarinas',
+    'Centro de Piura', 'Las Palmeras (Centenario)', 'Monte Verde (Galilea)',
+    'Urb. Piura', 'Santa Ana', 'Santa Isabel', 'Angamos', 'Cocos del Chipe', 'Laguna del Chipe'
+  ];
+
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  const allZones = [
+    'Piura', 'Sullana', 'Talara', 'Paita', 'Castilla', 'Catacaos', 'Veintiséis de Octubre',
+    'Los Ejidos', 'San Eduardo', 'Santa María del Pinar', 'Quinta Ana María',
+    'Miraflores', 'Miraflores Country Club', 'Santa Margarita', 'Casuarinas',
+    'Centro de Piura', 'Las Palmeras (Centenario)', 'Monte Verde (Galilea)',
+    'Urb. Piura', 'Santa Ana', 'Santa Isabel', 'Angamos', 'Cocos del Chipe', 'Laguna del Chipe'
+  ];
+
+  useEffect(() => {
+    if (location.length > 1) {
+      const filtered = allZones.filter(zone =>
+        zone.toLowerCase().includes(location.toLowerCase())
+      );
+      setFilteredSuggestions(filtered);
+      setShowSuggestions(filtered.length > 0);
+    } else {
+      setShowSuggestions(false);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const selectSuggestion = (zone: string) => {
+    setLocation(zone);
+    setShowSuggestions(false);
+    handleSearch({ query: zone });
+  };
+
   return (
-    <section className="relative min-h-[750px] md:h-[700px] flex items-start md:items-center justify-center overflow-hidden pt-18 pb-32 md:pt-0 md:pb-0">
-      {/* Background */}
-      <div className="absolute inset-0 z-0 shimmer" suppressHydrationWarning>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/80 z-10" />
+    <section className="relative min-h-[600px] md:min-h-[700px] flex items-center justify-center overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0" suppressHydrationWarning>
         <Image
           src="/Imagenes/fondo-piura.jpg"
-          alt="Piura Modern Panorama"
+          alt="Piura Panorama"
           fill
           priority
-          className="object-cover"
+          className="object-cover scale-105"
           sizes="100vw"
-          quality={85}
         />
+        {/* Overlay with increased opacity for better text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 z-10" />
       </div>
 
-      <div className="relative z-20 max-w-6xl mx-auto px-6 lg:px-12 w-full">
-        <div className="max-w-4xl mb-10">
+      <div className="relative z-20 max-w-6xl mx-auto px-6 lg:px-12 w-full pt-16 pb-12 md:pt-4 md:pb-0">
+        {/* Hero Copy */}
+        <div className="max-w-2xl mb-6 md:mb-8">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 w-fit mb-4">
-              <Zap className="h-3 w-3 text-yellow-400 fill-yellow-400" />
-              <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">Más de 1,200 Propiedades en la red Honecta®</span>
-            </div>
-
-            <h1 className="text-3xl md:text-6xl font-black text-white mb-6 leading-[1] tracking-tighter">
-              El Hogar de Tus <br /> Sueños en Piura.
+            {/* Badge - Intensified Glass Effect */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-xl px-4 py-2 rounded-full border border-white/30 mb-4 shadow-lg shadow-black/20"
+            >
+              <Zap className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
+              <span className="text-[10px] md:text-xs font-black text-white uppercase tracking-wider">
+                +1,200 Propiedades en Honecta®
+              </span>
+            </motion.div>
+            {/* Title */}
+            <h1 className="text-4xl md:text-5xl lg:text-5xl font-black text-white mb-2.5 leading-[1.1] tracking-tight">
+              El Hogar de Tus <br className="hidden md:block" /> Sueños en Piura.
             </h1>
-            <p className="text-sm md:text-xl text-white/80 font-medium max-w-xl leading-relaxed">
+
+            <p className="text-sm md:text-base text-white/90 font-medium max-w-lg leading-relaxed">
               Busca, encuentra y asegura tu próxima inversión con el respaldo legal y comercial de los expertos.
             </p>
           </motion.div>
         </div>
 
-        {/* Search Bar - Honecta Style */}
+        {/* Search Module */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          ref={searchRef}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="lg:max-w-5xl"
+          className="max-w-4xl relative"
         >
-          <div className="bg-white/90 backdrop-blur-2xl rounded-2xl p-2 shadow-2xl shadow-black/10 flex items-center border border-white/20">
-            {/* Location Input */}
-            <div className="flex-1 min-w-0 flex items-center gap-3 px-5 py-2 border-r border-slate-100">
-              <MapPin className="h-4 w-4 text-neutral-400 shrink-0" />
+          {/* Tabs */}
+          <div className="flex w-full md:w-fit mb-[-1px] relative z-10">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setOperation(tab.id)}
+                  className={`
+                    flex-1 md:flex-initial relative px-6 md:px-8 py-3 md:py-3.5 text-xs md:text-sm font-bold uppercase tracking-wide transition-all
+                    first:rounded-tl-xl last:rounded-tr-xl
+                    ${operation === tab.id
+                      ? 'bg-white text-[#0127AC]'
+                      : 'bg-white/90 text-neutral-500 hover:text-neutral-700 hover:bg-white'
+                    }
+                  `}
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <Icon className="h-4 w-4 hidden md:block" />
+                    {tab.label}
+                  </span>
+                  {operation === tab.id && (
+                    <motion.div
+                      layoutId="activeTabIndicator"
+                      className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#0127AC]"
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Search Body */}
+          <div className="bg-white rounded-b-2xl rounded-t-none md:rounded-2xl md:rounded-tl-none p-3 md:p-2.5 shadow-xl relative z-10 flex flex-col md:flex-row gap-2">
+
+            {/* Property Type Dropdown */}
+            <div className="relative flex-1 md:max-w-[200px]">
+              <select
+                value={propertyType}
+                onChange={(e) => setPropertyType(e.target.value)}
+                className="w-full h-12 md:h-12 pl-4 pr-10 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-neutral-700 appearance-none focus:ring-2 focus:ring-[#0127AC]/20 focus:border-[#0127AC] outline-none transition-all cursor-pointer"
+              >
+                {PROPERTY_TYPES.map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none" />
+            </div>
+
+            {/* Location Input with Suggestions */}
+            <div className="flex-[2] relative">
+              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
               <input
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="Ubicación, distrito o calle..."
+                onFocus={() => location.length > 1 && setShowSuggestions(true)}
+                placeholder="Ubicación, urbanización o distrito..."
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="w-full bg-transparent border-none p-0 font-medium text-neutral-700 placeholder:text-neutral-400 focus:ring-0 focus:outline-none text-sm"
+                className="w-full h-12 md:h-12 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-neutral-800 placeholder:text-neutral-400 focus:ring-2 focus:ring-[#0127AC]/20 focus:border-[#0127AC] outline-none transition-all"
               />
-            </div>
 
-            {/* Property Type Dropdown */}
-            <div className="hidden md:flex border-r border-slate-100">
-              <CustomDropdown
-                options={PROPERTY_TYPES}
-                value={propertyType}
-                onChange={setPropertyType}
-                placeholder="Cualquiera"
-              />
+              {/* Suggestions Dropdown */}
+              {showSuggestions && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute left-0 right-0 top-full mt-2 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-2xl shadow-2xl overflow-hidden z-[100] max-h-[300px] overflow-y-auto"
+                >
+                  {filteredSuggestions.map((suggestion, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => selectSuggestion(suggestion)}
+                      className="w-full px-5 py-3 text-left hover:bg-[#0127AC]/5 flex items-center gap-3 transition-colors border-b border-slate-50 last:border-none"
+                    >
+                      <MapPin className="h-4 w-4 text-neutral-400" />
+                      <span className="text-sm font-medium text-neutral-700">
+                        {suggestion.split(new RegExp(`(${location})`, 'gi')).map((part, i) =>
+                          part.toLowerCase() === location.toLowerCase()
+                            ? <span key={i} className="font-black text-[#0127AC]">{part}</span>
+                            : <span key={i}>{part}</span>
+                        )}
+                      </span>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
             </div>
-
-            {/* Operation Type Dropdown */}
-            <div className="hidden md:flex border-r border-slate-100">
-              <CustomDropdown
-                options={OPERATION_TYPES}
-                value={operation}
-                onChange={setOperation}
-                placeholder="Todas las..."
-              />
-            </div>
-
-            {/* Filters Button */}
-            <button
-              type="button"
-              onClick={() => {/* TODO: modal filtros avanzados */}}
-              className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors border-r border-slate-100"
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-              <span>Filtros</span>
-            </button>
 
             {/* Search Button */}
             <button
               type="button"
-              onClick={handleSearch}
-              className="flex items-center gap-2 bg-[#0127AC] hover:bg-black text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-black/10 shrink-0 ml-2"
+              onClick={() => handleSearch()}
+              className="h-12 md:h-12 px-8 bg-[#0127AC] hover:bg-[#001D8A] text-white rounded-xl font-bold text-sm uppercase tracking-wide transition-all shadow-md flex items-center justify-center gap-2"
             >
               <Search className="h-4 w-4" />
-              <span className="hidden sm:inline">Buscar Propiedad</span>
+              Buscar
             </button>
           </div>
 
-          {/* Mobile Filters Row */}
-          <div className="flex md:hidden gap-2 mt-3">
-            <div className="flex-1 bg-white/90 backdrop-blur-xl rounded-xl px-4 py-3 shadow-lg border border-white/20">
-              <CustomDropdown
-                options={PROPERTY_TYPES}
-                value={propertyType}
-                onChange={setPropertyType}
-                placeholder="Tipo"
-              />
-            </div>
-            <div className="flex-1 bg-white/90 backdrop-blur-xl rounded-xl px-4 py-3 shadow-lg border border-white/20">
-              <CustomDropdown
-                options={OPERATION_TYPES}
-                value={operation}
-                onChange={setOperation}
-                placeholder="Operación"
-              />
-            </div>
-          </div>
+          {/* Popular Tags */}
+          <div className="flex flex-wrap items-center gap-2 mt-4 md:mt-5 ml-1">
+            <span className="text-[10px] font-black text-white/60 uppercase tracking-wider mr-1">Populares:</span>
 
-          {/* Quick Filters / Tags */}
-          <div className="flex flex-wrap gap-3 mt-6 ml-4">
-            <span className="text-[10px] font-black text-white/60 uppercase tracking-widest mt-1 mr-2">Populares:</span>
-            {['Los Ejidos', 'Santa María del Valle', 'Castilla', 'Miraflores'].map((tag) => (
-              <button 
-                key={tag} 
-                onClick={() => { setLocation(tag); handleSearch(); }}
-                className="px-4 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-[#0127AC] transition-all"
+            <div className="flex flex-wrap gap-2 items-center">
+              {popularTags.map((tag, index) => (
+                <button
+                  key={tag}
+                  onClick={() => {
+                    setLocation(tag);
+                    handleSearch({ query: tag });
+                  }}
+                  className={`
+                    px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-xl border border-white/30 text-white text-[10px] font-bold uppercase tracking-wide hover:bg-white hover:text-[#0127AC] transition-all shadow-lg shadow-black/5
+                    ${!showAllTags && index >= 6 ? 'hidden md:flex' : 'flex'}
+                  `}
+                >
+                  {tag}
+                </button>
+              ))}
+
+              <button
+                onClick={() => setShowAllTags(!showAllTags)}
+                className="md:hidden px-3 py-1.5 rounded-full bg-[#0127AC]/40 backdrop-blur-xl border border-white/20 text-white text-[10px] font-black uppercase hover:bg-[#0127AC] transition-all"
               >
-                {tag}
+                {showAllTags ? 'Ver menos -' : 'Ver más +'}
               </button>
-            ))}
+            </div>
           </div>
         </motion.div>
       </div>
     </section>
   );
 }
-
-
