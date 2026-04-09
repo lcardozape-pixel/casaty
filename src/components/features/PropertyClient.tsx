@@ -29,6 +29,7 @@ import {
 import CalculadoraHipoteca from "@/components/CalculadoraHipoteca";
 import { PropertyCard } from "@/components/features/PropertyCard";
 import { ScheduleVisitSection } from "@/components/features/ScheduleVisitSection";
+import PropertyAlertModal from "./PropertyAlertModal";
 
 interface PropertyClientProps {
   property: Property;
@@ -53,6 +54,13 @@ export default function PropertyClient({ property, similarProperties }: Property
   const [visitType, setVisitType] = useState<'presencial' | 'videollamada'>('presencial');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>("");
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+
+  // Extraer información del agente para reutilizar
+  const agencyName = property?.agent?.agency?.trim();
+  const isCasaty = !agencyName || agencyName.toLowerCase().includes('casaty');
+  const agentDisplayName = isCasaty ? (property?.agent?.name || 'Luis Cardoza') : agencyName;
+  const agentDisplayImage = property?.agent?.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(agentDisplayName || 'Casaty')}&background=223345&color=fff`;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -497,6 +505,7 @@ export default function PropertyClient({ property, similarProperties }: Property
             <div className="sticky top-28 space-y-6">
             {/* Formulario / Contact Card */}
               <motion.div
+                id="contact-section"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
@@ -504,35 +513,20 @@ export default function PropertyClient({ property, similarProperties }: Property
               >
                 {/* Agent Info Estilo Mockup */}
                 <div className="flex items-center gap-4 mb-4">
-                  {(() => {
-                    const agencyName = property?.agent?.agency?.trim();
-                    const isCasaty = !agencyName || agencyName.toLowerCase().includes('casaty');
-                    
-                    const displayName = isCasaty 
-                      ? (property?.agent?.name || 'Luis Cardoza') 
-                      : agencyName;
-
-                    const displayImage = property?.agent?.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName || 'Casaty')}&background=223345&color=fff`;
-
-                    return (
-                      <>
-                        <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm ring-1 ring-slate-100">
-                          <Image src={displayImage} fill className="object-cover" alt={displayName} />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-[17px] font-bold text-neutral-800 tracking-tight leading-tight">
-                            {displayName}
-                          </span>
-                          <span className="text-[13px] text-neutral-500 font-medium mt-1">
-                            {isCasaty ? 'Broker de Inmobiliaria Casaty' : agencyName}
-                          </span>
-                          <span className="text-[13px] text-neutral-500 font-medium">
-                            Codigo MVCS: PN-20719
-                          </span>
-                        </div>
-                      </>
-                    );
-                  })()}
+                  <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm ring-1 ring-slate-100">
+                    <Image src={agentDisplayImage} fill className="object-cover" alt={agentDisplayName} />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[17px] font-bold text-neutral-800 tracking-tight leading-tight">
+                      {agentDisplayName}
+                    </span>
+                    <span className="text-[13px] text-neutral-500 font-medium mt-1">
+                      {isCasaty ? 'Broker de Inmobiliaria Casaty' : agencyName}
+                    </span>
+                    <span className="text-[13px] text-neutral-500 font-medium">
+                      Codigo MVCS: PN-20719
+                    </span>
+                  </div>
                 </div>
 
                 {/* Formulario Estilo Mockup */}
@@ -621,7 +615,10 @@ export default function PropertyClient({ property, similarProperties }: Property
                   Al hacer clic en "Iniciar conversación" estás aceptando nuestros <a href="/terminos-y-condiciones" className="text-neutral-500 hover:text-[#0055B8] transition-colors underline">Términos y condiciones</a> y Políticas de privacidad.
                 </p>
 
-                <button className="w-full border border-[#0055B8] text-[#0055B8] hover:bg-[#0055B8]/5 py-3.5 rounded-[14px] font-bold text-[14px] transition-colors flex items-center justify-center gap-2 shadow-sm bg-white">
+                <button 
+                  onClick={() => setIsAlertModalOpen(true)}
+                  className="w-full border border-[#0040FF] text-[#0040FF] hover:bg-[#0040FF]/5 py-3.5 rounded-[14px] font-bold text-[14px] transition-colors flex items-center justify-center gap-2 shadow-sm bg-white"
+                >
                   <Bell className="h-4 w-4 stroke-[2.5]" />
                   Recibe alertas de inmuebles similares
                 </button>
@@ -631,6 +628,42 @@ export default function PropertyClient({ property, similarProperties }: Property
           </div>
         </div>
       </div>
+
+      <PropertyAlertModal 
+        isOpen={isAlertModalOpen} 
+        onClose={() => setIsAlertModalOpen(false)}
+        initialCity={property?.address?.split(',').reverse()[1]?.trim() || property?.address?.split(',').pop()?.trim() || ""}
+        initialType={property?.type}
+      />
+
+      {/* Sticky Bottom Bar for Mobile */}
+      <motion.div 
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-[0_-10px_30px_rgba(0,0,0,0.08)] p-4 z-40 border-t border-slate-100 flex items-center justify-between"
+      >
+        <div className="flex items-center gap-3">
+          <div className="relative w-10 h-10 rounded-full overflow-hidden border border-slate-100 shadow-sm">
+            <Image src={agentDisplayImage} fill className="object-cover" alt={agentDisplayName} />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[14px] font-extrabold text-neutral-800 line-clamp-1 leading-tight">{agentDisplayName}</span>
+            <span className="text-[11px] text-[#00D179] font-bold">En línea ahora</span>
+          </div>
+        </div>
+        <button 
+          onClick={() => {
+            document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }}
+          style={{ backgroundColor: '#00D179' }}
+          className="text-white px-5 py-3 rounded-xl font-bold text-[13px] flex items-center gap-2 shadow-lg shadow-green-500/20 active:scale-95 transition-transform"
+        >
+          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Más información
+        </button>
+      </motion.div>
     </main>
   );
 }
