@@ -37,20 +37,27 @@ export function ScheduleVisitSection({ onSchedule }: ScheduleVisitSectionProps) 
   };
 
   return (
-    <div className="bg-white rounded-[2.5rem] border border-slate-100 p-8 md:p-12 shadow-2xl shadow-slate-200/50 max-w-5xl mx-auto overflow-hidden">
+    <div>
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-8">
+        <div className="h-10 w-10 bg-[#0127AC]/10 rounded-lg flex items-center justify-center text-[#0127AC]">
+          <Calendar className="h-5 w-5" />
+        </div>
+        <div>
+          <h3 className="text-xl font-black text-neutral-800">Agenda una visita</h3>
+          <p className="text-sm text-neutral-500 font-medium tracking-tight">Conoce el inmueble en persona o por videollamada</p>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         
         {/* Lado Izquierdo - Formulario */}
         <div className="space-y-8">
-          <h2 className="text-2xl md:text-2xl font-black text-neutral-800 tracking-tight">
-            Agenda una visita al inmueble
-          </h2>
-
           {/* Carrusel de Fechas */}
           <div className="relative group">
             <button 
               onClick={() => scroll('left')}
-              className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-slate-600 border border-slate-50"
+              className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 bg-white rounded-full shadow-md flex items-center justify-center text-slate-400 hover:text-slate-600 border border-slate-50"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -90,7 +97,7 @@ export function ScheduleVisitSection({ onSchedule }: ScheduleVisitSectionProps) 
 
             <button 
               onClick={() => scroll('right')}
-              className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-slate-600 border border-slate-50"
+               className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 bg-white rounded-full shadow-md flex items-center justify-center text-slate-400 hover:text-slate-600 border border-slate-50"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -103,7 +110,7 @@ export function ScheduleVisitSection({ onSchedule }: ScheduleVisitSectionProps) 
               <select
                 value={selectedTime}
                 onChange={(e) => setSelectedTime(e.target.value)}
-                className="w-full bg-slate-50/50 border border-slate-100 rounded-2xl px-6 py-4 text-sm font-medium text-neutral-500 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
+                className="w-full bg-white border border-slate-100 rounded-xl px-5 py-3.5 text-[14px] font-medium text-neutral-600 appearance-none cursor-pointer focus:outline-none focus:border-slate-300 transition-all hover:border-slate-200"
               >
                 <option value="">Seleccionar hora</option>
                 <option value="09:00 AM">09:00 AM</option>
@@ -123,7 +130,7 @@ export function ScheduleVisitSection({ onSchedule }: ScheduleVisitSectionProps) 
               <select
                 value={selectedMoveTime}
                 onChange={(e) => setSelectedMoveTime(e.target.value)}
-                className="w-full bg-slate-50/50 border border-slate-100 rounded-2xl px-6 py-4 text-sm font-medium text-neutral-500 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
+                className="w-full bg-white border border-slate-100 rounded-xl px-5 py-3.5 text-[14px] font-medium text-neutral-600 appearance-none cursor-pointer focus:outline-none focus:border-slate-300 transition-all hover:border-slate-200"
               >
                 <option value="">¿Cuándo deseas mudarte?</option>
                 <option value="Inmediatamente">Inmediatamente</option>
@@ -136,10 +143,10 @@ export function ScheduleVisitSection({ onSchedule }: ScheduleVisitSectionProps) 
           </div>
 
           {/* Botón */}
-          <div className="space-y-4 pt-4 text-center">
+          <div className="space-y-4 pt-2 text-center">
             <button 
               onClick={handleSchedule}
-              className="w-full bg-[#7C97F4] hover:bg-[#6885E6] text-white py-5 rounded-[1.25rem] font-black text-base shadow-xl shadow-blue-500/20 transition-all active:scale-[0.98]"
+              className="w-full bg-[#0127AC] hover:bg-[#011d8a] text-white py-3.5 rounded-lg font-bold text-[15px] shadow-sm transition-all active:scale-[0.98]"
             >
               Solicitar visita
             </button>

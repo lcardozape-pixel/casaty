@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Property } from "@/lib/types";
 import { motion } from "framer-motion";
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import Image from "next/image";
 import {
   ArrowLeft,
@@ -23,13 +23,26 @@ import {
   Loader2,
   Home as HomeIcon,
   Bell,
-  Clock
+  Clock,
+  ClipboardList,
+  FileText
 } from "lucide-react";
 
 import CalculadoraHipoteca from "@/components/CalculadoraHipoteca";
 import { PropertyCard } from "@/components/features/PropertyCard";
 import { ScheduleVisitSection } from "@/components/features/ScheduleVisitSection";
 import PropertyAlertModal from "./PropertyAlertModal";
+import dynamic from 'next/dynamic';
+
+// Lazy load del mapa de ubicación para rendimiento
+const PropertyLocationMap = dynamic(() => import('@/components/features/PropertyLocationMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="mt-10 pt-8 border-t border-slate-100">
+      <div className="w-full h-[350px] bg-slate-100 animate-pulse rounded-xl" />
+    </div>
+  ),
+});
 
 interface PropertyClientProps {
   property: Property;
@@ -376,8 +389,16 @@ export default function PropertyClient({ property, similarProperties }: Property
 
               {/* Resumen */}
               <div className="mb-8">
-                <h3 className="text-xl font-black text-neutral-800 mb-6">Resumen</h3>
-                <div className="py-6 border-t border-b border-slate-200 grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-10 w-10 bg-[#0127AC]/10 rounded-lg flex items-center justify-center text-[#0127AC]">
+                    <ClipboardList className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-neutral-800">Resumen</h3>
+                    <p className="text-sm text-neutral-500 font-medium tracking-tight">Características principales del inmueble</p>
+                  </div>
+                </div>
+                <div className="py-6 grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-6">
                   {!!property.beds && String(property.beds) !== '0' && (
                     <div className="flex items-center gap-4">
                       <BedDouble className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
@@ -428,12 +449,30 @@ export default function PropertyClient({ property, similarProperties }: Property
 
               {/* Description */}
               {property.description && (
-                <div className="mt-8">
-                  <h3 className="text-xl font-black text-neutral-800 mb-4">Descripción</h3>
+                <div className="mt-10 pt-8 border-t border-slate-100">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="h-10 w-10 bg-[#0127AC]/10 rounded-lg flex items-center justify-center text-[#0127AC]">
+                      <FileText className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-neutral-800">Descripción</h3>
+                      <p className="text-sm text-neutral-500 font-medium tracking-tight">Detalles completos de la propiedad</p>
+                    </div>
+                  </div>
                   <p className="text-neutral-600 font-medium text-sm md:text-[15px] leading-relaxed whitespace-pre-line">
                     {property.description}
                   </p>
                 </div>
+              )}
+
+              {/* Mapa de Ubicación + Lugares Cercanos */}
+              {property.lat && property.lng && (
+                <PropertyLocationMap
+                  lat={property.lat}
+                  lng={property.lng}
+                  address={property.address || property.location}
+                  propertyTitle={property.title}
+                />
               )}
 
               {/* Amenities */}

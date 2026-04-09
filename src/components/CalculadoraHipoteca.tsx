@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from "react";
-import { Calculator } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Calculator, Percent, CalendarDays, Wallet, TrendingDown, DollarSign } from "lucide-react";
 
 interface CalculadoraHipotecaProps {
   priceSoles: number;
@@ -18,6 +17,7 @@ function Slider({
   step = 1,
   onChange,
   display,
+  icon,
 }: {
   label: string;
   value: number;
@@ -26,13 +26,55 @@ function Slider({
   step?: number;
   onChange: (v: number) => void;
   display: string;
+  icon: React.ReactNode;
 }) {
   const pct = Math.min(((value - min) / (max - min)) * 100, 100);
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-[14px] text-slate-500 font-medium">{label}</span>
+    <div className="bg-white rounded-xl border border-slate-100 p-4 hover:border-slate-200 hover:shadow-sm transition-all">
+      <style jsx>{`
+        .calc-slider {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 100%;
+          height: 4px;
+          border-radius: 999px;
+          outline: none;
+          cursor: pointer;
+        }
+        /* Webkit (Chrome, Safari, Edge) */
+        .calc-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: white;
+          border: 2px solid #0127AC;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+          cursor: pointer;
+          margin-top: -1px; /* Centrar respecto a la barra de 4px */
+        }
+        /* Firefox */
+        .calc-slider::-moz-range-thumb {
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: white;
+          border: 2px solid #0127AC;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+          cursor: pointer;
+          border-radius: 50%;
+        }
+        .calc-slider::-moz-range-track {
+          height: 4px;
+          border-radius: 999px;
+        }
+      `}</style>
+      <div className="flex items-center gap-3 mb-3">
+        <div className="w-8 h-8 rounded-lg bg-[#0127AC]/10 flex items-center justify-center text-[#0127AC] shrink-0">
+          {icon}
+        </div>
+        <span className="text-[13px] text-neutral-500 font-medium flex-1">{label}</span>
         <span className="text-[14px] font-black text-neutral-800 tabular-nums">{display}</span>
       </div>
       <input
@@ -42,7 +84,7 @@ function Slider({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="calc-slider w-full"
+        className="calc-slider"
         style={{
           background: `linear-gradient(to right, #0127AC ${pct}%, #f1f5f9 ${pct}%)`,
         }}
@@ -87,146 +129,128 @@ export default function CalculadoraHipoteca({ priceSoles, priceDollars, initialC
   const priceStep = currency === 'PEN' ? 10000 : 5000;
 
   return (
-    <>
-      <style jsx>{`
-        .calc-slider {
-          -webkit-appearance: none;
-          appearance: none;
-          height: 6px;
-          border-radius: 999px;
-          outline: none;
-          cursor: pointer;
-        }
-        .calc-slider::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: white;
-          border: 3px solid #0127AC;
-          box-shadow: 0 2px 6px rgba(0,64,255,0.2);
-          cursor: pointer;
-        }
-      `}</style>
-
-      {/* Tarjeta con estilo idéntico a ScheduleVisitSection */}
-      <div className="bg-white rounded-[2.5rem] border border-slate-100 p-8 md:p-12 shadow-2xl shadow-slate-200/50 max-w-5xl mx-auto overflow-hidden flex flex-col lg:flex-row mt-12 min-h-[460px]">
-        
-        {/* Lado Izquierdo - Configuración */}
-        <div className="flex-1 flex flex-col pr-0 lg:pr-12">
-          <h3 className="text-2xl font-black text-neutral-800 tracking-tight mb-10">
-            Calcula tu cuota mensual
-          </h3>
-
-          <div className="space-y-8 flex-1">
-            <Slider
-              label="Valor del inmueble"
-              value={propertyPrice}
-              min={0}
-              max={maxPrice}
-              step={priceStep}
-              onChange={setPropertyPrice}
-              display={fmt(propertyPrice)}
-            />
-            <Slider
-              label="Cuota inicial"
-              value={downPaymentPercent}
-              min={0}
-              max={90}
-              step={5}
-              onChange={setDownPaymentPercent}
-              display={`${downPaymentPercent}% (${fmt(propertyPrice * downPaymentPercent / 100)})`}
-            />
-            <Slider
-              label="Tasa de interés (TEA)"
-              value={interestRate}
-              min={100}
-              max={2500}
-              step={25}
-              onChange={setInterestRate}
-              display={`${rate.toFixed(2)}%`}
-            />
-            <Slider
-              label="Plazo del crédito"
-              value={years}
-              min={1}
-              max={30}
-              step={1}
-              onChange={setYears}
-              display={`${years} ${years === 1 ? 'año' : 'años'}`}
-            />
-          </div>
-
-          <p className="text-[11px] text-neutral-400 font-medium mt-10 opacity-70 italic leading-relaxed">
-            * Valor referencial sujeto a evaluación crediticia de tu entidad financiera.
-          </p>
+    <div className="mt-10 pt-8 border-t border-slate-100">
+      {/* Header con estilo consistente */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="h-10 w-10 bg-[#0127AC]/10 rounded-lg flex items-center justify-center text-[#0127AC]">
+          <Calculator className="h-5 w-5" />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-xl font-black text-neutral-800">Calculadora Hipotecaria</h3>
+          <p className="text-sm text-neutral-500 font-medium tracking-tight">Estima tu cuota mensual de financiamiento</p>
         </div>
 
-        {/* Lado Derecho - Resultados */}
-        <div className="w-full lg:w-[400px] bg-slate-50/70 p-8 md:p-10 rounded-3xl flex flex-col border border-slate-100 mt-10 lg:mt-0">
-          
-          {/* Selector de Moneda */}
-          <div className="inline-flex bg-white p-1 rounded-xl border border-slate-100 shadow-sm self-start mb-10">
-            <button
-              onClick={() => setCurrency('PEN')}
-              className={cn(
-                "px-6 py-2 rounded-lg text-[11px] font-black transition-all duration-300",
-                currency === 'PEN' ? "bg-slate-50 text-[#0127AC]" : "text-slate-400 hover:text-slate-600"
-              )}
-            >
-              Soles
-            </button>
-            <button
-              onClick={() => setCurrency('USD')}
-              className={cn(
-                "px-6 py-2 rounded-lg text-[11px] font-black transition-all duration-300",
-                currency === 'USD' ? "bg-slate-50 text-[#0127AC]" : "text-slate-400 hover:text-slate-600"
-              )}
-            >
-              Dólares
-            </button>
-          </div>
-
-          <div className="space-y-10 flex-1 flex flex-col justify-center">
-            {/* Monto de Cuota */}
-            <div className="flex items-center gap-5">
-              <div className="h-14 w-14 bg-white border border-blue-50 rounded-2xl flex items-center justify-center text-[#0127AC] shadow-md shrink-0">
-                <Calculator className="h-7 w-7" />
-              </div>
-              <div className="flex items-center gap-2">
-                <p className="text-3xl md:text-4xl font-black text-[#0127AC] tracking-tighter leading-none">
-                  {fmt(monthlyPayment)}
-                </p>
-                <span className="text-[14px] font-bold text-slate-400 lowercase mt-1">mensual</span>
-              </div>
-            </div>
-
-            <div className="h-px bg-slate-200/50 w-full" />
-
-            {/* Detalles */}
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-[15px] font-medium text-slate-500 tracking-tight">Valor financiado:</span>
-                <span className="text-[15px] font-black text-neutral-800">{fmt(financedAmount)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[15px] font-medium text-slate-500 tracking-tight">Pago mensual:</span>
-                <span className="text-[15px] font-black text-neutral-800">{fmt(monthlyPayment)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[15px] font-medium text-slate-500 tracking-tight">Plazo préstamo:</span>
-                <span className="text-[15px] font-black text-neutral-800">{years} años</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[15px] font-medium text-slate-500 tracking-tight">Tasa (TEA):</span>
-                <span className="text-[15px] font-black text-neutral-800">{rate.toFixed(2)}%</span>
-              </div>
-            </div>
-          </div>
+        {/* Selector de Moneda */}
+        <div className="inline-flex bg-white p-1 rounded-lg border border-slate-100 shadow-sm">
+          <button
+            onClick={() => setCurrency('PEN')}
+            className={`px-4 py-1.5 rounded-md text-[12px] font-bold transition-all duration-200 ${
+              currency === 'PEN'
+                ? 'bg-[#0127AC] text-white shadow-sm'
+                : 'text-neutral-500 hover:text-neutral-700'
+            }`}
+          >
+            Soles
+          </button>
+          <button
+            onClick={() => setCurrency('USD')}
+            className={`px-4 py-1.5 rounded-md text-[12px] font-bold transition-all duration-200 ${
+              currency === 'USD'
+                ? 'bg-[#0127AC] text-white shadow-sm'
+                : 'text-neutral-500 hover:text-neutral-700'
+            }`}
+          >
+            Dólares
+          </button>
         </div>
       </div>
-    </>
+
+      {/* Grid: Controles + Resultados */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        
+        {/* Lado Izquierdo - Sliders (3 cols) */}
+        <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+          <Slider
+            label="Valor del inmueble"
+            value={propertyPrice}
+            min={0}
+            max={maxPrice}
+            step={priceStep}
+            onChange={setPropertyPrice}
+            display={fmt(propertyPrice)}
+            icon={<DollarSign className="h-4 w-4" />}
+          />
+          <Slider
+            label="Cuota inicial"
+            value={downPaymentPercent}
+            min={0}
+            max={90}
+            step={5}
+            onChange={setDownPaymentPercent}
+            display={`${downPaymentPercent}% (${fmt(propertyPrice * downPaymentPercent / 100)})`}
+            icon={<TrendingDown className="h-4 w-4" />}
+          />
+          <Slider
+            label="Tasa de interés (TEA)"
+            value={interestRate}
+            min={100}
+            max={2500}
+            step={25}
+            onChange={setInterestRate}
+            display={`${rate.toFixed(2)}%`}
+            icon={<Percent className="h-4 w-4" />}
+          />
+          <Slider
+            label="Plazo del crédito"
+            value={years}
+            min={1}
+            max={30}
+            step={1}
+            onChange={setYears}
+            display={`${years} ${years === 1 ? 'año' : 'años'}`}
+            icon={<CalendarDays className="h-4 w-4" />}
+          />
+        </div>
+
+        {/* Lado Derecho - Resultado (2 cols) */}
+        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-100 p-6 flex flex-col justify-between">
+          {/* Cuota mensual destacada */}
+          <div>
+            <p className="text-[13px] text-neutral-400 font-bold uppercase tracking-wider mb-2">Tu cuota mensual</p>
+            <div className="flex items-baseline gap-2">
+              <p className="text-3xl md:text-4xl font-black text-[#0127AC] tracking-tighter leading-none">
+                {fmt(monthlyPayment)}
+              </p>
+              <span className="text-[13px] font-bold text-neutral-400">/mes</span>
+            </div>
+          </div>
+
+          {/* Desglose */}
+          <div className="mt-6 space-y-3 pt-5 border-t border-slate-100">
+            <div className="flex justify-between items-center">
+              <span className="text-[13px] font-medium text-neutral-500">Valor financiado</span>
+              <span className="text-[13px] font-black text-neutral-800">{fmt(financedAmount)}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-[13px] font-medium text-neutral-500">Cuota inicial</span>
+              <span className="text-[13px] font-black text-neutral-800">{fmt(propertyPrice * downPaymentPercent / 100)}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-[13px] font-medium text-neutral-500">Plazo</span>
+              <span className="text-[13px] font-black text-neutral-800">{years} años ({years * 12} cuotas)</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-[13px] font-medium text-neutral-500">Tasa (TEA)</span>
+              <span className="text-[13px] font-black text-neutral-800">{rate.toFixed(2)}%</span>
+            </div>
+          </div>
+
+          {/* Nota legal */}
+          <p className="text-[10px] text-neutral-400 font-medium mt-5 leading-relaxed">
+            * Cálculo referencial sujeto a evaluación crediticia de tu entidad financiera.
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
-
-
