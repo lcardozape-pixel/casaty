@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getPublicProperties } from '@/lib/honecta'; 
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const properties = await getPublicProperties();

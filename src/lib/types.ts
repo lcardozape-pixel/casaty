@@ -24,6 +24,8 @@ export interface Property {
   subType?: string;
   amenities?: string[];
   age?: string;
+  lat?: number;
+  lng?: number;
   agent?: {
     name: string;
     photo?: string;
@@ -32,4 +34,3 @@ export interface Property {
     email?: string;
   };
 }
-

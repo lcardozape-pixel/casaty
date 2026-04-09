@@ -6,9 +6,10 @@ import { getProperties } from "@/lib/data";
 import type { Property } from "@/lib/types";
 import { motion } from "framer-motion";
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, SlidersHorizontal, X, Bell, List, Map as MapIcon, ChevronDown, ChevronUp, Menu } from "lucide-react";
+import { Search, MapPin, SlidersHorizontal, X, Bell, List, Map as MapIcon, ChevronDown, ChevronUp, Menu, ArrowUpRight, Square } from "lucide-react";
 import PropertyAlertModal from "@/components/features/PropertyAlertModal";
 import MobileFiltersModal from "@/components/features/MobileFiltersModal";
+import { PropertyMap } from "@/components/features/PropertyMap";
 import { AnimatePresence } from "framer-motion";
 
 const PRICE_RANGES = [
@@ -71,7 +72,8 @@ export default function SearchResults() {
   const [propertyType, setPropertyType] = useState(searchParams.get('tipo') || '');
   const [operation, setOperation] = useState(searchParams.get('operacion') || 'venta');
   const [sortBy, setSortBy] = useState('recent');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
@@ -233,9 +235,9 @@ export default function SearchResults() {
   const hasActiveFilters = !!(location || propertyType || operation);
 
   return (
-    <main className="flex min-h-screen flex-col bg-white">
+    <main className={`flex flex-col bg-white ${viewMode === 'map' ? 'fixed inset-0 z-[100] overflow-hidden' : 'min-h-screen'}`}>
       {/* Header con Filtros Premium estilo Imagen */}
-      <section className="bg-white px-4 md:px-6 lg:px-12 py-4 md:py-6 border-b border-slate-100 sticky top-0 z-50">
+      <section className={`bg-white px-4 md:px-6 lg:px-12 border-b border-slate-100 z-50 ${viewMode === 'map' ? 'py-3 shadow-sm' : 'py-4 md:py-6 sticky top-0'}`}>
         <div className="max-w-7xl mx-auto">
           
           {/* VERSION MOVIL (3 Niveles) */}
@@ -273,8 +275,8 @@ export default function SearchResults() {
                   <List className="h-4 w-4" />
                 </button>
                 <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-[#0127AC]' : 'text-neutral-400'}`}
+                  onClick={() => setViewMode('map')}
+                  className={`p-2 rounded-lg transition-all ${viewMode === 'map' ? 'bg-white shadow-sm text-[#0127AC]' : 'text-neutral-400'}`}
                 >
                   <MapIcon className="h-4 w-4" />
                 </button>
@@ -486,9 +488,9 @@ export default function SearchResults() {
                   Ver listado
                 </button>
                 <button
-                  onClick={() => setViewMode('list')}
+                  onClick={() => setViewMode('map')}
                   className={`flex items-center gap-2 px-5 h-full rounded-lg text-xs font-black transition-all ${
-                    viewMode === 'list' 
+                    viewMode === 'map' 
                       ? 'bg-white text-[#0127AC] shadow-sm' 
                       : 'text-neutral-500 hover:text-neutral-700'
                   }`}
@@ -498,33 +500,42 @@ export default function SearchResults() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Fila 2: Título Dinámico e Información */}
-            <div className="flex flex-col md:flex-row items-end justify-between gap-4 pt-2">
+      {/* Results */}
+      <section className={`w-full ${viewMode === 'map' ? 'flex-1 relative overflow-hidden bg-white' : 'px-6 lg:px-12 py-10 min-h-[600px]'}`}>
+        <div className={viewMode === 'map' ? "absolute inset-0" : "max-w-7xl mx-auto"}>
+          
+          {/* Header de Resultados (Solo en modo Grid) */}
+          {viewMode === 'grid' && (
+            <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-8">
               <div>
-                <h2 className="text-xl md:text-2xl font-black text-neutral-800 tracking-tight">
+                <h1 className="text-2xl md:text-3xl font-black text-neutral-800 tracking-tight">
                   {propertyType ? PROPERTY_TYPES.find(t => t.value === propertyType)?.label : "Inmuebles"}
                   {operation ? ` en ${OPERATION_TYPES.find(o => o.value === operation)?.label}` : " en venta o alquiler"}
                   {location ? ` en ${location}` : " en Perú"}
-                </h2>
+                </h1>
+                <p className="text-slate-500 text-sm font-medium mt-1">
+                  Se encontraron <span className="text-[#0127AC] font-bold">{filteredProperties.length}</span> propiedades disponibles
+                </p>
               </div>
 
-              {/* Ordenación y Alerta (DERECHA) */}
               <div className="flex items-center gap-3">
-                {/* Crear Alerta (BAJADO AL COSTADO DE ORDENAR) */}
                 <button 
                   onClick={() => setIsAlertModalOpen(true)}
-                  className="flex items-center gap-2 px-5 h-11 bg-white border-[1.5px] border-[#0127AC] rounded-xl text-sm font-black text-[#0127AC] hover:bg-[#0127AC]/5 transition-all shadow-sm"
+                  className="flex items-center gap-2 px-6 h-12 bg-white border-[1.5px] border-[#0127AC] rounded-xl text-sm font-black text-[#0127AC] hover:bg-[#0127AC]/5 transition-all shadow-sm"
                 >
                   <span>Crear alerta</span>
-                  <Bell className="h-3.5 w-3.5" />
+                  <Bell className="h-4 w-4" />
                 </button>
 
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="pl-4 pr-10 h-11 bg-white border border-slate-200 rounded-xl text-sm font-bold text-neutral-500 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0127AC]/10 transition-all outline-none"
-                  style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', paddingRight: '36px' }}
+                  className="pl-5 pr-12 h-12 bg-white border border-slate-200 rounded-xl text-sm font-bold text-neutral-500 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0127AC]/10 transition-all outline-none"
+                  style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}
                 >
                   {SORT_OPTIONS.map(s => (
                     <option key={s.value} value={s.value}>{s.label}</option>
@@ -532,54 +543,168 @@ export default function SearchResults() {
                 </select>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          )}
+          
+          {/* List Section (Solo en modo Grid) */}
+          {viewMode === 'grid' && (
+            <div className="w-full">
+              {filteredProperties.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredProperties.map((property, i) => (
+                    <motion.div
+                      key={property.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                    >
+                      <PropertyCard property={property} />
+                    </motion.div>
+                  ))}
+                </div>
+              ) : !loading ? (
+                <div className="text-center py-20 bg-white rounded-xl border border-slate-100 shadow-sm">
+                  <div className="h-16 w-16 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-6">
+                    <Search className="h-8 w-8 text-neutral-300" />
+                  </div>
+                  <h3 className="text-xl font-black text-neutral-800 mb-3">No se encontraron propiedades</h3>
+                  <p className="text-neutral-500 font-medium mb-6">Intenta con otros filtros o ubicación</p>
+                  <button
+                    onClick={clearFilters}
+                    className="px-6 py-2.5 bg-[#0127AC] text-white rounded-lg font-bold text-sm hover:bg-neutral-800 transition-colors"
+                  >
+                    Ver todas las propiedades
+                  </button>
+                </div>
+              ) : null}
 
-      {/* Results */}
-      <section className="px-6 lg:px-12 py-10 w-full min-h-[600px]">
-        <div className="max-w-7xl mx-auto">
-          {/* Results Header (Eliminada redundancia) */}
-
-        {/* Property Grid */}
-        {filteredProperties.length > 0 ? (
-          <div className={viewMode === 'grid' 
-            ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" 
-            : "flex flex-col gap-4"
-          }>
-            {filteredProperties.map((property, i) => (
-              <motion.div
-                key={property.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-              >
-                <PropertyCard property={property} />
-              </motion.div>
-            ))}
-          </div>
-        ) : !loading ? (
-          <div className="text-center py-20 bg-white rounded-xl border border-slate-100 shadow-sm">
-            <div className="h-16 w-16 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <Search className="h-8 w-8 text-neutral-300" />
+              {loading && (
+                <div className="py-20 text-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0127AC] mx-auto mb-4"></div>
+                  <p className="text-neutral-500 font-medium">Buscando propiedades...</p>
+                </div>
+              )}
             </div>
-            <h3 className="text-xl font-black text-neutral-800 mb-3">No se encontraron propiedades</h3>
-            <p className="text-neutral-500 font-medium mb-6">Intenta con otros filtros o ubicación</p>
-            <button
-              onClick={clearFilters}
-              className="px-6 py-2.5 bg-[#0127AC] text-white rounded-lg font-bold text-sm hover:bg-neutral-800 transition-colors"
-            >
-              Ver todas las propiedades
-            </button>
-          </div>
-        ) : null}
+          )}
 
-        {loading && (
-          <div className="py-20 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0127AC] mx-auto mb-4"></div>
-            <p className="text-neutral-500 font-medium">Buscando propiedades...</p>
-          </div>
-        )}
+          {/* Full Width Map View */}
+          {viewMode === 'map' && (
+            <div className="absolute inset-0 z-0">
+              <PropertyMap 
+                properties={filteredProperties} 
+                onPropertyClick={(p) => setSelectedPropertyId(p.id)}
+                selectedProperty={filteredProperties.find(p => p.id === selectedPropertyId)}
+              />
+
+              {/* Botones Flotantes de Control sobre el Mapa (Unificados) */}
+              <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5 bg-white p-1.5 rounded-2xl shadow-2xl border border-slate-100">
+                <div className="hidden md:flex items-center gap-1.5">
+                  <button 
+                    onClick={() => setIsAlertModalOpen(true)}
+                    className="flex items-center gap-2 px-4 h-10 bg-slate-50 border border-slate-100 rounded-xl text-[10px] font-black text-neutral-600 hover:bg-slate-100 transition-all uppercase tracking-tight"
+                  >
+                    <Bell className="h-3.5 w-3.5" />
+                    Alerta
+                  </button>
+                  <div className="h-6 w-[1px] bg-slate-200 mx-1" />
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="pl-3 pr-10 h-10 bg-transparent border-none text-[10px] font-black text-neutral-600 outline-none cursor-pointer appearance-none uppercase tracking-tight"
+                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center' }}
+                  >
+                    {SORT_OPTIONS.map(s => (
+                      <option key={s.value} value={s.value}>{s.label}</option>
+                    ))}
+                  </select>
+                  <div className="h-6 w-[1px] bg-slate-200 mx-1" />
+                </div>
+              </div>
+
+              {/* Quick View Sidebar - Centrado Vertical Robusto con Flex */}
+              <AnimatePresence>
+                {selectedPropertyId && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    className="absolute top-0 bottom-0 left-6 z-20 flex items-center w-[calc(100%-48px)] md:w-[380px] max-w-full pointer-events-none"
+                  >
+                    <div className="bg-white w-full h-[620px] rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden flex flex-col group pointer-events-auto">
+                      {/* Imagen con Altura Fija */}
+                      <div className="relative h-64 flex-none overflow-hidden">
+                        {filteredProperties.find(p => p.id === selectedPropertyId)?.image && (
+                          <img 
+                            src={filteredProperties.find(p => p.id === selectedPropertyId)?.image} 
+                            alt="Vista rápida" 
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                        )}
+                        <button 
+                          onClick={() => setSelectedPropertyId(null)}
+                          className="absolute top-4 right-4 h-9 w-9 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-neutral-800 shadow-lg hover:bg-[#0127AC] hover:text-white transition-all z-10"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                        
+                        <div className="absolute top-4 left-4 flex flex-col gap-2">
+                           <div className="bg-[#0127AC] text-white text-[9px] font-black px-3 py-1.5 rounded-lg uppercase tracking-widest shadow-xl">
+                             {filteredProperties.find(p => p.id === selectedPropertyId)?.type?.toUpperCase() || ''}
+                           </div>
+                           <div className="bg-neutral-900/80 backdrop-blur-md text-white text-[9px] font-black px-3 py-1.5 rounded-lg uppercase tracking-widest">
+                             {filteredProperties.find(p => p.id === selectedPropertyId)?.propertyType?.toUpperCase() || ''}
+                           </div>
+                        </div>
+                      </div>
+
+                      {/* Contenido con Distribución Fija */}
+                      <div className="p-6 flex-1 flex flex-col min-h-0">
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-2xl font-black text-[#0127AC]">
+                            {filteredProperties.find(p => p.id === selectedPropertyId)?.price}
+                          </span>
+                        </div>
+                        
+                        <h3 className="text-neutral-800 font-black text-lg mb-2 leading-tight line-clamp-2 h-[3.5rem] flex-none">
+                          {filteredProperties.find(p => p.id === selectedPropertyId)?.title || ''}
+                        </h3>
+                        
+                        <div className="flex items-center gap-2 text-neutral-400 text-xs font-bold mb-6 flex-none">
+                          <MapPin className="h-4 w-4 text-[#0127AC]/50" />
+                          <span className="line-clamp-1">{filteredProperties.find(p => p.id === selectedPropertyId)?.location || ''}</span>
+                        </div>
+
+                        {/* Características destacadas - Siempre en el mismo lugar */}
+                        <div className="grid grid-cols-2 gap-3 mb-auto">
+                           <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                              <div className="flex items-center gap-2 text-[#0127AC] mb-1">
+                                <Square className="h-4 w-4" />
+                                <span className="text-[10px] font-black uppercase tracking-wider">Área</span>
+                              </div>
+                              <span className="text-sm font-bold text-neutral-700">{filteredProperties.find(p => p.id === selectedPropertyId)?.area}</span>
+                           </div>
+                           <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                              <div className="flex items-center gap-2 text-[#0127AC] mb-1">
+                                <ArrowUpRight className="h-4 w-4" />
+                                <span className="text-[10px] font-black uppercase tracking-wider">Estado</span>
+                              </div>
+                              <span className="text-sm font-bold text-neutral-700">Disponible</span>
+                           </div>
+                        </div>
+
+                        <button 
+                          onClick={() => router.push(`/propiedades/${selectedPropertyId}`)}
+                          className="w-full mt-6 py-4 bg-neutral-900 text-white rounded-2xl text-xs font-black hover:bg-[#0127AC] shadow-xl shadow-black/10 transition-all flex items-center justify-center gap-2 group/btn"
+                        >
+                          VER DETALLES COMPLETOS
+                          <ArrowUpRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
         </div>
       </section>
       <PropertyAlertModal

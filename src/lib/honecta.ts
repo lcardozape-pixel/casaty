@@ -1,15 +1,11 @@
 import { Property } from "./types";
 
-const HONECTA_API_URL = process.env.NEXT_PUBLIC_HONECTA_API_URL || "https://app.honectapro.com";
-const HONECTA_AGENT_ID = process.env.NEXT_PUBLIC_HONECTA_AGENT_ID || "46a68490-51ae-40db-b8f7-4ded19c64301";
+const HONECTA_API_URL = process.env.NEXT_PUBLIC_HONECTA_API_URL || "https://app.honectapro.com/api/v1";
+const HONECTA_AGENT_ID = "46a68490-51ae-40db-b8f7-4ded19c64301";
 const HONECTA_API_KEY = process.env.HONECTA_API_KEY;
 
-// Supabase de Honecta — fuente de respaldo
-const HONECTA_SUPABASE_URL = "https://rrwluugzhnqpiedloysl.supabase.co/rest/v1";
-const HONECTA_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyd2x1dWd6aG5xcGllZGxveXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3ODYxOTIsImV4cCI6MjA4MDM2MjE5Mn0.f8q2YhYcskBKKNMieSTIwVCt-P4kkvcauyNC__pFpxM";
-
 /**
- * Mapea una propiedad de Honecta (API o Supabase) al formato de Casaty
+ * Mapea una propiedad de Honecta (API) al formato de Casaty
  */
 export function mapHonectaToCasaty(hp: Record<string, any>): Property {
   // Manejo de moneda y precios
@@ -79,18 +75,16 @@ export function mapHonectaToCasaty(hp: Record<string, any>): Property {
     return 0;
   };
 
-  // Agente: Manejo robusto para API (objeto) o Supabase (puede ser array)
-  const rawAgent = Array.isArray(hp.agent) ? hp.agent[0] : hp.agent;
-  
+  // Agente: Manejo robusto para API
   const agentData = {
-    name: rawAgent?.full_name || rawAgent?.name || 'Agente Casaty',
-    photo: rawAgent?.image_url || rawAgent?.photo || rawAgent?.avatar_url || rawAgent?.picture || '',
-    phone: rawAgent?.phone || rawAgent?.mobile || rawAgent?.whatsapp || '',
-    email: rawAgent?.email || '',
-    agency: rawAgent?.agency_name || rawAgent?.agency?.name || 'Casaty'
+    name: hp.agent?.full_name || hp.agent?.name || 'Agente Casaty',
+    photo: hp.agent?.image_url || hp.agent?.photo || hp.agent?.avatar_url || '',
+    phone: hp.agent?.phone || hp.agent?.mobile || '',
+    email: hp.agent?.email || '',
+    agency: hp.agent?.agency_name || hp.agent?.agency?.name || 'Casaty'
   };
 
-  return {
+  const result: Property = {
     id: hp.id,
     title: hp.title || 'Propiedad sin título',
     location: `${hp.district || hp.city || "Piura"}`,
@@ -112,124 +106,72 @@ export function mapHonectaToCasaty(hp: Record<string, any>): Property {
     district: hp.district || '',
     address: hp.address || '',
     amenities: Array.isArray(hp.amenities) ? hp.amenities : [],
-    agent: agentData
+    agent: agentData,
+    // Coordenadas listas para el mapa (Soporta formato "lat, lng" de Honecta)
+    lat: hp.latitude ? Number(hp.latitude) : undefined,
+    lng: hp.longitude ? Number(hp.longitude) : undefined
   };
+
+  // Si no hay lat/lng individuales, intentar extraer del campo 'location' (string: "lat, lng")
+  if ((!result.lat || !result.lng) && typeof hp.location === 'string' && hp.location.includes(',')) {
+    const parts = hp.location.split(',');
+    if (parts.length === 2) {
+      result.lat = Number(parts[0].trim());
+      result.lng = Number(parts[1].trim());
+    }
+  }
+
+  return result;
 }
 
 /**
- * Backup: Obtiene datos directamente de Supabase de Honecta
+ * Obtiene todas las propiedades directamente de la API de Honecta
  */
-async function fetchFromHonectaSupabase(): Promise<Property[]> {
+export async function getPublicProperties(): Promise<Property[]> {
   try {
-    console.log(`Honecta Fallback: Fetching properties and agent separately for ID: ${HONECTA_AGENT_ID}`);
+    const agentId = HONECTA_AGENT_ID;
+    const url = `${HONECTA_API_URL}/properties/public?agent_id=${agentId}&representing_agent_id=${agentId}&t=${Date.now()}`;
     
-    // 1. Obtener propiedades
-    const propRes = await fetch(`${HONECTA_SUPABASE_URL}/properties?agent_id=eq.${HONECTA_AGENT_ID}&select=*`, {
-      headers: {
-        'apikey': HONECTA_SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${HONECTA_SUPABASE_ANON_KEY}`
-      }
+    const response = await fetch(url, {
+      headers: { 'Accept': 'application/json' },
+      cache: 'no-store'
     });
 
-    if (!propRes.ok) throw new Error(`Supabase Prop Error: ${propRes.status}`);
-    const propertiesData = await propRes.json();
+    if (!response.ok) return [];
 
-    // 2. Intentar obtener datos del agente de forma independiente
-    let agentInfo: any = null;
-    const tablesToTry = ['agents', 'profiles', 'agent_profiles'];
+    const data = await response.json();
+    const rawProperties = Array.isArray(data) ? data : (data.data || []);
     
-    for (const table of tablesToTry) {
-      try {
-        const agentRes = await fetch(`${HONECTA_SUPABASE_URL}/${table}?id=eq.${HONECTA_AGENT_ID}&select=*`, {
-          headers: {
-            'apikey': HONECTA_SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${HONECTA_SUPABASE_ANON_KEY}`
-          }
-        });
-        if (agentRes.ok) {
-          const result = await agentRes.json();
-          if (result && result.length > 0) {
-            agentInfo = result[0];
-            console.log(`Honecta: Agent found in table '${table}'`);
-            break;
-          }
-        }
-      } catch (e) {
-        // Continue to next table
-      }
-    }
-
-    if (!agentInfo) {
-      console.warn("Honecta: Agent photo not found in common tables.");
-    }
-
-    // 3. Fusionar y mapear
-    return propertiesData.map((p: any) => {
-      // Inyectamos el agente encontrado si existe
-      if (agentInfo) p.agent = agentInfo;
-      return mapHonectaToCasaty(p);
-    });
-
+    return rawProperties.map(mapHonectaToCasaty);
   } catch (error) {
-    console.error("Honecta Fallback Final Failure:", error);
+    console.error("Honecta API Fetch Exception:", error);
     return [];
   }
 }
 
 /**
- * Obtiene todas las propiedades (Con fallback)
+ * Obtiene una propiedad específica por ID usando la API
  */
-export async function getPublicProperties(): Promise<Property[]> {
-  try {
-    const response = await fetch(`${HONECTA_API_URL}/api/properties?agent_id=${HONECTA_AGENT_ID}`, {
-      headers: {
-        'Accept': 'application/json',
-        'x-api-key': HONECTA_API_KEY || ''
-      },
-      next: { revalidate: 3600 }
-    });
-
-    if (response.status === 404) {
-      console.warn("Honecta API returned 404. Using Supabase fallback.");
-      return await fetchFromHonectaSupabase();
-    }
-
-    if (!response.ok) throw new Error(`API error: ${response.status}`);
-    const data = await response.json();
-    const rawProperties = Array.isArray(data) ? data : (data.data || []);
-    return rawProperties.map(mapHonectaToCasaty);
-  } catch (error) {
-    console.error("Using Supabase fallback due to exception:", error);
-    return await fetchFromHonectaSupabase();
-  }
-}
-
 export async function getHonectaPropertyById(id: string): Promise<Property | null> {
-  // 1. Intentar encontrar en la lista general de propiedades del agente (rápido y con caché)
+  // Intentar encontrar en la lista general de propiedades (aprovecha la caché de 1h)
   const all = await getPublicProperties();
   const directMatch = all.find(p => p.id === id);
   if (directMatch) return directMatch;
 
-  // 2. Si no está en su lista (ej: propiedad de la red MLS o compartida directa),
-  // intentar buscarla individualmente por ID en la base de datos de Honecta
+  // Si no está en la lista general (ej: es de la red MLS), intentamos fetch individual
   try {
-    console.log(`Honecta: Propiedad no encontrada en catálogo del agente. Buscando individualmente ID: ${id}`);
-    const res = await fetch(`${HONECTA_SUPABASE_URL}/properties?id=eq.${id}&select=*`, {
+    const response = await fetch(`${HONECTA_API_URL}/properties/public/${id}`, {
       headers: {
-        'apikey': HONECTA_SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${HONECTA_SUPABASE_ANON_KEY}`
+        'Accept': 'application/json'
       }
     });
 
-    if (res.ok) {
-      const data = await res.json();
-      if (data && data.length > 0) {
-        console.log(`Honecta: Propiedad encontrada mediante búsqueda individual por ID.`);
-        return mapHonectaToCasaty(data[0]);
-      }
+    if (response.ok) {
+      const data = await response.json();
+      return mapHonectaToCasaty(data.data || data);
     }
   } catch (error) {
-    console.error(`Honecta: Error en búsqueda individual de propiedad ${id}:`, error);
+    console.error(`Error fetching individual property ${id}:`, error);
   }
 
   return null;
@@ -248,11 +190,13 @@ export async function sendLeadToHonecta(lead: {
   tags?: string[];
 }) {
   try {
-    const response = await fetch(`${HONECTA_API_URL}/api/leads`, {
+    // Según la captura, para leads se usa Authorization: Bearer <api_key>
+    // URL: /leads/external
+    const response = await fetch(`${HONECTA_API_URL}/leads/external`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": HONECTA_API_KEY || ""
+        "Authorization": `Bearer ${HONECTA_API_KEY}`
       },
       body: JSON.stringify({
         full_name: lead.name,
@@ -266,13 +210,13 @@ export async function sendLeadToHonecta(lead: {
     });
 
     if (!response.ok) {
-      console.error("Honecta Lead Error:", await response.text());
+      console.error("Honecta Lead API Error:", await response.text());
       return null;
     }
 
     return await response.json();
   } catch (error) {
-    console.error("Error sending lead to Honecta:", error);
+    console.error("Exception sending lead to Honecta:", error);
     return null;
   }
 }
