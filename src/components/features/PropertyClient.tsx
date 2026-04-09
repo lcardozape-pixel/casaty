@@ -60,7 +60,12 @@ export default function PropertyClient({ property, similarProperties }: Property
   const agencyName = property?.agent?.agency?.trim();
   const isCasaty = !agencyName || agencyName.toLowerCase().includes('casaty');
   const agentDisplayName = isCasaty ? (property?.agent?.name || 'Luis Cardoza') : agencyName;
-  const agentDisplayImage = property?.agent?.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(agentDisplayName || 'Casaty')}&background=223345&color=fff`;
+  
+  // Lógica de Imagen: Si es externo, mostramos el logo de Casaty (branding del portal)
+  // Si es interno, mostramos su foto. Si no tiene foto, usamos el logo de Casaty como respaldo profesional.
+  const agentDisplayImage = isCasaty 
+    ? (property?.agent?.photo || property?.agent?.agencyLogo || '/Logo/logo-dark.webp')
+    : (property?.agent?.agencyLogo || '/Logo/logo-dark.webp');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -521,11 +526,13 @@ export default function PropertyClient({ property, similarProperties }: Property
                       {agentDisplayName}
                     </span>
                     <span className="text-[13px] text-neutral-500 font-medium mt-1">
-                      {isCasaty ? 'Broker de Inmobiliaria Casaty' : agencyName}
+                      {property?.agent?.position || (isCasaty ? 'Broker de Inmobiliaria Casaty' : agencyName)}
                     </span>
-                    <span className="text-[13px] text-neutral-500 font-medium">
-                      Codigo MVCS: PN-20719
-                    </span>
+                    {property?.agent?.mvcs && (
+                      <span className="text-[13px] text-neutral-500 font-medium">
+                        Codigo MVCS: {property.agent.mvcs}
+                      </span>
+                    )}
                   </div>
                 </div>
 

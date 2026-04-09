@@ -292,9 +292,21 @@ export default function SearchResults() {
 
             {/* Fila 3: Título + Sort */}
             <div className="flex items-center justify-between gap-2 border-t border-slate-50 pt-3">
-              <h2 className="text-xs font-bold text-neutral-800 line-clamp-1">
-                {propertyType ? PROPERTY_TYPES.find(t => t.value === propertyType)?.label : "Inmuebles"}
-                {operation ? ` en ${OPERATION_TYPES.find(o => o.value === operation)?.label}` : " en venta o alquiler"}
+              <h2 className="text-[10px] font-black text-neutral-800 uppercase tracking-tight line-clamp-1">
+                {(() => {
+                  const typeMap: Record<string, string> = {
+                    'casa': 'Casas',
+                    'depa': 'Departamentos',
+                    'oficina': 'Oficinas',
+                    'terreno': 'Terrenos',
+                    'local': 'Locales',
+                    '': 'Inmuebles'
+                  };
+                  const type = typeMap[propertyType] || 'Inmuebles';
+                  const op = operation === 'alquiler' ? 'en alquiler' : operation === 'venta' ? 'en venta' : 'en venta/alquiler';
+                  const loc = location ? ` en ${location}` : '';
+                  return `${type} ${op}${loc}`;
+                })()}
               </h2>
               <div className="relative">
                 <select
@@ -512,13 +524,24 @@ export default function SearchResults() {
           {viewMode === 'grid' && (
             <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-8">
               <div>
-                <h1 className="text-2xl md:text-3xl font-black text-neutral-800 tracking-tight">
-                  {propertyType ? PROPERTY_TYPES.find(t => t.value === propertyType)?.label : "Inmuebles"}
-                  {operation ? ` en ${OPERATION_TYPES.find(o => o.value === operation)?.label}` : " en venta o alquiler"}
-                  {location ? ` en ${location}` : " en Perú"}
+                <h1 className="text-lg md:text-xl font-black text-neutral-800 tracking-tight leading-tight">
+                  {(() => {
+                    const typeMap: Record<string, string> = {
+                      'casa': 'Casas',
+                      'depa': 'Departamentos',
+                      'oficina': 'Oficinas',
+                      'terreno': 'Terrenos',
+                      'local': 'Locales comerciales',
+                      '': 'Propiedades'
+                    };
+                    const type = typeMap[propertyType] || 'Propiedades';
+                    const op = operation === 'alquiler' ? 'en alquiler' : operation === 'venta' ? 'en venta' : 'en venta o alquiler';
+                    const loc = location ? `en ${location}` : 'en Perú';
+                    return `${type} ${op} ${loc}`;
+                  })()}
                 </h1>
-                <p className="text-slate-500 text-sm font-medium mt-1">
-                  Se encontraron <span className="text-[#0127AC] font-bold">{filteredProperties.length}</span> propiedades disponibles
+                <p className="text-slate-500 text-[10px] md:text-xs font-bold mt-1 uppercase tracking-wider">
+                  Se encontraron <span className="text-[#0127AC]">{filteredProperties.length}</span> propiedades disponibles
                 </p>
               </div>
 

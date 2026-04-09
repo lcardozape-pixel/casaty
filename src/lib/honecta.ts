@@ -75,13 +75,17 @@ export function mapHonectaToCasaty(hp: Record<string, any>): Property {
     return 0;
   };
 
-  // Agente: Manejo robusto para API
+  // Agente: Manejo robusto para API (Prioriza 'profiles' si viene de Honecta)
+  const profile = hp.profiles || {};
   const agentData = {
-    name: hp.agent?.full_name || hp.agent?.name || 'Agente Casaty',
-    photo: hp.agent?.image_url || hp.agent?.photo || hp.agent?.avatar_url || '',
-    phone: hp.agent?.phone || hp.agent?.mobile || '',
-    email: hp.agent?.email || '',
-    agency: hp.agent?.agency_name || hp.agent?.agency?.name || 'Casaty'
+    name: profile.full_name || hp.agent?.full_name || hp.agent?.name || 'Agente Casaty',
+    photo: profile.avatar_url || hp.agent?.image_url || hp.agent?.photo || hp.agent?.avatar_url || hp.agent?.picture_url || hp.agent?.profile_image_url || hp.agent?.profile_photo_url || '',
+    phone: profile.phone || hp.agent?.phone || hp.agent?.mobile || '',
+    email: profile.email || hp.agent?.email || '',
+    agency: profile.agency_name || hp.agent?.agency_name || hp.agent?.agency?.name || hp.agency?.name || 'Casaty',
+    agencyLogo: profile.agency_logo_url || hp.agent?.agency_logo_url || hp.agent?.agency?.logo_url || hp.agent?.agency?.image_url || hp.agency?.logo_url || hp.agency?.logo || '',
+    mvcs: profile.mvcs_code || '',
+    position: profile.position || ''
   };
 
   const result: Property = {

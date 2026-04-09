@@ -32,5 +32,8 @@ export interface Property {
     agency?: string;
     phone?: string;
     email?: string;
+    agencyLogo?: string;
+    mvcs?: string;
+    position?: string;
   };
 }
