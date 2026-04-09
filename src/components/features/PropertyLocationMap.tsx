@@ -289,7 +289,7 @@ export default function PropertyLocationMap({ lat, lng, address, propertyTitle }
                       className="w-7 h-7 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white"
                       style={{ backgroundColor: getCategoryColor(place.category) }}
                     >
-                      {React.cloneElement(place.icon as React.ReactElement, { className: 'h-3.5 w-3.5' })}
+                      {React.cloneElement(place.icon as React.ReactElement<any>, { className: 'h-3.5 w-3.5' })}
                     </div>
                   </motion.div>
                 </OverlayView>
@@ -405,7 +405,7 @@ export default function PropertyLocationMap({ lat, lng, address, propertyTitle }
                       style={{ backgroundColor: getCategoryColor(place.category) + '15' }}
                     >
                       <div style={{ color: getCategoryColor(place.category) }}>
-                        {React.cloneElement(place.icon as React.ReactElement, {
+                        {React.cloneElement(place.icon as React.ReactElement<any>, {
                           className: 'h-5 w-5',
                         })}
                       </div>
