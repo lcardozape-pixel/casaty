@@ -14,25 +14,25 @@ interface ButtonProps extends HTMLMotionProps<"button"> {
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", showArrow = false, children, ...props }, ref) => {
     const variants = {
-      primary: "bg-[#0040FF] text-white hover:bg-blue-700 shadow-lg shadow-blue-500/20",
+      primary: "bg-[#0127AC] text-white hover:bg-black shadow-lg shadow-black/5",
       secondary: "bg-neutral-800 text-white hover:bg-neutral-900 border border-neutral-700",
-      outline: "border-2 border-[#0040FF] text-[#0040FF] hover:bg-[#0040FF] hover:text-white",
-      ghost: "text-[#0040FF] hover:bg-blue-50/50",
+      outline: "border-2 border-[#0127AC] text-[#0127AC] hover:bg-[#0127AC] hover:text-white",
+      ghost: "text-[#0127AC] hover:bg-slate-50",
     };
 
     const sizes = {
-      sm: "h-8 px-4 text-[10px] rounded-lg",
-      md: "h-9 px-5 text-xs rounded-xl",
-      lg: "h-11 px-7 text-sm rounded-2xl",
+      sm: "h-8 px-4 text-[10px] rounded-md",
+      md: "h-9 px-5 text-xs rounded-lg",
+      lg: "h-12 px-8 text-sm rounded-lg",
     };
 
     return (
       <motion.button
         ref={ref}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
         className={cn(
-          "inline-flex items-center justify-center rounded-xl font-bold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none group",
+          "inline-flex items-center justify-center rounded-lg font-bold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none group",
           variants[variant],
           sizes[size],
           className
@@ -51,3 +51,5 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = "Button";
 
 export { Button };
+
+

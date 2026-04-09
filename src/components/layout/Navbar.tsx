@@ -48,14 +48,14 @@ export function Navbar() {
             {navigation.map((item) => (
               <div key={item.name} className="relative group">
                 {item.dropdown ? (
-                  <button className="text-[13px] font-bold text-neutral-500 group-hover:text-[#0040FF] flex items-center gap-1.5 transition-all outline-none">
+                  <button className="text-[13px] font-bold text-neutral-500 group-hover:text-[#0127AC] flex items-center gap-1.5 transition-all outline-none">
                     {item.name}
                     <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
                   </button>
                 ) : (
                   <Link
                     href={item.href}
-                    className="text-[13px] font-bold text-neutral-500 hover:text-[#0040FF] transition-all"
+                    className="text-[13px] font-bold text-neutral-500 hover:text-[#0127AC] transition-all"
                   >
                     {item.name}
                   </Link>
@@ -68,7 +68,7 @@ export function Navbar() {
                         <Link
                           key={subItem.name}
                           href={subItem.href}
-                          className="block px-6 py-4 text-[13px] font-bold text-neutral-500 hover:bg-slate-50 hover:text-[#0040FF] rounded-2xl transition-all"
+                          className="block px-6 py-4 text-[13px] font-bold text-neutral-500 hover:bg-slate-50 hover:text-[#0127AC] rounded-2xl transition-all"
                         >
                           {subItem.name}
                         </Link>
@@ -120,7 +120,7 @@ export function Navbar() {
           </Link>
           <button
             type="button"
-            className="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-50 text-neutral-500 hover:text-[#0040FF] transition-all"
+            className="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-50 text-neutral-500 hover:text-[#0127AC] transition-all"
             onClick={() => setMobileMenuOpen(false)}
           >
             <span className="sr-only">Cerrar menú</span>
@@ -142,7 +142,7 @@ export function Navbar() {
                           <Link
                             key={subItem.name}
                             href={subItem.href}
-                            className="block rounded-xl px-4 py-3 text-[15px] font-bold text-neutral-800 active:bg-slate-50 active:text-[#0040FF] transition-all"
+                            className="block rounded-xl px-4 py-3 text-[15px] font-bold text-neutral-800 active:bg-slate-50 active:text-[#0127AC] transition-all"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             {subItem.name}
@@ -153,7 +153,7 @@ export function Navbar() {
                   ) : (
                     <Link
                       href={item.href}
-                      className="block rounded-2xl px-4 py-4 text-[16px] font-bold text-neutral-800 active:bg-blue-50 active:text-[#0040FF] transition-all flex items-center justify-between group"
+                      className="block rounded-2xl px-4 py-4 text-[16px] font-bold text-neutral-800 active:bg-blue-50 active:text-[#0127AC] transition-all flex items-center justify-between group"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <span>{item.name}</span>
@@ -170,4 +170,6 @@ export function Navbar() {
     </>
   );
 }
+
+
 

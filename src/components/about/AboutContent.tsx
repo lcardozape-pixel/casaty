@@ -90,9 +90,9 @@ export function AboutContent() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Sobre Nosotros</span>
+            <span className="text-[10px] font-black text-[#0127AC] uppercase tracking-[0.3em] mb-4 block">Sobre Nosotros</span>
             <h1 className="text-3xl md:text-5xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
-              Transformando el Sector <br className="hidden md:block" /> Inmobiliario en <span className="text-[#0040FF]">Piura</span>.
+              Transformando el Sector <br className="hidden md:block" /> Inmobiliario en <span className="text-[#0127AC]">Piura</span>.
             </h1>
             <p className="text-base md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
               Somos más que una agencia de bienes raíces; somos arquitectos de sueños y facilitadores de inversiones seguras con alma norteña.
@@ -109,8 +109,8 @@ export function AboutContent() {
             { label: "Agentes Expertos", value: "15", icon: Users },
           ].map((stat, i) => (
             <div key={i} className="flex flex-col items-center text-center group">
-              <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-slate-50 flex items-center justify-center mb-3 md:mb-4 group-hover:bg-[#0040FF] group-hover:scale-110 transition-all">
-                <stat.icon className="h-5 w-5 md:h-6 md:w-6 text-[#0040FF] group-hover:text-white" />
+              <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-slate-50 flex items-center justify-center mb-3 md:mb-4 group-hover:bg-[#0127AC] group-hover:scale-110 transition-all">
+                <stat.icon className="h-5 w-5 md:h-6 md:w-6 text-[#0127AC] group-hover:text-white" />
               </div>
               <span className="text-2xl md:text-2xl font-black text-neutral-800 mb-1">{stat.value}</span>
               <span className="text-[9px] md:text-[10px] font-black text-neutral-400 uppercase tracking-widest leading-none">{stat.label}</span>
@@ -129,18 +129,18 @@ export function AboutContent() {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            <div className="h-14 w-14 bg-[#0040FF] rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200">
+            <div className="h-14 w-14 bg-[#0127AC] rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200">
                <History className="h-7 w-7 text-white" />
             </div>
             <h2 className="text-3xl md:text-4xl font-black text-neutral-800 leading-tight">
-              Una visión que nació en el <span className="text-[#0040FF]">corazón de Piura</span>.
+              Una visión que nació en el <span className="text-[#0127AC]">corazón de Piura</span>.
             </h2>
             <div className="space-y-6 text-neutral-500 font-medium text-lg leading-relaxed">
               <p>
                 Casaty nació bajo el concepto de <span className="text-neutral-800 font-black">transparencia total</span>. Vimos como el mercado inmobiliario crecía de forma desordenada en nuestra región y decidimos marcar una diferencia.
               </p>
               <p>
-                Hoy, nos hemos consolidado como el aliado estratégico ideal para quienes necesitan vender rápido, alquilar seguro o tasar con rigor técnico. Nuestra red de aliados, protegida por el sello <span className="text-[#0040FF] font-black">HONECTA®</span>, garantiza que cada transacción sea una experiencia placentera.
+                Hoy, nos hemos consolidado como el aliado estratégico ideal para quienes necesitan vender rápido, alquilar seguro o tasar con rigor técnico. Nuestra red de aliados, protegida por el sello <span className="text-[#0127AC] font-black">HONECTA®</span>, garantiza que cada transacción sea una experiencia placentera.
               </p>
             </div>
 
@@ -150,7 +150,7 @@ export function AboutContent() {
                 <span className="font-black text-neutral-800 text-sm">Sede Central: Piura</span>
               </div>
               <div className="flex items-center gap-3 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-                <Briefcase className="h-5 w-5 text-[#0040FF]" />
+                <Briefcase className="h-5 w-5 text-[#0127AC]" />
                 <span className="font-black text-neutral-800 text-sm">Respaldo Honecta®</span>
               </div>
             </div>
@@ -177,7 +177,7 @@ export function AboutContent() {
                 className="w-full h-full object-cover rounded-[2rem] shadow-xl grayscale-[0.2] group-hover:grayscale-0 transition-opacity"
               />
             </div>
-            <div className="col-span-4 row-span-5 bg-[#0040FF] rounded-[2rem] p-6 text-white flex flex-col justify-center items-center text-center shadow-xl">
+            <div className="col-span-4 row-span-5 bg-[#0127AC] rounded-[2rem] p-6 text-white flex flex-col justify-center items-center text-center shadow-xl">
                <span className="text-4xl font-black mb-2">98%</span>
                <span className="text-[8px] font-black uppercase tracking-widest opacity-80">Satisfacción <br /> del Cliente</span>
             </div>
@@ -187,13 +187,13 @@ export function AboutContent() {
 
       {/* 3. Purpose & Values */}
       <section className="py-16 md:py-24 bg-neutral-900 rounded-[3rem] md:rounded-[4rem] mx-4 lg:mx-8 mb-20 md:mb-24 relative overflow-hidden text-white">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#0040FF]/20 rounded-full blur-[120px] -mr-32 -mt-32" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#0127AC]/20 rounded-full blur-[120px] -mr-32 -mt-32" />
         <div className="relative z-10 max-w-7xl mx-auto px-10">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
             <div className="lg:col-span-1">
-              <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Nuestro ADN</span>
-              <h2 className="text-3xl md:text-4xl font-black mb-8 leading-tight">Principios <br /> que nos <span className="text-[#0040FF]">mueven</span>.</h2>
-              <p className="text-slate-400 font-medium leading-relaxed italic border-l-4 border-[#0040FF] pl-6 py-2 mb-12">
+              <span className="text-[10px] font-black text-[#0127AC] uppercase tracking-[0.3em] mb-4 block">Nuestro ADN</span>
+              <h2 className="text-3xl md:text-4xl font-black mb-8 leading-tight">Principios <br /> que nos <span className="text-[#0127AC]">mueven</span>.</h2>
+              <p className="text-slate-400 font-medium leading-relaxed italic border-l-4 border-[#0127AC] pl-6 py-2 mb-12">
                 "No solo vendemos casas, ayudamos a familias piuranas a sembrar las bases de su futuro con seguridad legal y comercial."
               </p>
               <Button size="lg" className="w-full md:w-auto bg-white text-neutral-900 hover:bg-slate-100" showArrow onClick={() => setShowWizard(true)}>
@@ -225,10 +225,10 @@ export function AboutContent() {
                 }
               ].map((val, i) => (
                 <div key={i} className="bg-white/5 border border-white/10 p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:bg-white/10 transition-all group">
-                   <div className="h-12 w-12 rounded-2xl bg-[#0040FF]/20 flex items-center justify-center mb-6 group-hover:bg-[#0040FF] transition-all">
-                      <val.icon className="h-6 w-6 text-[#0040FF] group-hover:text-white" />
+                   <div className="h-12 w-12 rounded-2xl bg-[#0127AC]/20 flex items-center justify-center mb-6 group-hover:bg-[#0127AC] transition-all">
+                      <val.icon className="h-6 w-6 text-[#0127AC] group-hover:text-white" />
                    </div>
-                   <h3 className="text-xl font-black mb-4 group-hover:text-[#0040FF] transition-colors">{val.title}</h3>
+                   <h3 className="text-xl font-black mb-4 group-hover:text-[#0127AC] transition-colors">{val.title}</h3>
                    <p className="text-slate-400 text-sm font-medium leading-relaxed">{val.desc}</p>
                 </div>
               ))}
@@ -261,7 +261,7 @@ export function AboutContent() {
            </motion.div>
 
            <div className="space-y-10">
-              <h2 className="text-3xl md:text-4xl font-black text-neutral-800 leading-tight">Un equipo que respira <br /> <span className="text-[#0040FF]">pasión inmobiliaria</span>.</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-neutral-800 leading-tight">Un equipo que respira <br /> <span className="text-[#0127AC]">pasión inmobiliaria</span>.</h2>
               <p className="text-neutral-500 font-medium text-lg leading-relaxed">
                 Nuestros agentes no solo venden metros cuadrados, venden hogares. Contamos con un equipo multidisciplinario de expertos en ventas, derecho inmobiliario y marketing digital.
               </p>
@@ -294,7 +294,7 @@ export function AboutContent() {
       {/* 5. Final Vision Statement */}
       <section className="py-24 bg-white border-t border-slate-100">
         <div className="max-w-4xl mx-auto px-4 text-center">
-           <Globe className="h-16 w-16 text-[#0040FF]/20 mx-auto mb-10" />
+           <Globe className="h-16 w-16 text-[#0127AC]/20 mx-auto mb-10" />
            <h2 className="text-3xl md:text-4xl font-black text-neutral-800 mb-8 leading-tight">Mirando hacia el futuro.</h2>
            <p className="text-neutral-500 font-medium text-lg leading-relaxed mb-12">
              Nuestra meta es digitalizar por completo la experiencia inmobiliaria en el norte del país, eliminando la burocracia y el miedo, convirtiendo cada compra-venta en un motivo de celebración.
@@ -318,11 +318,11 @@ export function AboutContent() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-24 bg-[#0040FF]">
+      <section className="py-24 bg-[#0127AC]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center text-white">
            <h2 className="text-3xl lg:text-5xl font-black mb-12">¿Empezamos tu historia hoy?</h2>
            <div className="flex flex-col md:flex-row justify-center gap-4">
-              <Button size="lg" className="bg-white text-[#0040FF] hover:bg-slate-100 px-12" showArrow onClick={() => setShowWizard(true)}>
+              <Button size="lg" className="bg-white text-[#0127AC] hover:bg-slate-100 px-12" showArrow onClick={() => setShowWizard(true)}>
                 Ver Propiedades
               </Button>
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-12" onClick={() => setShowWizard(true)}>
@@ -334,3 +334,5 @@ export function AboutContent() {
     </main>
   );
 }
+
+

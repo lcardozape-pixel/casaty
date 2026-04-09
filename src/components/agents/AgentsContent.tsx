@@ -137,9 +137,9 @@ export function AgentsContent() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Nuestro Equipo</span>
+            <span className="text-[10px] font-black text-[#0127AC] uppercase tracking-[0.3em] mb-4 block">Nuestro Equipo</span>
             <h1 className="text-3xl md:text-5xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
-              Asesores de Clase <br className="hidden md:block" /> <span className="text-[#0040FF]">Mundial</span>.
+              Asesores de Clase <br className="hidden md:block" /> <span className="text-[#0127AC]">Mundial</span>.
             </h1>
             <p className="text-base md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
               No solo vendemos casas, construimos confianza. Encuentra al agente ideal para tu próxima inversión en Piura.
@@ -154,14 +154,14 @@ export function AgentsContent() {
               <input 
                 type="text" 
                 placeholder="Buscar agente..."
-                className="w-full h-14 md:h-16 pl-14 pr-8 bg-white border-none rounded-2xl md:rounded-3xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all"
+                className="w-full h-14 md:h-16 pl-14 pr-8 bg-white border-none rounded-2xl md:rounded-3xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0127AC] transition-all"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
            </div>
            <div className="flex gap-4 w-full md:w-auto">
               <select 
-                className="h-14 md:h-16 px-6 md:px-8 bg-white border-none rounded-2xl md:rounded-3xl font-black text-neutral-800 text-xs md:text-sm focus:ring-2 focus:ring-[#0040FF] transition-all cursor-pointer appearance-none min-w-[150px] md:min-w-[180px]"
+                className="h-14 md:h-16 px-6 md:px-8 bg-white border-none rounded-2xl md:rounded-3xl font-black text-neutral-800 text-xs md:text-sm focus:ring-2 focus:ring-[#0127AC] transition-all cursor-pointer appearance-none min-w-[150px] md:min-w-[180px]"
                 value={filterSpecialty}
                 onChange={(e) => setFilterSpecialty(e.target.value)}
               >
@@ -170,7 +170,7 @@ export function AgentsContent() {
                  <option>Residencial Premium</option>
                  <option>Locales Comerciales</option>
               </select>
-              <div className="h-14 w-14 md:h-16 md:w-16 bg-[#0040FF] rounded-2xl md:rounded-3xl flex items-center justify-center text-white shadow-lg shadow-blue-200 cursor-pointer hover:scale-105 transition-transform">
+              <div className="h-14 w-14 md:h-16 md:w-16 bg-[#0127AC] rounded-2xl md:rounded-3xl flex items-center justify-center text-white shadow-lg shadow-blue-200 cursor-pointer hover:scale-105 transition-transform">
                  <Filter className="h-5 w-5 md:h-6 md:w-6" />
               </div>
            </div>
@@ -219,7 +219,7 @@ export function AgentsContent() {
                {/* Content wrapper */}
                <div className="p-10 flex-1 flex flex-col">
                   <div className="mb-8">
-                     <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.2em] mb-2 block">{agent.role}</span>
+                     <span className="text-[10px] font-black text-[#0127AC] uppercase tracking-[0.2em] mb-2 block">{agent.role}</span>
                      <h3 className="text-2xl md:text-3xl font-black text-neutral-800 mb-2 leading-tight">{agent.name}</h3>
                      <div className="flex items-center gap-2 text-neutral-400 text-xs font-bold">
                         <MapPin className="h-3 w-3" />
@@ -241,7 +241,7 @@ export function AgentsContent() {
                   <div className="mt-auto flex flex-col gap-3">
                      <Button 
                        size="lg" 
-                       className="w-full bg-[#0040FF] transition-all"
+                       className="w-full bg-[#0127AC] transition-all"
                        showArrow
                      >
                        WhatsApp de {agent.name.split(' ')[0]}
@@ -263,12 +263,12 @@ export function AgentsContent() {
 
       {/* 4. Join the Team Section (CTA) */}
       <section className="py-24 bg-neutral-900 rounded-[4rem] mx-4 lg:mx-8 mb-24 relative overflow-hidden text-white">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#0040FF]/20 rounded-full blur-[120px] -mr-32 -mt-32" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#0127AC]/20 rounded-full blur-[120px] -mr-32 -mt-32" />
         <div className="relative z-10 max-w-7xl mx-auto px-10">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
               <div>
-                 <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">¿Eres Agente?</span>
-                 <h2 className="text-3xl md:text-4xl font-black mb-8 leading-tight">Únete al Equipo que está <br /> <span className="text-[#0040FF]">Reinventando la Ciudad</span>.</h2>
+                 <span className="text-[10px] font-black text-[#0127AC] uppercase tracking-[0.3em] mb-4 block">¿Eres Agente?</span>
+                 <h2 className="text-3xl md:text-4xl font-black mb-8 leading-tight">Únete al Equipo que está <br /> <span className="text-[#0127AC]">Reinventando la Ciudad</span>.</h2>
                  <p className="text-slate-400 font-medium text-lg leading-relaxed mb-10 max-w-xl">
                    Si eres un agente profesional buscando las mejores herramientas y comisiones de Piura, queremos hablar contigo.
                  </p>
@@ -277,7 +277,7 @@ export function AgentsContent() {
                        Ver Vacantes
                     </Button>
                     <div className="flex items-center gap-4 bg-white/5 border border-white/10 px-8 py-4 rounded-3xl">
-                       <Zap className="h-6 w-6 text-[#0040FF]" />
+                       <Zap className="h-6 w-6 text-[#0127AC]" />
                        <span className="font-black text-white text-xs uppercase tracking-widest">Respaldo Honecta®</span>
                     </div>
                  </div>
@@ -290,7 +290,7 @@ export function AgentsContent() {
                     { label: "Soporte 24/7", val: "Legal", icon: ShieldCheck },
                  ].map((stat, i) => (
                    <div key={i} className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] flex flex-col items-center text-center">
-                      <stat.icon className="h-6 w-6 text-[#0040FF] mb-4" />
+                      <stat.icon className="h-6 w-6 text-[#0127AC] mb-4" />
                       <p className="text-2xl font-black mb-1">{stat.val}</p>
                       <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{stat.label}</p>
                    </div>
@@ -307,7 +307,7 @@ export function AgentsContent() {
            <p className="text-neutral-500 font-medium text-lg leading-relaxed mb-12">
              Habla hoy mismo con nuestra central para que te asignemos al experto ideal según el tipo de propiedad que estás buscando.
            </p>
-           <Button size="lg" className="bg-[#0040FF]" showArrow onClick={() => setShowWizard(true)}>
+           <Button size="lg" className="bg-[#0127AC]" showArrow onClick={() => setShowWizard(true)}>
              Hablar con Central Casaty
            </Button>
         </div>
@@ -315,3 +315,5 @@ export function AgentsContent() {
     </main>
   );
 }
+
+

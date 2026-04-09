@@ -107,9 +107,9 @@ export function HomeContent() {
       <section className="py-16 md:py-24 max-w-7xl mx-auto px-6 lg:px-12 w-full border-b border-slate-100 relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-20 gap-8">
           <div className="text-left space-y-3 md:space-y-4 max-w-2xl">
-            <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] block">Catálogo Exclusivo</span>
+            <span className="text-[10px] font-black text-[#0127AC] uppercase tracking-[0.3em] block">Catálogo Exclusivo</span>
             <h2 className="text-2xl md:text-4xl font-black text-neutral-800 leading-[1.1] tracking-tighter">
-              Propiedades <br /> <span className="text-[#0040FF]">Destacadas</span>.
+              Propiedades <br /> <span className="text-[#0127AC]">Destacadas</span>.
             </h2>
             <p className="text-neutral-500 font-medium text-sm md:text-lg leading-relaxed">
               Explora nuestra selección de inmuebles listos para habitar en las mejores urbanizaciones de Piura. Calidad certificada por nuestros expertos.
@@ -158,19 +158,19 @@ export function HomeContent() {
 
       {/* Honecta Network Call to Action */}
       <section className="py-16 md:py-24 max-w-7xl mx-auto px-6 lg:px-12 w-full mb-16 md:mb-24 relative">
-        <div className="bg-neutral-900 rounded-[2rem] md:rounded-[4rem] text-white overflow-hidden relative p-8 md:p-16">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#0040FF]/5 rounded-full -mr-64 -mt-64" />
+        <div className="bg-neutral-900 rounded-2xl md:rounded-3xl text-white overflow-hidden relative p-8 md:p-16">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#0127AC]/30 rounded-full -mr-64 -mt-64" />
           <div className="relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
                <div>
                   <div className="flex items-center gap-3 mb-6 md:mb-8">
-                     <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-[#0040FF] flex items-center justify-center">
-                        <Zap className="h-5 w-5 md:h-6 md:w-6" />
+                     <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg bg-[#0127AC] flex items-center justify-center">
+                        <Zap className="h-5 w-5 md:h-6 md:w-6 text-white" />
                      </div>
-                     <span className="font-black text-[#0040FF] uppercase tracking-widest text-[10px]">Propulsado por Honecta®</span>
+                     <span className="font-black text-[#0127AC] uppercase tracking-widest text-[10px]">Propulsado por Honecta®</span>
                   </div>
                   <h2 className="text-3xl md:text-4xl font-black mb-6 md:mb-8 leading-[1] tracking-tighter">
-                     Toda la Oferta <br className="hidden md:block" /> de Piura en <span className="text-[#0040FF]">Un Solo Lugar</span>.
+                     Toda la Oferta <br className="hidden md:block" /> de Piura en <span className="text-[#0127AC]">Un Solo Lugar</span>.
                   </h2>
                   <p className="text-slate-400 font-medium text-sm md:text-lg leading-relaxed mb-8 md:mb-12 max-w-lg">
                      Nuestra red exclusiva conecta más de 50 agencias y 1,000+ propiedades en tiempo real. Si no está en Casaty, no está en el mercado.
@@ -199,8 +199,8 @@ export function HomeContent() {
                     { label: "Satisfacción", val: "99%", icon: ShieldCheck },
                     { label: "Días de Venta", val: "45 Prom.", icon: Target },
                   ].map((stat, i) => (
-                    <div key={i} className="bg-white/5 border border-white/10 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] text-center hover:bg-white/10 transition-all cursor-default">
-                       <stat.icon className="h-8 w-8 md:h-10 md:w-10 text-[#0040FF] mx-auto mb-4 md:mb-6" />
+                    <div key={i} className="bg-white/5 border border-white/10 p-6 md:p-10 rounded-2xl text-center hover:bg-white/10 transition-all cursor-default">
+                       <stat.icon className="h-8 w-8 md:h-10 md:w-10 text-[#0127AC] mx-auto mb-4 md:mb-6" />
                        <h4 className="text-2xl md:text-4xl font-black mb-1">{stat.val}</h4>
                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{stat.label}</p>
                     </div>
@@ -213,3 +213,5 @@ export function HomeContent() {
     </main>
   );
 }
+
+

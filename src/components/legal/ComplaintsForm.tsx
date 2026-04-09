@@ -69,11 +69,11 @@ export function ComplaintsForm() {
         </div>
         <h2 className="text-3xl font-black text-neutral-800 mb-4 tracking-tight">¡Reclamado Registrado!</h2>
         <p className="text-neutral-500 font-medium mb-8 leading-relaxed">
-          Hemos recibido tu solicitud bajo el número de hoja <span className="text-[#0040FF] font-bold">#LR-{Math.floor(Math.random() * 10000)}</span>. 
+          Hemos recibido tu solicitud bajo el número de hoja <span className="text-[#0127AC] font-bold">#LR-{Math.floor(Math.random() * 10000)}</span>. 
           Te hemos enviado una copia a <span className="text-neutral-800 font-bold">{formData.email}</span>. 
           Casaty te responderá en un plazo máximo de 15 días hábiles.
         </p>
-        <Button size="lg" onClick={() => window.location.href = '/'} className="bg-[#0040FF]">
+        <Button size="lg" onClick={() => window.location.href = '/'} className="bg-[#0127AC]">
           Volver al Inicio
         </Button>
       </motion.div>
@@ -89,7 +89,7 @@ export function ComplaintsForm() {
           <div 
             key={s}
             className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-black transition-all duration-500 ${
-              step >= s ? 'bg-[#0040FF] text-white shadow-lg shadow-blue-200' : 'bg-white border-2 border-slate-100 text-slate-300'
+              step >= s ? 'bg-[#0127AC] text-white shadow-lg shadow-blue-200' : 'bg-white border-2 border-slate-100 text-slate-300'
             }`}
           >
             {s}
@@ -117,35 +117,35 @@ export function ComplaintsForm() {
                   <label className="text-[10px] uppercase tracking-widest font-black text-neutral-400 ml-2">Nombre Completo</label>
                   <div className="relative">
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-4 w-4" />
-                    <input required name="nombre" value={formData.nombre} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all" placeholder="Ej: Juan Pérez" />
+                    <input required name="nombre" value={formData.nombre} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0127AC] transition-all" placeholder="Ej: Juan Pérez" />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] uppercase tracking-widest font-black text-neutral-400 ml-2">DNI / CE</label>
                   <div className="relative">
                     <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-4 w-4" />
-                    <input required name="dni" value={formData.dni} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all" placeholder="8 dígitos" />
+                    <input required name="dni" value={formData.dni} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0127AC] transition-all" placeholder="8 dígitos" />
                   </div>
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <label className="text-[10px] uppercase tracking-widest font-black text-neutral-400 ml-2">Email</label>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-4 w-4" />
-                    <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all" placeholder="tu@email.com" />
+                    <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0127AC] transition-all" placeholder="tu@email.com" />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] uppercase tracking-widest font-black text-neutral-400 ml-2">Teléfono</label>
                   <div className="relative">
                     <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-4 w-4" />
-                    <input required name="telefono" value={formData.telefono} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all" placeholder="999 999 999" />
+                    <input required name="telefono" value={formData.telefono} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0127AC] transition-all" placeholder="999 999 999" />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] uppercase tracking-widest font-black text-neutral-400 ml-2">Domicilio</label>
                   <div className="relative">
                     <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-4 w-4" />
-                    <input required name="domicilio" value={formData.domicilio} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all" placeholder="Tu dirección" />
+                    <input required name="domicilio" value={formData.domicilio} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0127AC] transition-all" placeholder="Tu dirección" />
                   </div>
                 </div>
               </div>
@@ -173,7 +173,7 @@ export function ComplaintsForm() {
                         type="button"
                         onClick={() => setFormData(p => ({ ...p, tipoBien: type }))}
                         className={`flex-1 h-12 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${
-                          formData.tipoBien === type ? 'bg-white text-[#0040FF] shadow-sm' : 'text-slate-400 hover:text-slate-600'
+                          formData.tipoBien === type ? 'bg-white text-[#0127AC] shadow-sm' : 'text-slate-400 hover:text-slate-600'
                         }`}
                      >
                        {type}
@@ -185,7 +185,7 @@ export function ComplaintsForm() {
                   <label className="text-[10px] uppercase tracking-widest font-black text-neutral-400 ml-2">Monto Reclamado (S/.)</label>
                   <div className="relative">
                     <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-4 w-4" />
-                    <input name="monto" value={formData.monto} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all" placeholder="0.00" />
+                    <input name="monto" value={formData.monto} onChange={handleChange} className="w-full h-14 pl-12 pr-6 bg-slate-50 border-none rounded-2xl font-bold text-neutral-800 focus:ring-2 focus:ring-[#0127AC] transition-all" placeholder="0.00" />
                   </div>
                 </div>
 
@@ -196,7 +196,7 @@ export function ComplaintsForm() {
                     value={formData.descripcionBien}
                     onChange={handleChange}
                     rows={4} 
-                    className="w-full p-6 bg-slate-50 border-none rounded-[2rem] font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all resize-none" 
+                    className="w-full p-6 bg-slate-50 border-none rounded-[2rem] font-bold text-neutral-800 focus:ring-2 focus:ring-[#0127AC] transition-all resize-none" 
                     placeholder="Describe el inmueble o servicio contratado..." 
                   />
                 </div>
@@ -225,7 +225,7 @@ export function ComplaintsForm() {
                         type="button"
                         onClick={() => setFormData(p => ({ ...p, tipoReclamo: type }))}
                         className={`flex-1 h-12 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${
-                          formData.tipoReclamo === type ? 'bg-white text-[#0040FF] shadow-sm' : 'text-slate-400 hover:text-slate-600'
+                          formData.tipoReclamo === type ? 'bg-white text-[#0127AC] shadow-sm' : 'text-slate-400 hover:text-slate-600'
                         }`}
                      >
                        {type}
@@ -240,7 +240,7 @@ export function ComplaintsForm() {
                     value={formData.detalle}
                     onChange={handleChange}
                     rows={4} 
-                    className="w-full p-6 bg-slate-50 border-none rounded-[2rem] font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all resize-none" 
+                    className="w-full p-6 bg-slate-50 border-none rounded-[2rem] font-bold text-neutral-800 focus:ring-2 focus:ring-[#0127AC] transition-all resize-none" 
                     placeholder="Explica detalladamente lo ocurrido..." 
                   />
                 </div>
@@ -252,7 +252,7 @@ export function ComplaintsForm() {
                     value={formData.pedido}
                     onChange={handleChange}
                     rows={4} 
-                    className="w-full p-6 bg-slate-50 border-none rounded-[2rem] font-bold text-neutral-800 focus:ring-2 focus:ring-[#0040FF] transition-all resize-none" 
+                    className="w-full p-6 bg-slate-50 border-none rounded-[2rem] font-bold text-neutral-800 focus:ring-2 focus:ring-[#0127AC] transition-all resize-none" 
                     placeholder="¿Qué acción esperas que tome la empresa?" 
                   />
                 </div>
@@ -279,7 +279,7 @@ export function ComplaintsForm() {
               type="button"
               size="lg"
               onClick={nextStep}
-              className="flex-1 bg-[#0040FF]"
+              className="flex-1 bg-[#0127AC]"
               showArrow
             >
               Siguiente
@@ -288,7 +288,7 @@ export function ComplaintsForm() {
             <Button 
               type="submit"
               size="lg"
-              className="flex-1 bg-[#0040FF]"
+              className="flex-1 bg-[#0127AC]"
             >
               <Send className="mr-2 h-4 w-4" /> Enviar Reclamación
             </Button>
@@ -299,7 +299,7 @@ export function ComplaintsForm() {
       {/* Footer Info */}
       <div className="mt-12 bg-slate-50 p-8 rounded-[2.5rem] border border-slate-100 flex gap-6 items-start">
          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center flex-none shadow-sm">
-            <AlertCircle className="text-[#0040FF]" />
+            <AlertCircle className="text-[#0127AC]" />
          </div>
          <div>
             <h4 className="font-black text-neutral-800 text-sm mb-1 uppercase tracking-tight">Importante</h4>
@@ -313,3 +313,5 @@ export function ComplaintsForm() {
     </div>
   );
 }
+
+

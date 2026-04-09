@@ -33,3 +33,4 @@ export async function getProperties(): Promise<Property[]> {
 
   return [];
 }
+

@@ -12,3 +12,5 @@ export const metadata: Metadata = {
 export default function AgentesPage() {
   return <AgentsContent />;
 }
+
+

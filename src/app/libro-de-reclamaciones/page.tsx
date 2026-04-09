@@ -21,10 +21,10 @@ export default function LibroReclamacionesPage() {
       <section className="pt-32 pb-20 bg-slate-50 border-b border-slate-100 rounded-b-[4rem] px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100">
-             <BookOpen className="text-[#0040FF]" />
+             <BookOpen className="text-[#0127AC]" />
           </div>
           <h1 className="text-4xl md:text-5xl font-black text-neutral-800 mb-6 tracking-tighter">
-            Libro de <br className="hidden md:block" /> <span className="text-[#0040FF]">Reclamaciones</span>.
+            Libro de <br className="hidden md:block" /> <span className="text-[#0127AC]">Reclamaciones</span>.
           </h1>
           <p className="text-base md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
             Conforme a lo establecido en el Código de Protección y Defensa del Consumidor, ponemos a tu disposición nuestro libro de reclamaciones virtual.
@@ -39,3 +39,5 @@ export default function LibroReclamacionesPage() {
     </main>
   );
 }
+
+

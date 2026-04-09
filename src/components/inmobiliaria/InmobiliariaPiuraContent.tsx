@@ -82,7 +82,7 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
     >
       <div className="flex justify-between items-center">
         <span className="font-bold text-neutral-800">{question}</span>
-        <ChevronDown className={`h-5 w-5 text-neutral-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#0040FF]' : ''}`} />
+        <ChevronDown className={`h-5 w-5 text-neutral-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#0127AC]' : ''}`} />
       </div>
       {isOpen && (
         <div className="mt-4 pt-4 border-t border-slate-100">
@@ -134,7 +134,7 @@ export function InmobiliariaPiuraContent() {
               <span className="text-xs font-black uppercase tracking-widest">Inmobiliaria Líder en Piura</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
-              Somos una de las mejores <span className="text-[#0040FF]">inmobiliarias en Piura</span>
+              Somos una de las mejores inmobiliarias en Piura
             </h1>
             <p className="text-base md:text-xl text-white/90 font-medium mb-12 max-w-3xl mx-auto leading-relaxed">
               Te ayudamos a vender, alquilar y gestionar tus propiedades en toda la región. Aplicamos tecnología Casaty Honecta® para garantizar resultados reales en tiempo récord.
@@ -173,7 +173,7 @@ export function InmobiliariaPiuraContent() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 flex-1">
             <div className="flex flex-col items-center text-center px-4">
               <div className="h-16 w-16 mb-6 bg-blue-50 rounded-2xl flex items-center justify-center">
-                <ShieldCheck className="h-8 w-8 text-[#0040FF]" />
+                <ShieldCheck className="h-8 w-8 text-[#0127AC]" />
               </div>
               <h4 className="text-lg font-black text-neutral-800 mb-2">Procesos Seguros</h4>
               <p className="text-xs text-neutral-500 leading-relaxed font-bold">
@@ -299,7 +299,7 @@ export function InmobiliariaPiuraContent() {
                   allowFullScreen
                 ></iframe>
               </div>
-              <div className="absolute -top-6 -right-6 bg-[#0040FF] p-6 rounded-full shadow-xl hidden md:flex items-center justify-center animate-bounce">
+              <div className="absolute -top-6 -right-6 bg-[#0127AC] p-6 rounded-full shadow-xl hidden md:flex items-center justify-center animate-bounce">
                 <Video className="text-white h-6 w-6" />
               </div>
             </div>
@@ -374,19 +374,21 @@ export function InmobiliariaPiuraContent() {
         </div>
       </section>
 
-      {/* 7. Final CTA Section */}
-      <section className="py-24 overflow-hidden relative">
-        <div className="absolute inset-0 bg-[#0040FF] z-0" />
-        <div className="absolute top-0 right-0 w-1/3 h-full bg-white/5 skew-x-12 transform translate-x-1/2" />
+      {/* 7. Final CTA Section with Premium Gradient */}
+      <section className="py-24 bg-gradient-to-br from-[#0127AC] to-[#001D8A] text-white relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/5 rounded-full -mr-48 -mt-48 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full -ml-32 -mb-32 blur-2xl" />
+        
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-6xl font-black text-white mb-8 leading-tight">
             ¿Listo para dar el siguiente paso en Piura?
           </h2>
-          <p className="text-white/80 font-bold mb-12 text-lg md:text-xl max-w-2xl mx-auto">
+          <p className="text-blue-100 font-bold mb-12 text-lg md:text-xl max-w-2xl mx-auto">
             Agenda una asesoría gratuita hoy mismo y descubre cómo podemos ayudarte a lograr tus objetivos inmobiliarios.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Button size="lg" className="bg-white text-[#0040FF] hover:bg-white/90 w-full sm:w-auto px-12 h-16 text-lg" onClick={() => setShowWizard(true)}>
+            <Button size="lg" className="bg-white text-[#0127AC] hover:bg-white/90 w-full sm:w-auto px-12 h-16 text-lg" onClick={() => setShowWizard(true)}>
               Solicitar Asesoría Gratis
             </Button>
             <a href="https://wa.me/51941849523" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
@@ -400,3 +402,5 @@ export function InmobiliariaPiuraContent() {
     </main>
   );
 }
+
+

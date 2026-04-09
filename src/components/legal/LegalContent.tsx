@@ -52,7 +52,7 @@ export function LegalContent({ title, lastUpdated, sections }: LegalContentProps
               >
                 {section.title && (
                   <h2 className="text-2xl font-black text-neutral-800 mb-6 tracking-tight flex items-center gap-4">
-                    <span className="flex-none w-8 h-8 rounded-full bg-[#0040FF]/10 text-[#0040FF] flex items-center justify-center text-xs font-black">
+                    <span className="flex-none w-8 h-8 rounded-full bg-[#0127AC]/10 text-[#0127AC] flex items-center justify-center text-xs font-black">
                       {index + 1}
                     </span>
                     {section.title}
@@ -73,3 +73,5 @@ export function LegalContent({ title, lastUpdated, sections }: LegalContentProps
     </main>
   );
 }
+
+

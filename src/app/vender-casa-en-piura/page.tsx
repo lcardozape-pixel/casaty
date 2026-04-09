@@ -12,3 +12,5 @@ export const metadata: Metadata = {
 export default function VenderPropiedadPage() {
   return <VenderPropiedadContent />;
 }
+
+

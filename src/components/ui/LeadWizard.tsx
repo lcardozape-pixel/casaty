@@ -177,7 +177,7 @@ export function LeadWizard({
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white rounded-[3rem] p-10 md:p-16 max-w-xl w-full text-center shadow-2xl border border-blue-50"
+          className="bg-white rounded-2xl p-10 md:p-16 max-w-xl w-full text-center shadow-2xl border border-slate-50"
         >
           <div className="h-24 w-24 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-8">
             <CheckCircle2 className="h-12 w-12" />
@@ -200,12 +200,12 @@ export function LeadWizard({
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 100 }}
-        className="bg-slate-50 md:rounded-[3rem] w-full max-w-2xl min-h-screen md:min-h-[auto] md:max-h-[90vh] overflow-hidden flex flex-col shadow-2xl relative"
+        className="bg-slate-50 md:rounded-2xl w-full max-w-2xl min-h-screen md:min-h-[auto] md:max-h-[85vh] overflow-hidden flex flex-col shadow-2xl relative"
       >
         {/* Header */}
         <div className="p-6 md:p-10 flex items-center justify-between bg-white border-b border-slate-100">
           <div>
-            <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-widest block mb-1">
+            <span className="text-[10px] font-black text-[#0127AC] uppercase tracking-widest block mb-1">
               {title}
             </span>
             <div className="flex items-center gap-2">
@@ -226,7 +226,7 @@ export function LeadWizard({
           <motion.div 
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
-            className="h-full bg-[#0040FF] shadow-[0_0_15px_rgba(0,64,255,0.4)]"
+            className="h-full bg-[#0127AC]"
           />
         </div>
 
@@ -256,15 +256,15 @@ export function LeadWizard({
                         key={option.id}
                         onClick={() => handleOptionSelect(option.value)}
                         className={cn(
-                          "flex items-center gap-4 p-5 rounded-2xl border-2 transition-all duration-300 text-left group",
+                          "flex items-center gap-4 p-5 rounded-xl border-2 transition-all duration-300 text-left group",
                           isSelected 
-                            ? "border-[#0040FF] bg-[#0040FF]/5 text-[#0040FF]" 
+                            ? "border-[#0127AC] bg-[#0127AC]/5 text-[#0127AC]" 
                             : "border-white bg-white hover:border-slate-200 text-neutral-600 shadow-sm"
                         )}
                       >
                         <div className={cn(
-                          "h-12 w-12 rounded-xl flex items-center justify-center transition-colors",
-                          isSelected ? "bg-[#0040FF] text-white" : "bg-slate-50 text-neutral-400 group-hover:bg-slate-100"
+                          "h-12 w-12 rounded-lg flex items-center justify-center transition-colors",
+                          isSelected ? "bg-[#0127AC] text-white" : "bg-slate-50 text-neutral-400 group-hover:bg-slate-100"
                         )}>
                           <Icon className="h-6 w-6" />
                         </div>
@@ -288,15 +288,15 @@ export function LeadWizard({
                         placeholder={field.placeholder}
                         value={formData[field.id] || ""}
                         onChange={(e) => handleInputChange(field.id, e.target.value)}
-                        className="w-full bg-white border-2 border-transparent focus:border-[#0040FF] focus:bg-white p-5 rounded-2xl outline-none transition-all font-bold text-neutral-800 shadow-sm"
+                        className="w-full bg-white border-2 border-transparent focus:border-[#0127AC] focus:bg-white p-5 rounded-xl outline-none transition-all font-bold text-neutral-800 shadow-sm"
                       />
                     </div>
                   ))}
                   
                   <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 mt-8">
                      <div className="flex gap-4">
-                        <div className="h-10 w-10 rounded-full bg-[#0040FF]/10 flex items-center justify-center flex-shrink-0">
-                           <Sparkles className="h-5 w-5 text-[#0040FF]" />
+                        <div className="h-10 w-10 rounded-full bg-[#0127AC]/10 flex items-center justify-center flex-shrink-0">
+                           <Sparkles className="h-5 w-5 text-[#0127AC]" />
                         </div>
                         <p className="text-xs font-bold text-blue-900 leading-relaxed">
                            Estás a un solo paso de recibir nuestra propuesta estratégica de venta líder en el mercado de Piura.
@@ -339,3 +339,5 @@ export function LeadWizard({
     </div>
   );
 }
+
+

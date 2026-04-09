@@ -57,9 +57,9 @@ const ServicesSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-             <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Nuestros Servicios</span>
+             <span className="text-[10px] font-black text-[#0127AC] uppercase tracking-[0.3em] mb-4 block">Nuestros Servicios</span>
              <h2 className="text-3xl md:text-4xl font-black text-neutral-800 mb-6 leading-tight">
-               Soluciones Inmobiliarias de <br className="hidden md:block" /> <span className="text-[#0040FF]">Siguiente Generación</span>.
+               Soluciones Inmobiliarias de <br className="hidden md:block" /> <span className="text-[#0127AC]">Siguiente Generación</span>.
              </h2>
              <p className="text-neutral-500 font-medium text-lg leading-relaxed max-w-2xl mx-auto">
                Desde la compra de tu primer hogar hasta el blindaje legal de tus contratos, Casaty es tu aliado estratégico en Piura.
@@ -75,16 +75,16 @@ const ServicesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group bg-white rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-slate-100 hover:shadow-2xl hover:border-[#0040FF]/20 transition-all duration-500 flex flex-col items-start relative overflow-hidden"
+              className="group bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 hover:shadow-2xl hover:border-[#0127AC]/20 transition-all duration-500 flex flex-col items-start relative overflow-hidden"
             >
                {/* Animated background decoration */}
                <div className="absolute bottom-[-100px] right-[-100px] w-64 h-64 bg-slate-50 rounded-full -z-10 group-hover:bg-blue-50 transition-colors duration-500" />
                
-               <div className="h-16 w-16 bg-slate-50 text-[#0040FF] rounded-2xl flex items-center justify-center mb-8 group-hover:bg-[#0040FF] group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-blue-200 group-hover:scale-110">
+               <div className="h-16 w-16 bg-slate-50 text-[#0127AC] rounded-xl flex items-center justify-center mb-8 group-hover:bg-[#0127AC] group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-slate-200 group-hover:scale-110">
                  <service.icon className="h-8 w-8" />
                </div>
 
-               <h3 className="text-2xl font-black text-neutral-800 mb-4 leading-tight group-hover:text-[#0040FF] transition-colors">
+               <h3 className="text-2xl font-black text-neutral-800 mb-4 leading-tight group-hover:text-[#0127AC] transition-colors">
                  {service.title}
                </h3>
                
@@ -94,9 +94,9 @@ const ServicesSection = () => {
 
                <Link 
                  href={service.href}
-                 className="mt-auto group/btn flex items-center gap-3 text-[#0040FF] font-black text-xs uppercase tracking-widest hover:translate-x-2 transition-all duration-300"
+                 className="mt-auto group/btn flex items-center gap-3 text-[#0127AC] font-black text-xs uppercase tracking-widest hover:translate-x-2 transition-all duration-300"
                >
-                 <span className="pb-1 border-b-2 border-[#0040FF]">{service.buttonText}</span>
+                 <span className="pb-1 border-b-2 border-[#0127AC]">{service.buttonText}</span>
                  <ChevronRight className="h-4 w-4" />
                </Link>
             </motion.div>
@@ -108,16 +108,16 @@ const ServicesSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
-            className="group bg-neutral-900 rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-white/5 hover:shadow-2xl transition-all duration-500 flex flex-col items-start relative overflow-hidden col-span-1 md:col-span-1"
+            className="group bg-neutral-900 rounded-2xl p-8 md:p-10 shadow-sm border border-white/5 hover:shadow-2xl transition-all duration-500 flex flex-col items-start relative overflow-hidden col-span-1 md:col-span-1"
           >
-             <div className="absolute top-[-50px] right-[-50px] w-32 h-32 bg-[#0040FF]/20 rounded-full blur-3xl" />
+             <div className="absolute top-[-50px] right-[-50px] w-32 h-32 bg-[#0127AC]/20 rounded-full blur-3xl" />
              
-             <div className="h-16 w-16 bg-[#0040FF] text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-blue-500/20">
+             <div className="h-16 w-16 bg-[#0127AC] text-white rounded-xl flex items-center justify-center mb-8 shadow-lg shadow-black/20">
                <Zap className="h-8 w-8" />
              </div>
 
              <h3 className="text-2xl font-black text-white mb-4 leading-tight">
-               Busca en la Red <br /> <span className="text-[#0040FF]">Honecta®</span> 
+               Busca en la Red <br /> <span className="text-[#0127AC]">Honecta®</span> 
              </h3>
              
              <p className="text-slate-400 mb-10 leading-relaxed font-bold text-sm">
@@ -155,3 +155,5 @@ const ServicesSection = () => {
 };
 
 export default ServicesSection;
+
+

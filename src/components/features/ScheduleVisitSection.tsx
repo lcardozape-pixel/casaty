@@ -74,7 +74,7 @@ export function ScheduleVisitSection({ onSchedule }: ScheduleVisitSectionProps) 
                     className={cn(
                       "flex flex-col items-center justify-center min-w-[72px] h-[92px] rounded-2xl border transition-all snap-start",
                       isSelected 
-                        ? "bg-[#0040FF] border-[#0040FF] text-white shadow-lg shadow-blue-500/20" 
+                        ? "bg-[#0127AC] border-[#0127AC] text-white shadow-lg shadow-blue-500/20" 
                         : "bg-white border-slate-100 text-neutral-400 hover:border-slate-300"
                     )}
                   >
@@ -190,3 +190,5 @@ export function ScheduleVisitSection({ onSchedule }: ScheduleVisitSectionProps) 
     </div>
   );
 }
+
+

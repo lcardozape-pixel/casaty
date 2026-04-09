@@ -20,7 +20,7 @@ export async function POST(request: Request) {
         subject: `Nueva Suscripción a Alertas: ${firstName}`,
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-            <h2 style="color: #0040FF;">Nueva Suscripción a Alertas</h2>
+            <h2 style="color: #0127AC;">Nueva Suscripción a Alertas</h2>
             <p>Un usuario se ha suscrito para recibir notificaciones de nuevas propiedades:</p>
             
             <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
@@ -64,3 +64,4 @@ export async function POST(request: Request) {
     }, { status: 500 });
   }
 }
+

@@ -44,7 +44,7 @@ function Slider({
         onChange={(e) => onChange(Number(e.target.value))}
         className="calc-slider w-full"
         style={{
-          background: `linear-gradient(to right, #0040FF ${pct}%, #f1f5f9 ${pct}%)`,
+          background: `linear-gradient(to right, #0127AC ${pct}%, #f1f5f9 ${pct}%)`,
         }}
       />
     </div>
@@ -103,7 +103,7 @@ export default function CalculadoraHipoteca({ priceSoles, priceDollars, initialC
           height: 20px;
           border-radius: 50%;
           background: white;
-          border: 3px solid #0040FF;
+          border: 3px solid #0127AC;
           box-shadow: 0 2px 6px rgba(0,64,255,0.2);
           cursor: pointer;
         }
@@ -171,7 +171,7 @@ export default function CalculadoraHipoteca({ priceSoles, priceDollars, initialC
               onClick={() => setCurrency('PEN')}
               className={cn(
                 "px-6 py-2 rounded-lg text-[11px] font-black transition-all duration-300",
-                currency === 'PEN' ? "bg-slate-50 text-[#0040FF]" : "text-slate-400 hover:text-slate-600"
+                currency === 'PEN' ? "bg-slate-50 text-[#0127AC]" : "text-slate-400 hover:text-slate-600"
               )}
             >
               Soles
@@ -180,7 +180,7 @@ export default function CalculadoraHipoteca({ priceSoles, priceDollars, initialC
               onClick={() => setCurrency('USD')}
               className={cn(
                 "px-6 py-2 rounded-lg text-[11px] font-black transition-all duration-300",
-                currency === 'USD' ? "bg-slate-50 text-[#0040FF]" : "text-slate-400 hover:text-slate-600"
+                currency === 'USD' ? "bg-slate-50 text-[#0127AC]" : "text-slate-400 hover:text-slate-600"
               )}
             >
               Dólares
@@ -190,11 +190,11 @@ export default function CalculadoraHipoteca({ priceSoles, priceDollars, initialC
           <div className="space-y-10 flex-1 flex flex-col justify-center">
             {/* Monto de Cuota */}
             <div className="flex items-center gap-5">
-              <div className="h-14 w-14 bg-white border border-blue-50 rounded-2xl flex items-center justify-center text-[#0040FF] shadow-md shrink-0">
+              <div className="h-14 w-14 bg-white border border-blue-50 rounded-2xl flex items-center justify-center text-[#0127AC] shadow-md shrink-0">
                 <Calculator className="h-7 w-7" />
               </div>
               <div className="flex items-center gap-2">
-                <p className="text-3xl md:text-4xl font-black text-[#0040FF] tracking-tighter leading-none">
+                <p className="text-3xl md:text-4xl font-black text-[#0127AC] tracking-tighter leading-none">
                   {fmt(monthlyPayment)}
                 </p>
                 <span className="text-[14px] font-bold text-slate-400 lowercase mt-1">mensual</span>
@@ -228,3 +228,5 @@ export default function CalculadoraHipoteca({ priceSoles, priceDollars, initialC
     </>
   );
 }
+
+

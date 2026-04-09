@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       subject: `Nuevo Lead: ${serviceName} - ${name}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-          <h2 style="color: #0040FF;">Nueva Solicitud de ${serviceName}</h2>
+          <h2 style="color: #0127AC;">Nueva Solicitud de ${serviceName}</h2>
           <p>Has recibido un nuevo lead desde el detalle de propiedad en Casaty.pe:</p>
           
           <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
             <h3>Detalles de la Propiedad</h3>
             ${propertyUrl ? `
               <div style="margin-bottom: 20px;">
-                <a href="${propertyUrl}" style="background-color: #0040FF; color: white; padding: 12px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
+                <a href="${propertyUrl}" style="background-color: #0127AC; color: white; padding: 12px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
                   Ver Propiedad en la Web
                 </a>
               </div>
@@ -115,3 +115,4 @@ export async function POST(request: Request) {
     }, { status: 500 });
   }
 }
+

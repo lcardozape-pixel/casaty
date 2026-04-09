@@ -31,7 +31,7 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
     >
       <div className="flex justify-between items-center">
         <span className="font-bold text-neutral-800">{question}</span>
-        <ChevronDown className={`h-5 w-5 text-neutral-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#0040FF]' : ''}`} />
+        <ChevronDown className={`h-5 w-5 text-neutral-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#0127AC]' : ''}`} />
       </div>
       {isOpen && (
         <div className="mt-4 pt-4 border-t border-slate-100">
@@ -63,7 +63,7 @@ export default function ContratoAlquilerPage() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-3xl md:text-5xl font-black mb-6 leading-tight">
-              Tu Inversión Protegida con <br /> <span className="text-[#0040FF]">Criterio Legal</span>
+              Tu Inversión Protegida con <br /> Criterio Legal
             </h1>
             <p className="text-sm md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
               No arriesgues tu propiedad con formatos genéricos. Redactamos contratos de alquiler blindados con las últimas cláusulas de desalojo express.
@@ -103,7 +103,7 @@ export default function ContratoAlquilerPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1">
             <div className="flex flex-col items-center text-center">
               <div className="h-16 w-16 mb-4 flex items-center justify-center bg-white rounded-2xl shadow-sm">
-                <Gavel className="h-8 w-8 text-[#0040FF]" />
+                <Gavel className="h-8 w-8 text-[#0127AC]" />
               </div>
               <h4 className="text-base font-black text-neutral-800 mb-2">Desalojo Express</h4>
               <p className="text-xs text-neutral-500 leading-relaxed font-bold">
@@ -153,7 +153,7 @@ export default function ContratoAlquilerPage() {
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
                   <div className="h-8 w-8 bg-blue-50 rounded-full flex items-center justify-center">
-                   <CheckCircle2 className="h-5 w-5 text-[#0040FF]" />
+                   <CheckCircle2 className="h-5 w-5 text-[#0127AC]" />
                   </div>
                   <span className="font-bold text-neutral-800 text-base">{item}</span>
                 </div>
@@ -233,7 +233,7 @@ export default function ContratoAlquilerPage() {
                 }
               ].map((step, i) => (
                 <div key={i} className="flex gap-8 items-start group/item">
-                  <div className="h-10 w-10 shrink-0 bg-blue-50 text-[#0040FF] flex items-center justify-center rounded-full font-black shadow-sm border border-blue-100 group-hover/item:scale-110 transition-transform">
+                  <div className="h-10 w-10 shrink-0 bg-blue-50 text-[#0127AC] flex items-center justify-center rounded-full font-black shadow-sm border border-blue-100 group-hover/item:scale-110 transition-transform">
                     {i + 1}
                   </div>
                   <div className="pt-1">
@@ -286,8 +286,8 @@ export default function ContratoAlquilerPage() {
               }
             ].map((benefit, i) => (
               <div key={i} className="bg-white p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-sm border border-slate-100 text-left hover:shadow-xl transition-all group">
-                <div className="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-8 group-hover:bg-[#0040FF] transition-colors">
-                  <benefit.icon className="h-7 w-7 text-[#0040FF] group-hover:text-white transition-colors" />
+                <div className="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-8 group-hover:bg-[#0127AC] transition-colors">
+                  <benefit.icon className="h-7 w-7 text-[#0127AC] group-hover:text-white transition-colors" />
                 </div>
                 <h3 className="text-xl font-black text-neutral-800 mb-4">{benefit.title}</h3>
                 <p className="text-sm text-neutral-500 font-bold leading-relaxed">{benefit.desc}</p>
@@ -325,17 +325,21 @@ export default function ContratoAlquilerPage() {
         </div>
       </section>
 
-      {/* 7. Final CTA */}
-      <section className="py-16 md:py-24 bg-neutral-900">
-        <div className="max-w-4xl mx-auto px-4 text-center text-white">
+      {/* 7. Final CTA with Premium Gradient */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-[#0127AC] to-[#001D8A] text-white relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/5 rounded-full -mr-48 -mt-48 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full -ml-32 -mb-32 blur-2xl" />
+
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight">
             No dejes tu propiedad <br /> a la suerte.
           </h2>
-          <p className="text-slate-400 font-bold mb-12 text-lg">
-            Blindar tu contrato es the mejor inversión que puedes hacer como propietario. Habla hoy con nuestro equipo legal.
+          <p className="text-blue-100 font-bold mb-12 text-lg">
+            Blindar tu contrato es la mejor inversión que puedes hacer como propietario. Habla hoy con nuestro equipo legal.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" showArrow className="w-full md:w-auto px-12 bg-[#0040FF]">
+            <Button size="lg" className="w-full md:w-auto px-12 bg-white text-[#0127AC] hover:bg-slate-100" showArrow>
               Blindar mi contrato ahora
             </Button>
             <Button variant="outline" size="lg" className="w-full md:w-auto px-12 border-white text-white hover:bg-white/10">
@@ -347,3 +351,5 @@ export default function ContratoAlquilerPage() {
     </main>
   );
 }
+
+

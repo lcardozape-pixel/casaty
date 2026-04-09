@@ -66,12 +66,12 @@ function CustomDropdown({
               onClick={() => { onChange(option.value); setIsOpen(false); }}
               className={`w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center gap-2 ${
                 value === option.value 
-                  ? 'text-[#0040FF] bg-blue-50/60 font-semibold' 
+                  ? 'text-[#0127AC] bg-slate-50 font-semibold' 
                   : 'text-neutral-700 hover:bg-slate-50 font-medium'
               }`}
             >
               {value === option.value && (
-                <svg className="h-4 w-4 text-[#0040FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <svg className="h-4 w-4 text-[#0127AC]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               )}
@@ -102,9 +102,9 @@ export function Hero() {
     <section className="relative min-h-[750px] md:h-[700px] flex items-start md:items-center justify-center overflow-hidden pt-18 pb-32 md:pt-0 md:pb-0">
       {/* Background */}
       <div className="absolute inset-0 z-0 shimmer" suppressHydrationWarning>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-slate-50 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/80 z-10" />
         <Image
-          src="/Imagenes/piura-panorama.png"
+          src="/Imagenes/fondo-piura.jpg"
           alt="Piura Modern Panorama"
           fill
           priority
@@ -126,10 +126,10 @@ export function Hero() {
               <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">Más de 1,200 Propiedades en la red Honecta®</span>
             </div>
 
-            <h1 className="text-3xl md:text-5xl font-black text-white mb-4 leading-[1.1] tracking-tighter">
-              El Hogar de Tus <br /> <span className="text-[#0040FF] drop-shadow-lg">Sueños</span> en Piura.
+            <h1 className="text-3xl md:text-6xl font-black text-white mb-6 leading-[1] tracking-tighter">
+              El Hogar de Tus <br /> Sueños en Piura.
             </h1>
-            <p className="text-sm md:text-xl text-white/90 font-medium max-w-xl leading-relaxed">
+            <p className="text-sm md:text-xl text-white/80 font-medium max-w-xl leading-relaxed">
               Busca, encuentra y asegura tu próxima inversión con el respaldo legal y comercial de los expertos.
             </p>
           </motion.div>
@@ -140,9 +140,9 @@ export function Hero() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="lg:max-w-4xl"
+          className="lg:max-w-5xl"
         >
-          <div className="bg-white rounded-full p-1.5 shadow-2xl shadow-black/20 flex items-center border border-white/80">
+          <div className="bg-white/90 backdrop-blur-2xl rounded-2xl p-2 shadow-2xl shadow-black/10 flex items-center border border-white/20">
             {/* Location Input */}
             <div className="flex-1 min-w-0 flex items-center gap-3 px-5 py-2 border-r border-slate-100">
               <MapPin className="h-4 w-4 text-neutral-400 shrink-0" />
@@ -190,16 +190,16 @@ export function Hero() {
             <button
               type="button"
               onClick={handleSearch}
-              className="flex items-center gap-2 bg-[#0040FF] hover:bg-blue-700 text-white px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 shrink-0"
+              className="flex items-center gap-2 bg-[#0127AC] hover:bg-black text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-black/10 shrink-0 ml-2"
             >
               <Search className="h-4 w-4" />
-              <span className="hidden sm:inline">Buscar</span>
+              <span className="hidden sm:inline">Buscar Propiedad</span>
             </button>
           </div>
 
           {/* Mobile Filters Row */}
-          <div className="flex md:hidden gap-2 mt-3 px-2">
-            <div className="flex-1 bg-white/95 rounded-full px-4 py-2.5 shadow-lg">
+          <div className="flex md:hidden gap-2 mt-3">
+            <div className="flex-1 bg-white/90 backdrop-blur-xl rounded-xl px-4 py-3 shadow-lg border border-white/20">
               <CustomDropdown
                 options={PROPERTY_TYPES}
                 value={propertyType}
@@ -207,7 +207,7 @@ export function Hero() {
                 placeholder="Tipo"
               />
             </div>
-            <div className="flex-1 bg-white/95 rounded-full px-4 py-2.5 shadow-lg">
+            <div className="flex-1 bg-white/90 backdrop-blur-xl rounded-xl px-4 py-3 shadow-lg border border-white/20">
               <CustomDropdown
                 options={OPERATION_TYPES}
                 value={operation}
@@ -224,7 +224,7 @@ export function Hero() {
               <button 
                 key={tag} 
                 onClick={() => { setLocation(tag); handleSearch(); }}
-                className="px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-[#0040FF] transition-all"
+                className="px-4 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-[#0127AC] transition-all"
               >
                 {tag}
               </button>
@@ -235,3 +235,5 @@ export function Hero() {
     </section>
   );
 }
+
+

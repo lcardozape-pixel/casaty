@@ -45,23 +45,23 @@ export function Footer() {
             <ul className="space-y-3 text-[13px]">
               <li className="flex items-center gap-3">
                 <Phone className="h-3.5 w-3.5 text-neutral-800" />
-                <a href="https://wa.link/cr2g9a" target="_blank" rel="noopener noreferrer" className="hover:text-[#0040FF] transition-colors font-medium">941 849 523</a>
+                <a href="https://wa.link/cr2g9a" target="_blank" rel="noopener noreferrer" className="hover:text-[#0127AC] transition-colors font-medium">941 849 523</a>
               </li>
               <li className="flex items-center gap-3">
                 <Facebook className="h-3.5 w-3.5 text-neutral-800" />
-                <a href="https://www.facebook.com/casatypiura" target="_blank" rel="noopener noreferrer" className="hover:text-[#0040FF] transition-colors font-medium">Facebook</a>
+                <a href="https://www.facebook.com/casatypiura" target="_blank" rel="noopener noreferrer" className="hover:text-[#0127AC] transition-colors font-medium">Facebook</a>
               </li>
               <li className="flex items-center gap-3">
                 <Instagram className="h-3.5 w-3.5 text-neutral-800" />
-                <a href="https://www.instagram.com/casatyperu" target="_blank" rel="noopener noreferrer" className="hover:text-[#0040FF] transition-colors font-medium">Instagram</a>
+                <a href="https://www.instagram.com/casatyperu" target="_blank" rel="noopener noreferrer" className="hover:text-[#0127AC] transition-colors font-medium">Instagram</a>
               </li>
               <li className="flex items-center gap-3">
                 <Youtube className="h-3.5 w-3.5 text-neutral-800" />
-                <a href="https://www.youtube.com/@casatyperu" target="_blank" rel="noopener noreferrer" className="hover:text-[#0040FF] transition-colors font-medium">Youtube</a>
+                <a href="https://www.youtube.com/@casatyperu" target="_blank" rel="noopener noreferrer" className="hover:text-[#0127AC] transition-colors font-medium">Youtube</a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="h-3.5 w-3.5 text-neutral-800 mt-0.5" />
-                <a href="https://maps.app.goo.gl/TePoypD73DFK1qGy5" target="_blank" rel="noopener noreferrer" className="hover:text-[#0040FF] transition-colors font-medium leading-tight">
+                <a href="https://maps.app.goo.gl/TePoypD73DFK1qGy5" target="_blank" rel="noopener noreferrer" className="hover:text-[#0127AC] transition-colors font-medium leading-tight">
                   Av. Bolognesi 349, Of. 206, Piura
                 </a>
               </li>
@@ -111,10 +111,10 @@ export function Footer() {
           </div>
           
           <div className="flex gap-6 text-[10px] font-medium text-neutral-500 flex-wrap justify-center md:justify-end">
-            <Link href="/terminos-y-condiciones" className="hover:text-[#0040FF] transition-colors">Términos y condiciones</Link>
-            <Link href="/politica-de-privacidad" className="hover:text-[#0040FF] transition-colors">Política privacidad</Link>
-            <Link href="/politica-de-cookies" className="hover:text-[#0040FF] transition-colors">Política cookies</Link>
-            <Link href="/libro-de-reclamaciones" className="hover:text-[#0040FF] transition-colors">Libro de Reclamaciones</Link>
+            <Link href="/terminos-y-condiciones" className="hover:text-[#0127AC] transition-colors">Términos y condiciones</Link>
+            <Link href="/politica-de-privacidad" className="hover:text-[#0127AC] transition-colors">Política privacidad</Link>
+            <Link href="/politica-de-cookies" className="hover:text-[#0127AC] transition-colors">Política cookies</Link>
+            <Link href="/libro-de-reclamaciones" className="hover:text-[#0127AC] transition-colors">Libro de Reclamaciones</Link>
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@ export function Footer() {
       {/* Scroll to Top Button */}
       <button 
         onClick={scrollToTop}
-        className="absolute right-8 bottom-24 md:bottom-12 bg-[#0f2a4a] text-white p-2 rounded shadow-xl hover:bg-primary transition-colors z-20"
+        className="absolute right-8 bottom-24 md:bottom-12 bg-[#0127AC] text-white p-2 rounded shadow-xl hover:bg-[#051C77] transition-colors z-20"
         aria-label="Volver arriba"
       >
         <ChevronUp className="h-5 w-5" />
@@ -130,4 +130,6 @@ export function Footer() {
     </footer>
   );
 }
+
+
 

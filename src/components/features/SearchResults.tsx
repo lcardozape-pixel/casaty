@@ -158,7 +158,7 @@ export default function SearchResults() {
             transition={{ delay: 0.2 }}
             className="max-w-4xl mx-auto"
           >
-            <div className="bg-white rounded-full p-1.5 shadow-2xl flex items-center">
+            <div className="bg-white rounded-xl p-1.5 shadow-2xl flex items-center">
               {/* Location Input */}
               <div className="flex-1 min-w-0 flex items-center gap-3 px-5 py-2 border-r border-slate-100">
                 <MapPin className="h-4 w-4 text-neutral-400 shrink-0" />
@@ -209,7 +209,7 @@ export default function SearchResults() {
               {/* Search Button */}
               <button
                 onClick={handleSearch}
-                className="flex items-center gap-2 bg-[#0040FF] hover:bg-blue-700 text-white px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg shadow-blue-500/25 shrink-0"
+                className="flex items-center gap-2 bg-[#0127AC] hover:bg-neutral-800 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-black/10 shrink-0"
               >
                 <Search className="h-4 w-4" />
                 <span className="hidden sm:inline">Buscar</span>
@@ -238,7 +238,7 @@ export default function SearchResults() {
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 rounded-full text-xs font-bold hover:bg-red-100 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-xs font-bold hover:bg-red-100 transition-colors"
               >
                 <X className="h-3 w-3" />
                 Limpiar filtros
@@ -249,7 +249,7 @@ export default function SearchResults() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-neutral-700 bg-white focus:ring-2 focus:ring-[#0040FF]/20 focus:border-[#0040FF] cursor-pointer"
+              className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-neutral-700 bg-white focus:ring-2 focus:ring-[#0127AC]/20 focus:border-[#0127AC] cursor-pointer"
             >
               {SORT_OPTIONS.map(s => (
                 <option key={s.value} value={s.value}>{s.label}</option>
@@ -260,7 +260,7 @@ export default function SearchResults() {
             <div className="hidden md:flex border border-slate-200 rounded-lg overflow-hidden">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 transition-colors ${viewMode === 'grid' ? 'bg-[#0040FF] text-white' : 'bg-white text-neutral-500 hover:bg-slate-50'}`}
+                className={`p-2 transition-colors ${viewMode === 'grid' ? 'bg-[#0127AC] text-white' : 'bg-white text-neutral-500 hover:bg-slate-50'}`}
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 16 16">
                   <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/>
@@ -268,7 +268,7 @@ export default function SearchResults() {
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 transition-colors ${viewMode === 'list' ? 'bg-[#0040FF] text-white' : 'bg-white text-neutral-500 hover:bg-slate-50'}`}
+                className={`p-2 transition-colors ${viewMode === 'list' ? 'bg-[#0127AC] text-white' : 'bg-white text-neutral-500 hover:bg-slate-50'}`}
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 16 16">
                   <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
@@ -296,15 +296,15 @@ export default function SearchResults() {
             ))}
           </div>
         ) : !loading ? (
-          <div className="text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm">
-            <div className="h-16 w-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <div className="text-center py-20 bg-white rounded-xl border border-slate-100 shadow-sm">
+            <div className="h-16 w-16 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-6">
               <Search className="h-8 w-8 text-neutral-300" />
             </div>
             <h3 className="text-xl font-black text-neutral-800 mb-3">No se encontraron propiedades</h3>
             <p className="text-neutral-500 font-medium mb-6">Intenta con otros filtros o ubicación</p>
             <button
               onClick={clearFilters}
-              className="px-6 py-2.5 bg-[#0040FF] text-white rounded-full font-bold text-sm hover:bg-blue-700 transition-colors"
+              className="px-6 py-2.5 bg-[#0127AC] text-white rounded-lg font-bold text-sm hover:bg-neutral-800 transition-colors"
             >
               Ver todas las propiedades
             </button>
@@ -313,7 +313,7 @@ export default function SearchResults() {
         
         {loading && (
           <div className="py-20 text-center">
-            <div className="animate-spin h-10 w-10 border-4 border-[#0040FF] border-t-transparent rounded-full mx-auto mb-4"></div>
+            <div className="animate-spin h-10 w-10 border-4 border-[#0127AC] border-t-transparent rounded-full mx-auto mb-4"></div>
             <span className="text-neutral-400 font-black">Validando inventario actualizado...</span>
           </div>
         )}
@@ -321,3 +321,5 @@ export default function SearchResults() {
     </main>
   );
 }
+
+

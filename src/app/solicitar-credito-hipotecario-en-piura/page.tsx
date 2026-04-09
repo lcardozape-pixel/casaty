@@ -87,7 +87,7 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
     >
       <div className="flex justify-between items-center">
         <span className="font-bold text-neutral-800">{question}</span>
-        <ChevronDown className={`h-5 w-5 text-neutral-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#0040FF]' : ''}`} />
+        <ChevronDown className={`h-5 w-5 text-neutral-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#0127AC]' : ''}`} />
       </div>
       {isOpen && (
         <div className="mt-4 pt-4 border-t border-slate-100">
@@ -136,7 +136,7 @@ function MortgageCalculator({ onAction }: { onAction: () => void }) {
 
   return (
     <div className="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100">
-      <div className="bg-[#0040FF] p-6 md:p-10 text-white text-center">
+      <div className="bg-[#0127AC] p-6 md:p-10 text-white text-center">
         <h3 className="text-xl md:text-2xl font-black mb-2 flex items-center justify-center gap-3">
           <Calculator className="h-6 w-6" /> Calculadora Hipotecaria
         </h3>
@@ -148,7 +148,7 @@ function MortgageCalculator({ onAction }: { onAction: () => void }) {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <label className="block text-sm font-black text-neutral-800">Precio del Inmueble (S/)</label>
-              <span className="text-[10px] font-black text-[#0040FF]">{formatCurrency(price)}</span>
+              <span className="text-[10px] font-black text-[#0127AC]">{formatCurrency(price)}</span>
             </div>
             <input 
               type="text" 
@@ -157,12 +157,12 @@ function MortgageCalculator({ onAction }: { onAction: () => void }) {
                 const val = Number(e.target.value.replace(/[^0-9]/g, ''));
                 if (!isNaN(val)) setPrice(val);
               }}
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-neutral-800 font-bold focus:ring-2 focus:ring-[#0040FF] outline-none"
+              className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-neutral-800 font-bold focus:ring-2 focus:ring-[#0127AC] outline-none"
             />
             <input 
                type="range" min="50000" max="2000000" step="10000" 
                value={price} onChange={(e) => setPrice(Number(e.target.value))}
-               className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#0040FF]"
+               className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#0127AC]"
             />
           </div>
 
@@ -184,7 +184,7 @@ function MortgageCalculator({ onAction }: { onAction: () => void }) {
                   setInitialPercent(Math.round((val / price) * 100));
                 }
               }}
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-neutral-800 font-bold focus:ring-2 focus:ring-[#0040FF] outline-none"
+              className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-neutral-800 font-bold focus:ring-2 focus:ring-[#0127AC] outline-none"
             />
             <div className="space-y-2">
               <input 
@@ -210,7 +210,7 @@ function MortgageCalculator({ onAction }: { onAction: () => void }) {
                  <button 
                   key={y}
                   onClick={() => setYears(y)}
-                  className={`flex-1 py-3 rounded-xl font-black text-xs transition-all ${years === y ? 'bg-[#0040FF] text-white shadow-lg' : 'bg-slate-100 text-neutral-500 hover:bg-slate-200'}`}
+                  className={`flex-1 py-3 rounded-xl font-black text-xs transition-all ${years === y ? 'bg-[#0127AC] text-white shadow-lg' : 'bg-slate-100 text-neutral-500 hover:bg-slate-200'}`}
                  >
                    {y}
                  </button>
@@ -225,7 +225,7 @@ function MortgageCalculator({ onAction }: { onAction: () => void }) {
               step="0.1"
               value={interest} 
               onChange={(e) => setInterest(Number(e.target.value))}
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-neutral-800 font-bold focus:ring-2 focus:ring-[#0040FF] outline-none"
+              className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-neutral-800 font-bold focus:ring-2 focus:ring-[#0127AC] outline-none"
             />
             <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest leading-none text-right">Tasa Promedio Actual: 7.5% - 9.5%</p>
           </div>
@@ -233,7 +233,7 @@ function MortgageCalculator({ onAction }: { onAction: () => void }) {
 
         <div className="bg-[#eff6ff] rounded-[2rem] p-8 text-center border border-blue-100">
           <p className="text-sm font-black text-neutral-500 uppercase tracking-widest mb-2 leading-none">Tu Cuota Mensual Estimada</p>
-          <p className="text-5xl font-black text-[#0040FF] leading-none mb-4">{formatCurrency(monthlyPayment)}</p>
+          <p className="text-5xl font-black text-[#0127AC] leading-none mb-4">{formatCurrency(monthlyPayment)}</p>
           <p className="text-xs text-neutral-500 font-medium leading-relaxed max-w-xs mx-auto">
             * Referencial. Sujeto a evaluación crediticia y comisiones de desgravamen/seguro de inmueble.
           </p>
@@ -281,7 +281,7 @@ export default function CreditoPage() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-3xl md:text-5xl font-black mb-6 leading-tight">
-              Consigue el Crédito para tu <br /> <span className="text-[#0040FF]">Próximo Hogar</span>
+              Consigue el Crédito para tu <br /> Próximo Hogar
             </h1>
             <p className="text-sm md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
               Asesoría gratuita y pre-calificación digital en 48 horas. Trabajamos con los principales bancos locales para conseguirte la mejor tasa del mercado.
@@ -321,7 +321,7 @@ export default function CreditoPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1">
             <div className="flex flex-col items-center text-center">
               <div className="h-16 w-16 mb-4 flex items-center justify-center bg-white rounded-2xl shadow-sm">
-                <Landmark className="h-8 w-8 text-[#0040FF]" />
+                <Landmark className="h-8 w-8 text-[#0127AC]" />
               </div>
               <h4 className="text-base font-black text-neutral-800 mb-2">Multibanco</h4>
               <p className="text-xs text-neutral-500 leading-relaxed font-bold">
@@ -369,7 +369,7 @@ export default function CreditoPage() {
               ].map((item, i) => (
                 <div key={i} className="flex gap-6 items-start">
                   <div className="h-12 w-12 shrink-0 bg-white shadow-sm border border-slate-100 rounded-2xl flex items-center justify-center">
-                    <item.icon className="h-6 w-6 text-[#0040FF]" />
+                    <item.icon className="h-6 w-6 text-[#0127AC]" />
                   </div>
                   <div>
                     <h4 className="font-black text-neutral-800 text-lg leading-tight mb-2">{item.title}</h4>
@@ -425,7 +425,7 @@ export default function CreditoPage() {
                 }
               ].map((step, i) => (
                 <div key={i} className="flex gap-8 items-start group/item">
-                  <div className="h-10 w-10 shrink-0 bg-blue-50 text-[#0040FF] flex items-center justify-center rounded-full font-black shadow-sm border border-blue-100 group-hover/item:scale-110 transition-transform">
+                  <div className="h-10 w-10 shrink-0 bg-blue-50 text-[#0127AC] flex items-center justify-center rounded-full font-black shadow-sm border border-blue-100 group-hover/item:scale-110 transition-transform">
                     {i + 1}
                   </div>
                   <div className="pt-1">
@@ -478,8 +478,8 @@ export default function CreditoPage() {
               }
             ].map((benefit, i) => (
               <div key={i} className="bg-white p-12 rounded-[2.5rem] shadow-sm border border-slate-100 text-left hover:shadow-xl transition-all group">
-                <div className="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-8 group-hover:bg-[#0040FF] transition-colors">
-                  <benefit.icon className="h-7 w-7 text-[#0040FF] group-hover:text-white transition-colors" />
+                <div className="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-8 group-hover:bg-[#0127AC] transition-colors">
+                  <benefit.icon className="h-7 w-7 text-[#0127AC] group-hover:text-white transition-colors" />
                 </div>
                 <h3 className="text-xl font-black text-neutral-800 mb-4">{benefit.title}</h3>
                 <p className="text-sm text-neutral-500 font-bold leading-relaxed">{benefit.desc}</p>
@@ -517,20 +517,24 @@ export default function CreditoPage() {
         </div>
       </section>
 
-      {/* 7. Final CTA */}
-      <section className="py-24 bg-[#eff6ff]">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-black text-neutral-800 mb-8 leading-tight">
+      {/* 7. Final CTA with Premium Gradient */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-[#0127AC] to-[#001D8A] text-white relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/5 rounded-full -mr-48 -mt-48 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full -ml-32 -mb-32 blur-2xl" />
+
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight">
             ¿Listo para dar el gran paso?
           </h2>
-          <p className="text-neutral-500 font-bold mb-12 text-lg">
+          <p className="text-blue-100 font-bold mb-12 text-lg">
             No pierdas tiempo en colas. Deja que nuestros expertos gestionen tu crédito hipotecario de forma gratuita y eficiente.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" showArrow className="w-full md:w-auto px-12" onClick={() => setShowWizard(true)}>
+            <Button size="lg" className="w-full md:w-auto px-12 bg-white text-[#0127AC] hover:bg-slate-100" showArrow onClick={() => setShowWizard(true)}>
               Pre-calificar ahora
             </Button>
-            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 bg-white">
+            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 border-white text-white hover:bg-white/10">
               Hablar con asesor
             </Button>
           </div>
@@ -539,3 +543,5 @@ export default function CreditoPage() {
     </main>
   );
 }
+
+

@@ -19,3 +19,5 @@ export const metadata: Metadata = {
 export default function InmobiliariaPiuraPage() {
   return <InmobiliariaPiuraContent />;
 }
+
+

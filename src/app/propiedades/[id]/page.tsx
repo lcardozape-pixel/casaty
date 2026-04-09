@@ -96,3 +96,5 @@ export default async function PropertyDetailPage({ params }: Props) {
     />
   );
 }
+
+

@@ -37,8 +37,6 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
     locations: initialCity ? [initialCity] : [] as string[]
   });
 
-  const [newCity, setNewCity] = useState("");
-
   // Manejar el cierre con Esc
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -65,7 +63,6 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
         locations: [...prev.locations, cleanCity]
       }));
     }
-    setNewCity("");
   };
 
   const removeCity = (city: string) => {
@@ -127,14 +124,14 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative w-full max-w-lg bg-white rounded-[32px] overflow-hidden shadow-2xl"
+          className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
           <div className="p-6 md:p-8 flex items-center justify-between border-b border-slate-50">
             <div className="flex items-center gap-3">
-              <div className="bg-[#0040FF]/10 p-2.5 rounded-2xl">
-                <Bell className="h-6 w-6 text-[#0040FF]" />
+              <div className="bg-[#0127AC]/10 p-2.5 rounded-lg">
+                <Bell className="h-6 w-6 text-[#0127AC]" />
               </div>
               <h2 className="text-xl md:text-2xl font-black text-neutral-800">Alertas Casaty</h2>
             </div>
@@ -154,7 +151,7 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
                   {[1, 2, 3].map(i => (
                     <div 
                       key={i}
-                      className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${step >= i ? 'bg-[#0040FF]' : 'bg-slate-100'}`}
+                      className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${step >= i ? 'bg-[#0127AC]' : 'bg-slate-100'}`}
                     />
                   ))}
                 </div>
@@ -173,9 +170,9 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
                           <button
                             key={intent}
                             onClick={() => setFormData(prev => ({ ...prev, searchIntent: intent as any }))}
-                            className={`py-3 rounded-2xl font-bold text-sm capitalize transition-all border-2 ${
+                            className={`py-3 rounded-lg font-bold text-sm capitalize transition-all border-2 ${
                               formData.searchIntent === intent 
-                                ? 'bg-[#0040FF] border-[#0040FF] text-white shadow-lg shadow-blue-200' 
+                                ? 'bg-[#0127AC] border-[#0127AC] text-white shadow-lg shadow-black/10' 
                                 : 'bg-white border-slate-100 text-neutral-500 hover:border-slate-200'
                             }`}
                           >
@@ -192,9 +189,9 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
                           <button
                             key={type}
                             onClick={() => togglePropertyType(type)}
-                            className={`px-4 py-2.5 rounded-full text-sm font-bold transition-all border-2 ${
+                            className={`px-4 py-2.5 rounded-lg text-sm font-bold transition-all border-2 ${
                               formData.propertyTypes.includes(type)
-                                ? 'bg-neutral-800 border-neutral-800 text-white'
+                                ? 'bg-[#0127AC] border-[#0127AC] text-white'
                                 : 'bg-white border-slate-100 text-neutral-500 hover:border-slate-200'
                             }`}
                           >
@@ -225,9 +222,9 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
                       {formData.locations.map(city => (
                         <span 
                           key={city}
-                          className="bg-white border border-slate-100 text-neutral-700 px-3 py-1.5 rounded-full text-sm font-black flex items-center gap-2 shadow-sm"
+                          className="bg-white border border-slate-100 text-neutral-700 px-3 py-1.5 rounded-md text-sm font-black flex items-center gap-2 shadow-sm"
                         >
-                          <MapPin className="h-3.5 w-3.5 text-[#0040FF]" />
+                          <MapPin className="h-3.5 w-3.5 text-[#0127AC]" />
                           {city}
                           <button onClick={() => removeCity(city)}>
                             <X className="h-3.5 w-3.5 text-neutral-400 hover:text-red-500" />
@@ -241,7 +238,7 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
                         <button
                           key={city}
                           onClick={() => addCity(city)}
-                          className="px-6 py-3 rounded-2xl text-[14px] font-bold text-neutral-600 bg-white border-2 border-slate-100 hover:border-[#0040FF] hover:text-[#0040FF] transition-all"
+                          className="px-6 py-3 rounded-lg text-[14px] font-bold text-neutral-600 bg-white border-2 border-slate-100 hover:border-[#0127AC] hover:text-[#0127AC] transition-all"
                         >
                           {city}
                         </button>
@@ -271,7 +268,7 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
                           value={formData.firstName}
                           onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
                           placeholder="Ej: Luis"
-                          className="w-full px-4 py-4 rounded-2xl border border-slate-100 focus:outline-none focus:border-[#0040FF] text-neutral-800 transition-all"
+                          className="w-full px-4 py-4 rounded-lg border border-slate-100 focus:outline-none focus:border-[#0127AC] text-neutral-800 transition-all"
                         />
                       </div>
                       <div className="space-y-1">
@@ -282,7 +279,7 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
                           value={formData.email}
                           onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                           placeholder="ejemplo@email.com"
-                          className="w-full px-4 py-4 rounded-2xl border border-slate-100 focus:outline-none focus:border-[#0040FF] text-neutral-800 transition-all"
+                          className="w-full px-4 py-4 rounded-lg border border-slate-100 focus:outline-none focus:border-[#0127AC] text-neutral-800 transition-all"
                         />
                       </div>
                     </div>
@@ -315,7 +312,7 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
                   <button 
                     onClick={() => step < 3 ? setStep(s => s + 1) : handleSubmit()}
                     disabled={isSubmitting}
-                    className="flex items-center gap-2 bg-[#0040FF] text-white px-8 py-4 rounded-2xl font-black text-sm shadow-xl shadow-blue-100 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+                    className="flex items-center gap-2 bg-[#0127AC] text-white px-8 py-4 rounded-lg font-black text-sm shadow-xl shadow-black/10 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
@@ -343,7 +340,7 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
                 </p>
                 <button 
                   onClick={onClose}
-                  className="w-full bg-neutral-800 text-white py-4 rounded-2xl font-black hover:bg-neutral-900 transition-all"
+                  className="w-full bg-[#0127AC] text-white py-4 rounded-lg font-black hover:bg-neutral-800 transition-all"
                 >
                   Cerrar Ventana
                 </button>
@@ -355,3 +352,5 @@ export default function PropertyAlertModal({ isOpen, onClose, initialCity, initi
     </AnimatePresence>
   );
 }
+
+

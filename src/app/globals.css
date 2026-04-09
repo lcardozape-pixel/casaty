@@ -4,9 +4,9 @@
   --background: #f8fafc;
   --foreground: #262626; /* Neutral 800 */
   --muted-foreground: #737373; /* Neutral 500 */
-  --primary: #0040FF;
-  --secondary: #1e3a8a;
-  --accent: #3b82f6;
+  --primary: #0127AC;
+  --secondary: #051C77;
+  --accent: #3052E1;
   --card: #ffffff;
   --card-foreground: #0f172a;
   /* Forzamos las fuentes aquí para que el navegador las reconozca globalmente */
@@ -58,3 +58,4 @@ h1, h2, h3, h4, h5, h6 {
     background-position: 200% 0;
   }
 }
+

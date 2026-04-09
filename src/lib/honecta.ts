@@ -278,3 +278,4 @@ export async function sendLeadToHonecta(lead: {
 }
 
 export const getHonectaProperties = getPublicProperties;
+

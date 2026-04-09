@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/Button";
-import { 
-  LeadWizard, 
-  WizardStep 
+import {
+  LeadWizard,
+  WizardStep
 } from "@/components/ui/LeadWizard";
 import {
   ShieldCheck,
@@ -82,13 +82,13 @@ const VENDER_STEPS: WizardStep[] = [
 function FAQItem({ question, answer }: { question: string, answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div 
+    <div
       className={`border border-slate-100 rounded-2xl p-6 transition-all duration-300 cursor-pointer bg-slate-50/50 ${isOpen ? 'border-blue-200 bg-blue-50/30' : 'hover:border-blue-100'}`}
       onClick={() => setIsOpen(!isOpen)}
     >
       <div className="flex justify-between items-center">
         <span className="font-bold text-neutral-800">{question}</span>
-        <ChevronDown className={`h-5 w-5 text-neutral-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#0040FF]' : ''}`} />
+        <ChevronDown className={`h-5 w-5 text-neutral-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#0127AC]' : ''}`} />
       </div>
       {isOpen && (
         <div className="mt-4 pt-4 border-t border-slate-100">
@@ -137,7 +137,7 @@ export function VenderPropiedadContent() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-3xl md:text-5xl font-black mb-6 leading-tight">
-              Vende tu Propiedad Rápido y al <span className="text-[#0040FF]">Mejor Precio</span>
+              Vende tu Propiedad Rápido y al Mejor Precio
             </h1>
             <p className="text-sm md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
               Confía en los expertos de Piura. Maximizamos el valor de tu inmueble mediante tecnología Casaty Honecta® y marketing estratégico.
@@ -236,7 +236,7 @@ export function VenderPropiedadContent() {
               Quiero saber todos los detalles
             </Button>
           </div>
-          
+
           <div className="relative">
             <div className="aspect-video rounded-[3rem] overflow-hidden shadow-2xl bg-black group">
               <iframe
@@ -249,7 +249,7 @@ export function VenderPropiedadContent() {
             </div>
             <div className="absolute -bottom-8 -right-8 bg-white p-8 rounded-3xl shadow-xl border border-blue-50 hidden md:block">
               <div className="flex items-center gap-4 mb-4">
-                <div className="h-12 w-12 rounded-full bg-[#0040FF] flex items-center justify-center">
+                <div className="h-12 w-12 rounded-full bg-[#0127AC] flex items-center justify-center">
                   <TrendingUp className="text-white h-6 w-6" />
                 </div>
                 <div>
@@ -356,7 +356,7 @@ export function VenderPropiedadContent() {
                 }
               ].map((step, i) => (
                 <div key={i} className="flex gap-8 items-start group/item">
-                  <div className="h-10 w-10 shrink-0 bg-blue-50 text-[#0040FF] flex items-center justify-center rounded-full font-black shadow-sm border border-blue-100 group-hover/item:scale-110 transition-transform">
+                  <div className="h-10 w-10 shrink-0 bg-blue-50 text-[#0127AC] flex items-center justify-center rounded-full font-black shadow-sm border border-blue-100 group-hover/item:scale-110 transition-transform">
                     {i + 1}
                   </div>
                   <div className="pt-1">
@@ -394,7 +394,7 @@ export function VenderPropiedadContent() {
                 alt="Agentes vendiendo"
               />
               <div className="absolute -bottom-6 -right-6 bg-white p-8 rounded-3xl shadow-2xl border border-blue-50">
-                <p className="text-3xl font-black text-[#0040FF] leading-none mb-1">+240</p>
+                <p className="text-3xl font-black text-[#0127AC] leading-none mb-1">+240</p>
                 <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest leading-none">Clientes felices</p>
               </div>
             </div>
@@ -450,21 +450,25 @@ export function VenderPropiedadContent() {
         </div>
       </section>
 
-      {/* 8. Final CTA Center */}
-      <section className="py-16 md:py-24 bg-[#eff6ff]">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-black text-neutral-800 mb-8 leading-tight">
-            Vende tu propiedad sin estrés.
+      {/* 8. Final CTA with Premium Gradient */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-[#0127AC] to-[#001D8A] text-white relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/5 rounded-full -mr-48 -mt-48 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full -ml-32 -mb-32 blur-2xl" />
+
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight">
+            ¿Listo para vender con éxito?
           </h2>
-          <p className="text-neutral-500 font-bold mb-12 text-lg">
-            Estamos listos para encontrar al comprador ideal para tu inmueble en el menor tiempo posible.
+          <p className="text-blue-100 font-bold mb-12 text-lg">
+            Únete a los propietarios que ya vendieron su inmueble en tiempo récord con la metodología Casaty Honecta®.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" showArrow className="w-full md:w-auto px-12" onClick={() => setShowWizard(true)}>
-              Empezar ahora gratis
+            <Button size="lg" className="w-full md:w-auto px-12 bg-white text-[#0127AC] hover:bg-slate-100" showArrow onClick={() => setShowWizard(true)}>
+              Vender mi Propiedad Ahora
             </Button>
-            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 bg-white">
-              Hablar con un experto
+            <Button variant="outline" size="lg" className="w-full md:w-auto px-12 border-white text-white hover:bg-white/10">
+              Ver testimonios
             </Button>
           </div>
         </div>
@@ -472,3 +476,5 @@ export function VenderPropiedadContent() {
     </main>
   );
 }
+
+

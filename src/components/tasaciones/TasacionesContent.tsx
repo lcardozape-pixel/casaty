@@ -89,7 +89,7 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
     >
       <div className="flex justify-between items-center">
         <span className="font-bold text-neutral-800">{question}</span>
-        <ChevronDown className={`h-5 w-5 text-neutral-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#0040FF]' : ''}`} />
+        <ChevronDown className={`h-5 w-5 text-neutral-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#0127AC]' : ''}`} />
       </div>
       {isOpen && (
         <div className="mt-4 pt-4 border-t border-slate-100">
@@ -136,7 +136,7 @@ export function TasacionesContent() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-3xl md:text-5xl font-black mb-6 leading-tight">
-              Conoce el <span className="text-[#0040FF]">Valor Real</span> de tu <br /> Propiedad en Piura
+              Conoce el Valor Real de tu <br /> Propiedad en Piura
             </h1>
             <p className="text-sm md:text-xl text-white/90 font-medium mb-10 max-w-3xl mx-auto leading-relaxed">
               Tasaciones inmobiliarias con rigor técnico y validez legal. Obtén un informe detallado en tiempo récord para vender, hipotecar o procesos legales.
@@ -164,7 +164,7 @@ export function TasacionesContent() {
             <p className="text-neutral-500 font-bold text-sm mb-4">Informes con precisión milimétrica</p>
             <div className="flex items-center gap-3">
               <div className="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center">
-                <ShieldCheck className="text-[#0040FF] h-7 w-7" />
+                <ShieldCheck className="text-[#0127AC] h-7 w-7" />
               </div>
               <div>
                 <p className="font-black text-neutral-800 text-lg">Tasadores Colegiados</p>
@@ -185,7 +185,7 @@ export function TasacionesContent() {
             </div>
             <div className="flex flex-col items-center text-center">
               <div className="h-16 w-16 mb-4 flex items-center justify-center bg-slate-50 rounded-2xl">
-                <Scale className="h-8 w-8 text-[#0040FF]" />
+                <Scale className="h-8 w-8 text-[#0127AC]" />
               </div>
               <h4 className="text-base font-black text-neutral-800 mb-2">Validez Jurídica</h4>
               <p className="text-xs text-neutral-500 leading-relaxed font-bold">
@@ -225,7 +225,7 @@ export function TasacionesContent() {
               ].map((item, i) => (
                 <div key={i} className="flex flex-col items-start gap-4">
                   <div className="h-12 w-12 bg-white shadow-sm border border-slate-100 rounded-2xl flex items-center justify-center">
-                    <item.icon className="h-6 w-6 text-[#0040FF]" />
+                    <item.icon className="h-6 w-6 text-[#0127AC]" />
                   </div>
                   <div>
                     <h4 className="font-black text-neutral-800 text-lg leading-tight mb-1">{item.title}</h4>
@@ -246,7 +246,7 @@ export function TasacionesContent() {
               />
               <div className="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-white/50">
                 <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-[#0040FF] flex items-center justify-center text-white">
+                  <div className="h-12 w-12 rounded-full bg-[#0127AC] flex items-center justify-center text-white">
                     <Trophy className="h-6 w-6" />
                   </div>
                   <div>
@@ -262,11 +262,11 @@ export function TasacionesContent() {
 
       {/* 4. Types of Services */}
       <section className="py-16 md:py-24 bg-neutral-900 text-white rounded-[3rem] md:rounded-[4rem] mx-4 lg:mx-8 mb-20 md:mb-24 overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#0040FF]/20 rounded-full blur-[120px] -mr-32 -mt-32" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#0127AC]/20 rounded-full blur-[120px] -mr-32 -mt-32" />
         <div className="relative z-10 max-w-7xl mx-auto px-10">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-black mb-4">Servicios Especializados</h2>
-            <p className="text-slate-400 font-medium max-w-2xl mx-auto italic underline decoration-[#0040FF] decoration-2 underline-offset-8">Soluciones técnicas para cada necesidad.</p>
+            <p className="text-slate-400 font-medium max-w-2xl mx-auto italic underline decoration-[#0127AC] decoration-2 underline-offset-8">Soluciones técnicas para cada necesidad.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -289,13 +289,13 @@ export function TasacionesContent() {
             ].map((service, i) => (
               <div key={i} className="bg-white/5 border border-white/10 p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:bg-white/10 transition-all group">
                 <h3 className="text-2xl font-black mb-6 flex items-center gap-3">
-                  <div className="h-2 w-8 bg-[#0040FF] rounded-full" /> {service.title}
+                  <div className="h-2 w-8 bg-[#0127AC] rounded-full" /> {service.title}
                 </h3>
                 <p className="text-slate-400 text-sm leading-relaxed mb-8 font-medium italic">"{service.desc}"</p>
                 <ul className="space-y-4">
                   {service.points.map((p, idx) => (
                     <li key={idx} className="flex items-center gap-3 text-xs font-black uppercase tracking-wider text-slate-300">
-                      <CheckCircle2 className="h-4 w-4 text-[#0040FF]" /> {p}
+                      <CheckCircle2 className="h-4 w-4 text-[#0127AC]" /> {p}
                     </li>
                   ))}
                 </ul>
@@ -340,7 +340,7 @@ export function TasacionesContent() {
                 }
               ].map((step, i) => (
                 <div key={i} className="flex gap-8 items-start group/item">
-                  <div className="h-10 w-10 shrink-0 bg-blue-50 text-[#0040FF] flex items-center justify-center rounded-full font-black shadow-sm border border-blue-100 group-hover/item:scale-110 transition-transform">
+                  <div className="h-10 w-10 shrink-0 bg-blue-50 text-[#0127AC] flex items-center justify-center rounded-full font-black shadow-sm border border-blue-100 group-hover/item:scale-110 transition-transform">
                     {i + 1}
                   </div>
                   <div className="pt-1">
@@ -395,21 +395,25 @@ export function TasacionesContent() {
         </div>
       </section>
 
-      {/* 7. Final CTA */}
-      <section className="py-16 md:py-24 bg-[#0040FF]">
-        <div className="max-w-4xl mx-auto px-4 text-center text-white">
-          <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
-            Valora tu patrimonio con <br /> rigor técnico.
+      {/* 8. Final CTA with Premium Gradient */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-[#0127AC] to-[#001D8A] text-white relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/5 rounded-full -mr-48 -mt-48 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full -ml-32 -mb-32 blur-2xl" />
+        
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight">
+            ¿Listo para conocer el valor real de tu propiedad?
           </h2>
           <p className="text-blue-100 font-bold mb-12 text-lg">
-            No adivines el precio. Solicita hoy una tasación profesional y negocia con seguridad.
+            No pierdas tiempo con estimaciones poco precisas. Obtén hoy mismo una tasación profesional con valor comercial o legal.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button size="lg" className="w-full md:w-auto px-12 bg-white text-[#0040FF] hover:bg-slate-100" showArrow onClick={() => setShowWizard(true)}>
-              Cotizar mi tasación
+            <Button size="lg" className="w-full md:w-auto px-12 bg-white text-[#0127AC] hover:bg-slate-100" showArrow onClick={() => setShowWizard(true)}>
+              Cotizar mi tasación ahora
             </Button>
             <Button variant="outline" size="lg" className="w-full md:w-auto px-12 border-white text-white hover:bg-white/10">
-              Ver servicios corporativos
+              Ver ejemplos de informes
             </Button>
           </div>
         </div>
@@ -417,3 +421,5 @@ export function TasacionesContent() {
     </main>
   );
 }
+
+

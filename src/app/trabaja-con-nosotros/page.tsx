@@ -32,9 +32,9 @@ export default function TrabajaNosotrosPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Carreras en Casaty</span>
+            <span className="text-[10px] font-black text-[#0127AC] uppercase tracking-[0.3em] mb-4 block">Carreras en Casaty</span>
             <h1 className="text-3xl md:text-5xl font-black text-neutral-800 mb-6 md:mb-8 leading-[1.1] tracking-tighter">
-              Lleva tu Carrera al <br className="hidden md:block" /> <span className="text-[#0040FF]">Siguiente Nivel</span>.
+              Lleva tu Carrera al <br className="hidden md:block" /> <span className="text-[#0127AC]">Siguiente Nivel</span>.
             </h1>
             <p className="text-base md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl mx-auto">
               No buscamos simples empleados, buscamos socios estratégicos apasionados por transformar el mercado inmobiliario de Piura.
@@ -51,8 +51,8 @@ export default function TrabajaNosotrosPage() {
             { label: "Crecimiento", value: "Acelerado", icon: TrendingUp },
           ].map((stat, i) => (
             <div key={i} className="flex flex-col items-center text-center group">
-              <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-slate-50 flex items-center justify-center mb-3 md:mb-4 group-hover:bg-[#0040FF] group-hover:scale-110 transition-all">
-                <stat.icon className="h-5 w-5 md:h-6 md:w-6 text-[#0040FF] group-hover:text-white" />
+              <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-slate-50 flex items-center justify-center mb-3 md:mb-4 group-hover:bg-[#0127AC] group-hover:scale-110 transition-all">
+                <stat.icon className="h-5 w-5 md:h-6 md:w-6 text-[#0127AC] group-hover:text-white" />
               </div>
               <span className="text-xl md:text-2xl font-black text-neutral-800 mb-1 leading-none">{stat.value}</span>
               <span className="text-[9px] md:text-[10px] font-black text-neutral-400 uppercase tracking-widest leading-none mt-1">{stat.label}</span>
@@ -71,11 +71,11 @@ export default function TrabajaNosotrosPage() {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            <div className="h-14 w-14 bg-[#0040FF] rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200">
+            <div className="h-14 w-14 bg-[#0127AC] rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200">
                <Zap className="h-7 w-7 text-white" />
             </div>
             <h2 className="text-3xl md:text-4xl font-black text-neutral-800 leading-tight">
-              ¿Por qué unirte a la <br /> <span className="text-[#0040FF]">Red Casaty Honecta®</span>?
+              ¿Por qué unirte a la <br /> <span className="text-[#0127AC]">Red Casaty Honecta®</span>?
             </h2>
             <div className="space-y-6 text-neutral-500 font-medium text-lg leading-relaxed">
               <p>
@@ -93,8 +93,8 @@ export default function TrabajaNosotrosPage() {
                 { title: "Respaldo Legal", desc: "Firma seguro y sin miedos.", icon: ShieldCheck },
                 { title: "Comunidad", desc: "Eventos y red de contactos.", icon: Users },
               ].map((item, i) => (
-                <div key={i} className="flex flex-col items-start gap-3 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:border-[#0040FF] transition-all group">
-                  <item.icon className="h-6 w-6 text-[#0040FF]" />
+                <div key={i} className="flex flex-col items-start gap-3 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:border-[#0127AC] transition-all group">
+                  <item.icon className="h-6 w-6 text-[#0127AC]" />
                   <div>
                     <h4 className="font-black text-neutral-800 text-base leading-tight mb-1">{item.title}</h4>
                     <p className="text-[10px] text-neutral-500 font-bold leading-relaxed">{item.desc}</p>
@@ -134,11 +134,11 @@ export default function TrabajaNosotrosPage() {
 
       {/* 3. Perks Section (Dark) */}
       <section className="py-24 bg-neutral-900 rounded-[4rem] mx-4 lg:mx-8 mb-24 relative overflow-hidden text-white">
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#0040FF]/20 rounded-full blur-[120px] -ml-32 -mb-32" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#0127AC]/20 rounded-full blur-[120px] -ml-32 -mb-32" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 text-center">
           <div className="text-center mb-16">
-            <span className="text-[10px] font-black text-[#0040FF] uppercase tracking-[0.3em] mb-4 block">Beneficios Exclusivos</span>
-            <h2 className="text-3xl md:text-4xl font-black mb-4">Lo que ganas al ser un <span className="text-[#0040FF]">Agente Casaty</span>.</h2>
+            <span className="text-[10px] font-black text-[#0127AC] uppercase tracking-[0.3em] mb-4 block">Beneficios Exclusivos</span>
+            <h2 className="text-3xl md:text-4xl font-black mb-4">Lo que ganas al ser un <span className="text-[#0127AC]">Agente Casaty</span>.</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -165,8 +165,8 @@ export default function TrabajaNosotrosPage() {
               }
             ].map((perk, i) => (
               <div key={i} className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all group group/card text-left">
-                 <div className="h-14 w-14 rounded-2xl bg-[#0040FF]/20 flex items-center justify-center mb-8 group-hover/card:bg-[#0040FF] transition-all">
-                    <perk.icon className="h-7 w-7 text-[#0040FF] group-hover/card:text-white" />
+                 <div className="h-14 w-14 rounded-2xl bg-[#0127AC]/20 flex items-center justify-center mb-8 group-hover/card:bg-[#0127AC] transition-all">
+                    <perk.icon className="h-7 w-7 text-[#0127AC] group-hover/card:text-white" />
                  </div>
                  <h3 className="text-xl font-black mb-4">{perk.title}</h3>
                  <p className="text-slate-400 text-sm font-medium leading-relaxed">{perk.desc}</p>
@@ -194,7 +194,7 @@ export default function TrabajaNosotrosPage() {
            </motion.div>
 
            <div className="space-y-10">
-              <h2 className="text-3xl md:text-4xl font-black text-neutral-800 leading-tight">¿Tienes el <span className="text-[#0040FF]">perfil</span>?</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-neutral-800 leading-tight">¿Tienes el <span className="text-[#0127AC]">perfil</span>?</h2>
               <p className="text-neutral-500 font-medium text-lg leading-relaxed">
                 No buscamos currículums perfectos, buscamos actitudes imparables. Si eres proactivo, te gusta el trato con personas y no le temes a los grandes retos, este es tu sitio.
               </p>
@@ -228,7 +228,7 @@ export default function TrabajaNosotrosPage() {
       <section className="py-24 bg-white border-t border-slate-100">
         <div className="max-w-4xl mx-auto px-4 text-center">
            <div className="h-20 w-20 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-10 shadow-sm border border-blue-100">
-              <Briefcase className="h-10 w-10 text-[#0040FF]" />
+              <Briefcase className="h-10 w-10 text-[#0127AC]" />
            </div>
            <h2 className="text-3xl md:text-4xl font-black text-neutral-800 mb-8 leading-tight">Tu nueva vida <br /> empieza con un clic.</h2>
            <p className="text-neutral-500 font-medium text-lg leading-relaxed mb-12">
@@ -236,7 +236,7 @@ export default function TrabajaNosotrosPage() {
            </p>
            
            <div className="flex flex-col md:flex-row justify-center items-center gap-6">
-              <Button size="lg" className="h-16 px-12 text-lg bg-[#0040FF] w-full md:w-auto" showArrow>
+              <Button size="lg" className="h-16 px-12 text-lg bg-[#0127AC] w-full md:w-auto" showArrow>
                 Postular por WhatsApp
               </Button>
               <Button variant="outline" size="lg" className="h-16 px-12 text-lg w-full md:w-auto">
@@ -248,3 +248,5 @@ export default function TrabajaNosotrosPage() {
     </main>
   );
 }
+
+

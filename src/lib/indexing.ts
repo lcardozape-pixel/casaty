@@ -67,3 +67,4 @@ export async function notifyIndexNow(url: string) {
     return { success: false, message: error.message || String(error) };
   }
 }
+

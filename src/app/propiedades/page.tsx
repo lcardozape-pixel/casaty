@@ -14,10 +14,12 @@ export default function PropiedadesPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="animate-spin h-10 w-10 border-4 border-[#0040FF] border-t-transparent rounded-full"></div>
+        <div className="animate-spin h-10 w-10 border-4 border-[#0127AC] border-t-transparent rounded-full"></div>
       </div>
     }>
       <SearchResults />
     </Suspense>
   );
 }
+
+

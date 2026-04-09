@@ -15,7 +15,7 @@ export function PropertyCard({ property }: { property: Property }) {
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       onClick={() => router.push(`/propiedades/${property.id}`)}
-      className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 group relative flex flex-col h-full will-change-transform cursor-pointer"
+      className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 group relative flex flex-col h-full will-change-transform cursor-pointer"
     >
       {/* Image Wrapper */}
       <div className="relative h-56 md:h-64 overflow-hidden shimmer" suppressHydrationWarning>
@@ -30,16 +30,16 @@ export function PropertyCard({ property }: { property: Property }) {
         {/* Labels - Honecta Style */}
         <div className="absolute top-5 left-5 flex items-center gap-2">
           {property.propertyType && (
-            <div className="bg-neutral-700/80 backdrop-blur-sm text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1.5">
+            <div className="bg-neutral-800/90 backdrop-blur-md text-white text-[9px] font-black px-3 py-1.5 rounded-md uppercase tracking-widest flex items-center gap-1.5">
               <MapPin className="h-2.5 w-2.5" />
               {property.propertyType}
             </div>
           )}
-          <div className="bg-[#0040FF] text-white text-[9px] font-black px-3 py-1.5 rounded-full shadow-lg shadow-blue-500/30 uppercase tracking-widest">
+          <div className="bg-[#0127AC] text-white text-[9px] font-black px-3 py-1.5 rounded-md shadow-lg shadow-black/10 uppercase tracking-widest">
             {property.type === 'Venta' ? 'VENTA' : 'ALQUILER'}
           </div>
           {property.label && (
-            <div className="bg-amber-400 text-neutral-900 text-[9px] font-black px-3 py-1.5 rounded-full shadow-lg uppercase tracking-widest">
+            <div className="bg-amber-400 text-neutral-900 text-[9px] font-black px-3 py-1.5 rounded-md shadow-lg uppercase tracking-widest">
               {property.label}
             </div>
           )}
@@ -56,7 +56,7 @@ export function PropertyCard({ property }: { property: Property }) {
       <div className="p-6 flex flex-col flex-1">
         {/* Price - Honecta style */}
         <div className="mb-4">
-          <span className="text-xl font-black text-[#0040FF] leading-none">{property.price}</span>
+          <span className="text-xl font-black text-[#0127AC] leading-none">{property.price}</span>
           {property.priceUsd && (
             <span className="text-sm font-bold text-neutral-400 ml-2">/ {property.priceUsd}</span>
           )}
@@ -69,7 +69,7 @@ export function PropertyCard({ property }: { property: Property }) {
         </div>
 
         {/* Title */}
-        <h3 className="text-neutral-800 font-black text-base mb-4 leading-tight group-hover:text-[#0040FF] transition-colors line-clamp-2">
+        <h3 className="text-neutral-800 font-black text-base mb-4 leading-tight group-hover:text-[#0127AC] transition-colors line-clamp-2">
           {property.title}
         </h3>
 
@@ -82,3 +82,5 @@ export function PropertyCard({ property }: { property: Property }) {
     </motion.div>
   );
 }
+
+

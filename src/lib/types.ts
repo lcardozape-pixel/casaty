@@ -32,3 +32,4 @@ export interface Property {
     email?: string;
   };
 }
+
