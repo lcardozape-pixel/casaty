@@ -728,7 +728,7 @@ export default function SearchResults() {
                         </div>
 
                         <button 
-                          onClick={() => router.push(`/propiedades/${selectedPropertyId}`)}
+                          onClick={() => router.push(`/propiedades/${filteredProperties.find(p => p.id === selectedPropertyId)?.slug || selectedPropertyId}`)}
                           className="w-full mt-2 py-3.5 bg-neutral-900 text-white rounded-2xl text-[11px] font-black hover:bg-[#0127AC] shadow-xl shadow-black/10 transition-all flex items-center justify-center gap-2 group/btn"
                         >
                           VER DETALLES COMPLETOS

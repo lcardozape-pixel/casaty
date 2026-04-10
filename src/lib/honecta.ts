@@ -1,4 +1,5 @@
 import { Property } from "./types";
+import { generatePropertySlug } from "./slugs";
 
 const HONECTA_API_URL = process.env.NEXT_PUBLIC_HONECTA_API_URL || "https://app.honectapro.com/api/v1";
 const HONECTA_AGENT_ID = "46a68490-51ae-40db-b8f7-4ded19c64301";
@@ -128,7 +129,8 @@ export function mapHonectaToCasaty(hp: Record<string, any>): Property {
     agent: agentData,
     // Coordenadas listas para el mapa (Soporta formato "lat, lng" de Honecta)
     lat: hp.latitude ? Number(hp.latitude) : undefined,
-    lng: hp.longitude ? Number(hp.longitude) : undefined
+    lng: hp.longitude ? Number(hp.longitude) : undefined,
+    slug: generatePropertySlug(hp.id, hp.title || '')
   };
 
   // Si no hay lat/lng individuales, intentar extraer del campo 'location' (string: "lat, lng")

@@ -42,4 +42,5 @@ export interface Property {
     mvcs?: string;
     position?: string;
   };
+  slug?: string;
 }

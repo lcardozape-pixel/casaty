@@ -1,8 +1,9 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { getHonectaPropertyById, getPublicProperties } from "@/lib/honecta";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import PropertyClient from "@/components/features/PropertyClient";
 import { PropertySchema } from "@/components/SEO/PropertySchema";
+import { extractIdFromSlug } from "@/lib/slugs";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -16,7 +17,8 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { id } = await params;
+  const { id: slugParam } = await params;
+  const id = extractIdFromSlug(slugParam);
   const property = await getHonectaPropertyById(id);
 
   if (!property) {
@@ -27,7 +29,7 @@ export async function generateMetadata(
 
   const title = `${property.propertyType} en ${property.type} en ${property.district || property.location} - ${property.title} | Casaty`;
   const description = property.description?.slice(0, 160) || `Increíble ${property.propertyType} en ${property.type} en ${property.location}. Contáctanos para más detalles.`;
-  const url = `https://casaty.pe/propiedades/${id}`;
+  const url = `https://casaty.pe/propiedades/${property.slug || id}`;
   const imageUrl = property.image || "https://casaty.pe/Logo/logo-principal.webp";
 
   return {
@@ -62,13 +64,20 @@ export async function generateMetadata(
 }
 
 export default async function PropertyDetailPage({ params }: Props) {
-  const { id: propertyId } = await params;
+  const { id: slugParam } = await params;
+  const id = extractIdFromSlug(slugParam);
   
   // Obtener datos de la propiedad en el servidor
-  const property = await getHonectaPropertyById(propertyId);
+  const property = await getHonectaPropertyById(id);
   
   if (!property) {
     notFound();
+  }
+
+  // Lógica de Redirección 301 para SEO (Canonicalización)
+  // Si el slug en la URL no coincide con el slug oficial (id-titulo), redirigimos.
+  if (slugParam !== property.slug && property.slug) {
+    redirect(`/propiedades/${property.slug}`);
   }
 
   // Obtener todas las propiedades para buscar similares en el servidor

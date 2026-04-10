@@ -30,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const properties = await getPublicProperties();
     const dynamicPages = properties.map((prop) => ({
-      url: `${baseUrl}/propiedades/${prop.id}`,
+      url: `${baseUrl}/propiedades/${prop.slug || prop.id}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.6,

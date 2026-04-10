@@ -7,7 +7,7 @@ interface PropertySchemaProps {
 
 export const PropertySchema = ({ property }: PropertySchemaProps) => {
   const baseUrl = 'https://casaty.pe';
-  const url = `${baseUrl}/propiedades/${property.id}`;
+  const url = `${baseUrl}/propiedades/${property.slug || property.id}`;
   
   // Determinar el tipo de esquema más específico
   const getSchemaType = (type?: string) => {

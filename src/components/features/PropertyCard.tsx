@@ -17,7 +17,7 @@ export function PropertyCard({ property }: { property: Property }) {
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      onClick={() => router.push(`/propiedades/${property.id}`)}
+      onClick={() => router.push(`/propiedades/${property.slug || property.id}`)}
       className="bg-white rounded-2xl overflow-hidden border border-slate-200/80 group relative flex flex-col h-full will-change-transform cursor-pointer hover:border-[#0127AC]/20 hover:shadow-lg hover:shadow-[#0127AC]/5 transition-all duration-300"
     >
       {/* Image Section */}
