@@ -130,7 +130,8 @@ export function mapHonectaToCasaty(hp: Record<string, any>): Property {
     // Coordenadas listas para el mapa (Soporta formato "lat, lng" de Honecta)
     lat: hp.latitude ? Number(hp.latitude) : undefined,
     lng: hp.longitude ? Number(hp.longitude) : undefined,
-    slug: generatePropertySlug(hp.id, hp.title || '')
+    slug: generatePropertySlug(hp.id, hp.title || ''),
+    status: hp.status
   };
 
   // Si no hay lat/lng individuales, intentar extraer del campo 'location' (string: "lat, lng")

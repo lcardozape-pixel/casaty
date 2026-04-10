@@ -26,12 +26,21 @@ export function PropertyCard({ property }: { property: Property }) {
           src={property.image}
           alt={property.title}
           fill
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${property.status && ['sold', 'rented'].includes(property.status.toLowerCase()) ? 'grayscale transition-all' : ''}`}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
 
+        {/* Status Overlay (Vendido/Alquilado) */}
+        {property.status && ['sold', 'rented'].includes(property.status.toLowerCase()) && (
+          <div className="absolute inset-0 bg-neutral-900/30 backdrop-blur-[1px] z-10 flex items-center justify-center">
+            <span className="bg-red-600/95 text-white font-black px-5 py-2 rounded-xl text-xs uppercase tracking-widest shadow-xl rotate-[-8deg] border border-red-500/50">
+              {property.status.toLowerCase() === 'sold' ? 'Vendido' : 'Alquilado'}
+            </span>
+          </div>
+        )}
+
         {/* Gradient overlay sutil en la parte inferior */}
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/30 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/30 to-transparent z-0" />
 
         {/* Labels - Estilo minimalista */}
         <div className="absolute top-3.5 left-3.5 flex items-center gap-1.5">

@@ -245,12 +245,20 @@ export default function PropertyClient({ property, similarProperties }: Property
         {/* Galería Tipo Grid (Desktop) o Carrusel (Mobile) */}
         <div className="mb-10">
           <div
-            className="hidden md:grid gap-2 rounded-xl overflow-hidden relative aspect-[16/7]"
+            className={`hidden md:grid gap-2 rounded-xl overflow-hidden relative aspect-[16/7] ${property.status && ['sold', 'rented'].includes(property.status.toLowerCase()) ? 'grayscale opacity-90' : ''}`}
             style={{
               gridTemplateColumns: images.length === 1 ? '1fr' : images.length === 2 ? '1fr 1fr' : 'repeat(4, minmax(0, 1fr))',
               gridTemplateRows: 'repeat(2, minmax(0, 1fr))'
             }}
           >
+            {/* Etiqueta Flotante VENDIDO/ALQUILADO */}
+            {property.status && ['sold', 'rented'].includes(property.status.toLowerCase()) && (
+              <div className="absolute top-6 left-6 z-40 pointer-events-none">
+                <span className="bg-red-600 border-2 border-red-500 text-white font-black px-6 py-2 rounded-xl text-lg uppercase tracking-widest shadow-2xl rotate-[-4deg] inline-block">
+                  {property.status.toLowerCase() === 'sold' ? 'Vendido' : 'Alquilado'}
+                </span>
+              </div>
+            )}
             {/* Imagen Principal */}
             {images.length > 0 && (
               <div
@@ -317,8 +325,17 @@ export default function PropertyClient({ property, similarProperties }: Property
           </div>
 
           {/* Versión Mobile: Carrusel nativo o Imagen Principal sola */}
-          <div className="md:hidden relative rounded-xl overflow-hidden aspect-[4/3] w-full" onClick={() => setShowGallery(true)}>
+          <div className={`md:hidden relative rounded-xl overflow-hidden aspect-[4/3] w-full ${property.status && ['sold', 'rented'].includes(property.status.toLowerCase()) ? 'grayscale opacity-90' : ''}`} onClick={() => setShowGallery(true)}>
             <Image src={images[currentImageIndex]} fill className="object-cover" alt={property.title} priority />
+
+            {/* Etiqueta Flotante VENDIDO/ALQUILADO (Mobile) */}
+            {property.status && ['sold', 'rented'].includes(property.status.toLowerCase()) && (
+              <div className="absolute top-4 left-4 z-30 pointer-events-none">
+                <span className="bg-red-600 border border-red-500 text-white font-black px-4 py-1.5 rounded-xl text-sm uppercase tracking-widest shadow-xl rotate-[-4deg] inline-block">
+                  {property.status.toLowerCase() === 'sold' ? 'Vendido' : 'Alquilado'}
+                </span>
+              </div>
+            )}
 
             {images.length > 1 && (
               <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-md text-xs font-bold tracking-wider z-20">

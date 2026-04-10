@@ -43,4 +43,5 @@ export interface Property {
     position?: string;
   };
   slug?: string;
+  status?: string;
 }
