@@ -14,7 +14,10 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Inmobiliaria Casaty | Casas, departamento y terrenos en Piura",
+  title: {
+    default: "Inmobiliaria Casaty | Casas, departamento y terrenos en Piura",
+    template: "%s | Casaty",
+  },
   description: "Ofrecemos una gama completa de servicios para satisfacer todas tus necesidades inmobiliarias en Piura. Nuestro equipo de expertos está comprometido con brindarte la mejor asesoría en compra, venta y tasación de propiedades.",
   keywords: ["Inmobiliaria en Piura", "Venta de casas en Piura", "Departamentos en Piura", "Tasaciones en Piura", "Agentes inmobiliarios Piura", "Casaty"],
 

@@ -27,7 +27,7 @@ export async function generateMetadata(
     };
   }
 
-  const title = `${property.propertyType} en ${property.type} en ${property.district || property.location} - ${property.title} | Casaty`;
+  const title = `${property.propertyType} en ${property.type} en ${property.district || property.location} - ${property.title}`;
   const description = property.description?.slice(0, 160) || `Increíble ${property.propertyType} en ${property.type} en ${property.location}. Contáctanos para más detalles.`;
   const url = `https://casaty.pe/propiedades/${property.slug || id}`;
   const imageUrl = property.image || "https://casaty.pe/Logo/logo-principal.webp";
