@@ -94,6 +94,7 @@ export async function POST(request: Request) {
         source: "Casaty.pe Website",
         notes: `Solicitud de ${serviceName}. Datos adicionales: ${JSON.stringify(otherData)}`,
         agent_id: HONECTA_AGENT_ID,
+        property_id: formData.propertyId,
         tags: ["website", "casaty", serviceName.toLowerCase()]
       });
       console.log("Sincronización con Honecta exitosa");

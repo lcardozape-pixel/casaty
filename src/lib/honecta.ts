@@ -209,6 +209,7 @@ export async function sendLeadToHonecta(lead: {
   source: string;
   notes?: string;
   agent_id?: string;
+  property_id?: string;
   tags?: string[];
 }) {
   try {
@@ -218,15 +219,16 @@ export async function sendLeadToHonecta(lead: {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${HONECTA_API_KEY}`
+        "x-api-key": HONECTA_API_KEY || ""
       },
       body: JSON.stringify({
-        full_name: lead.name,
+        name: lead.name,
         phone: lead.phone,
         email: lead.email,
         source: lead.source,
         notes: lead.notes,
         agent_id: lead.agent_id || HONECTA_AGENT_ID,
+        property_id: lead.property_id,
         tags: lead.tags || ["website"]
       })
     });

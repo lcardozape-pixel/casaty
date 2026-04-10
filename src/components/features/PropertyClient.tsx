@@ -420,6 +420,14 @@ export default function PropertyClient({ property, similarProperties }: Property
                       </div>
                     </>
                   )}
+                  {/* Etiqueta de Estado (Vendido/Alquilado) */}
+                  {property.status && ['sold', 'rented'].includes(property.status.toLowerCase()) && (
+                    <div className="flex items-center self-end mb-0.5 ml-2">
+                       <span className="bg-red-600 text-white font-black text-[11px] md:text-[13px] uppercase tracking-wider px-3 py-1.5 rounded-lg shadow-md border border-red-500 transform -rotate-1">
+                        {property.status.toLowerCase() === 'sold' ? 'Vendido' : 'Alquilado'}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
 
