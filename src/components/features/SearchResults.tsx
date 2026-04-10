@@ -23,10 +23,11 @@ const PRICE_RANGES = [
 const PROPERTY_TYPES = [
   { value: '', label: 'Cualquiera' },
   { value: 'casa', label: 'Casa' },
-  { value: 'depa', label: 'Depa' },
+  { value: 'depa', label: 'Departamento' },
   { value: 'oficina', label: 'Oficina' },
   { value: 'terreno', label: 'Terreno' },
-  { value: 'local', label: 'Local comercial' },
+  { value: 'local_comercial', label: 'Local Comercial' },
+  { value: 'local_industrial', label: 'Local Industrial' },
 ];
 
 const OPERATION_TYPES = [
@@ -144,7 +145,8 @@ export default function SearchResults() {
         'depa': ['depa', 'departamento', 'apartment'],
         'oficina': ['oficina', 'office'],
         'terreno': ['terreno', 'land'],
-        'local': ['local', 'local comercial', 'commercial'],
+        'local_comercial': ['local comercial', 'commercial'],
+        'local_industrial': ['local industrial', 'industrial', 'warehouse', 'bodega', 'almacen'],
       };
       const matchTerms = typeMap[propertyType] || [propertyType];
       result = result.filter(p => 
@@ -299,7 +301,8 @@ export default function SearchResults() {
                     'depa': 'Departamentos',
                     'oficina': 'Oficinas',
                     'terreno': 'Terrenos',
-                    'local': 'Locales',
+                    'local_comercial': 'Locales Comerciales',
+                    'local_industrial': 'Locales Industriales',
                     '': 'Propiedades'
                   };
                   const type = typeMap[propertyType] || 'Propiedades';
@@ -540,7 +543,8 @@ export default function SearchResults() {
                       'depa': 'Departamentos',
                       'oficina': 'Oficinas',
                       'terreno': 'Terrenos',
-                      'local': 'Locales comerciales',
+                      'local_comercial': 'Locales Comerciales',
+                      'local_industrial': 'Locales Industriales',
                       '': 'Propiedades'
                     };
                     const type = typeMap[propertyType] || 'Propiedades';

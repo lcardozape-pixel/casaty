@@ -40,12 +40,27 @@ export function mapHonectaToCasaty(hp: Record<string, any>): Property {
   }
   const mainImage = allImages.length > 0 ? allImages[0] : defaultImage;
 
-  // Tipos
+  // Tipos — Mapeo exhaustivo de todos los tipos que puede devolver la API de Honecta
   const typeMap: Record<string, string> = {
-    'house': 'Casa', 'apartment': 'Departamento', 'office': 'Oficina',
-    'land': 'Terreno', 'commercial': 'Local comercial', 'casa': 'Casa',
-    'depa': 'Departamento', 'oficina': 'Oficina', 'terreno': 'Terreno',
-    'local': 'Local comercial'
+    // Inglés
+    'house': 'Casa',
+    'apartment': 'Departamento',
+    'office': 'Oficina',
+    'land': 'Terreno',
+    'commercial': 'Local Comercial',
+    'industrial': 'Local Industrial',
+    'warehouse': 'Local Industrial',
+    // Español (como llega de la API)
+    'casa': 'Casa',
+    'departamento': 'Departamento',
+    'depa': 'Departamento',
+    'oficina': 'Oficina',
+    'terreno': 'Terreno',
+    'local comercial': 'Local Comercial',
+    'local industrial': 'Local Industrial',
+    'local': 'Local Comercial',
+    'almacen': 'Local Industrial',
+    'bodega': 'Local Industrial',
   };
   const propertyType = typeMap[(hp.property_type || hp.type || '').toLowerCase()] || hp.property_type || hp.type || 'Propiedad';
   

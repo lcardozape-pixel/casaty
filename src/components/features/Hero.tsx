@@ -12,7 +12,8 @@ const PROPERTY_TYPES = [
   { value: 'depa', label: 'Departamento' },
   { value: 'oficina', label: 'Oficina' },
   { value: 'terreno', label: 'Terreno' },
-  { value: 'local', label: 'Local comercial' },
+  { value: 'local_comercial', label: 'Local Comercial' },
+  { value: 'local_industrial', label: 'Local Industrial' },
 ];
 
 export function Hero() {
