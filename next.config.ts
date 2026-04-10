@@ -71,7 +71,51 @@ const nextConfig: NextConfig = {
     ];
   },
   */
-
+  // 4. Redirecciones 301 para limpiar errores 404 de la migración de WordPress
+  async redirects() {
+    return [
+      // Redirección de página duplicada
+      {
+        source: '/solicitar-credito-hipotecario-en-piura-2',
+        destination: '/solicitar-credito-hipotecario-en-piura',
+        permanent: true,
+      },
+      // Redirección de estados de venta/alquiler
+      {
+        source: '/estado/en-venta',
+        destination: '/propiedades?operacion=venta',
+        permanent: true,
+      },
+      {
+        source: '/estado/en-alquiler',
+        destination: '/propiedades?operacion=alquiler',
+        permanent: true,
+      },
+      // Redirección de taxonomías (características y etiquetas) a la búsqueda general
+      {
+        source: '/caracteristica/:slug',
+        destination: '/propiedades?q=:slug',
+        permanent: true,
+      },
+      {
+        source: '/etiqueta/:slug',
+        destination: '/propiedades?q=:slug',
+        permanent: true,
+      },
+      {
+        source: '/estado/:slug',
+        destination: '/propiedades',
+        permanent: true,
+      },
+      // Redirección de todas las propiedades viejas al catálogo actual
+      // (Como los IDs cambiaron, se envían al listado para no perder al usuario)
+      {
+        source: '/propiedad/:slug',
+        destination: '/propiedades',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
