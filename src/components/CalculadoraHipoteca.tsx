@@ -70,12 +70,14 @@ function Slider({
           border-radius: 999px;
         }
       `}</style>
-      <div className="flex items-center gap-3 mb-3">
-        <div className="w-8 h-8 rounded-lg bg-[#0127AC]/10 flex items-center justify-center text-[#0127AC] shrink-0">
+      <div className="flex items-start gap-3 mb-4">
+        <div className="w-8 h-8 rounded-lg bg-[#0127AC]/10 flex items-center justify-center text-[#0127AC] shrink-0 mt-0.5">
           {icon}
         </div>
-        <span className="text-[13px] text-neutral-500 font-medium flex-1">{label}</span>
-        <span className="text-[14px] font-black text-neutral-800 tabular-nums">{display}</span>
+        <div className="flex flex-col gap-1 flex-1">
+          <span className="text-[13px] text-neutral-500 font-medium">{label}</span>
+          <span className="text-[14px] font-black text-neutral-800 tabular-nums">{display}</span>
+        </div>
       </div>
       <input
         type="range"
@@ -131,20 +133,22 @@ export default function CalculadoraHipoteca({ priceSoles, priceDollars, initialC
   return (
     <div className="mt-10 pt-8 border-t border-slate-100">
       {/* Header con estilo consistente */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="h-10 w-10 bg-[#0127AC]/10 rounded-lg flex items-center justify-center text-[#0127AC]">
-          <Calculator className="h-5 w-5" />
-        </div>
-        <div className="flex-1">
-          <h3 className="text-xl font-black text-neutral-800">Calculadora Hipotecaria</h3>
-          <p className="text-sm text-neutral-500 font-medium tracking-tight">Estima tu cuota mensual de financiamiento</p>
+      <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+        <div className="flex items-center gap-3 flex-1">
+          <div className="h-10 w-10 bg-[#0127AC]/10 rounded-lg flex items-center justify-center text-[#0127AC] shrink-0">
+            <Calculator className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="text-xl font-black text-neutral-800 leading-none mb-1">Calculadora Hipotecaria</h3>
+            <p className="text-sm text-neutral-500 font-medium tracking-tight">Estima tu cuota mensual de financiamiento</p>
+          </div>
         </div>
 
         {/* Selector de Moneda */}
-        <div className="inline-flex bg-white p-1 rounded-lg border border-slate-100 shadow-sm">
+        <div className="flex bg-white p-1 rounded-lg border border-slate-100 shadow-sm w-full md:w-auto">
           <button
             onClick={() => setCurrency('PEN')}
-            className={`px-4 py-1.5 rounded-md text-[12px] font-bold transition-all duration-200 ${
+            className={`flex-1 md:flex-none px-4 py-1.5 rounded-md text-[12px] font-bold transition-all duration-200 ${
               currency === 'PEN'
                 ? 'bg-[#0127AC] text-white shadow-sm'
                 : 'text-neutral-500 hover:text-neutral-700'
@@ -154,7 +158,7 @@ export default function CalculadoraHipoteca({ priceSoles, priceDollars, initialC
           </button>
           <button
             onClick={() => setCurrency('USD')}
-            className={`px-4 py-1.5 rounded-md text-[12px] font-bold transition-all duration-200 ${
+            className={`flex-1 md:flex-none px-4 py-1.5 rounded-md text-[12px] font-bold transition-all duration-200 ${
               currency === 'USD'
                 ? 'bg-[#0127AC] text-white shadow-sm'
                 : 'text-neutral-500 hover:text-neutral-700'

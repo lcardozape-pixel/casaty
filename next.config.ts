@@ -38,8 +38,18 @@ const nextConfig: NextConfig = {
   },
 
   // 4. Headers de caché agresivos para estáticos
+  /* Desactivado temporalmente para diagnosticar persistencia de cambios
   async headers() {
     return [
+      {
+        source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
       {
         source: '/_next/static/(.*)',
         headers: [
@@ -60,6 +70,8 @@ const nextConfig: NextConfig = {
       }
     ];
   },
+  */
+
 };
 
 export default nextConfig;

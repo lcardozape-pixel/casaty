@@ -16,9 +16,13 @@ import {
   Fuel,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
   Navigation,
   Clock,
+  ArrowRight,
 } from 'lucide-react';
+
 
 // Librería que necesitamos cargar
 const libraries: ("places")[] = ['places'];
@@ -108,7 +112,11 @@ export default function PropertyLocationMap({ lat, lng, address, propertyTitle }
   const [loadingPlaces, setLoadingPlaces] = useState(true);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [showAllPlaces, setShowAllPlaces] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
   const serviceRef = useRef<google.maps.places.PlacesService | null>(null);
+
 
   const center = useMemo(() => ({ lat, lng }), [lat, lng]);
 
@@ -166,6 +174,35 @@ export default function PropertyLocationMap({ lat, lng, address, propertyTitle }
     });
   }, [map, isLoaded, lat, lng]);
 
+  // Control del scroll para las flechas en móvil
+  const checkScroll = useCallback(() => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setShowLeftArrow(scrollLeft > 10);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  }, []);
+
+  useEffect(() => {
+    const scrollEl = scrollRef.current;
+    if (scrollEl) {
+      scrollEl.addEventListener('scroll', checkScroll);
+      // Verificación inicial con un pequeño delay para que carguen los items
+      const timer = setTimeout(checkScroll, 500);
+      return () => {
+        scrollEl.removeEventListener('scroll', checkScroll);
+        clearTimeout(timer);
+      };
+    }
+  }, [checkScroll, nearbyPlaces]);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = direction === 'left' ? -200 : 200;
+      scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   // Agrupar lugares por categoría
   const groupedPlaces = useMemo(() => {
     const groups: Record<string, NearbyPlace[]> = {};
@@ -183,7 +220,7 @@ export default function PropertyLocationMap({ lat, lng, address, propertyTitle }
     if (activeCategory) {
       return nearbyPlaces.filter((p) => p.category === activeCategory);
     }
-    return showAllPlaces ? nearbyPlaces : nearbyPlaces.slice(0, 8);
+    return showAllPlaces ? nearbyPlaces : nearbyPlaces.slice(0, 4);
   }, [nearbyPlaces, activeCategory, showAllPlaces]);
 
   // Obtener el color de la categoría
@@ -322,49 +359,99 @@ export default function PropertyLocationMap({ lat, lng, address, propertyTitle }
           </div>
         </div>
 
-        {/* Filtro de categorías (Pills) */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          <button
-            onClick={() => setActiveCategory(null)}
-            className={`px-3.5 py-1.5 rounded-lg text-[13px] font-bold transition-all border ${
-              !activeCategory
-                ? 'bg-[#0127AC] text-white border-[#0127AC] shadow-sm'
-                : 'bg-white text-neutral-600 border-slate-200 hover:border-slate-300'
-            }`}
-          >
-            Todos
-          </button>
-          {placeCategories.map((cat) => {
-            const count = groupedPlaces[cat.label]?.length || 0;
-            if (count === 0) return null;
-            return (
-              <button
-                key={cat.type}
-                onClick={() => setActiveCategory(activeCategory === cat.label ? null : cat.label)}
-                className={`px-3.5 py-1.5 rounded-lg text-[13px] font-bold transition-all border flex items-center gap-1.5 ${
-                  activeCategory === cat.label
-                    ? 'text-white border-transparent shadow-sm'
-                    : 'bg-white text-neutral-600 border-slate-200 hover:border-slate-300'
-                }`}
-                style={
-                  activeCategory === cat.label
-                    ? { backgroundColor: cat.color, borderColor: cat.color }
-                    : {}
-                }
+        {/* Filtro de categorías (Pills) - Multilínea en PC, Scroll en Móvil */}
+        <div className="relative mb-6 -mx-4 px-4 md:mx-0 md:px-0 group">
+          {/* Flecha Izquierda (Móvil) */}
+          <AnimatePresence>
+            {showLeftArrow && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                onClick={() => scroll('left')}
+                className="md:hidden absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-slate-50 flex items-center justify-center text-black"
               >
-                {cat.icon}
-                {cat.label}
-                <span
-                  className={`text-[11px] ml-0.5 ${
-                    activeCategory === cat.label ? 'text-white/80' : 'text-neutral-400'
+                <ChevronLeft className="h-6 w-6" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          {/* Flecha Derecha (Móvil) */}
+          <AnimatePresence>
+            {showRightArrow && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                onClick={() => scroll('right')}
+                className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-slate-50 flex items-center justify-center text-black"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          <div 
+            ref={scrollRef}
+            className="flex flex-row flex-nowrap md:flex-wrap overflow-x-auto md:overflow-x-visible gap-2 pb-4 md:pb-0 scroll-smooth hide-scrollbar touch-pan-x items-center"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
+            {/* Botón: Todos */}
+            <button
+              onClick={() => setActiveCategory(null)}
+              className={`shrink-0 px-5 py-2.5 rounded-xl text-[13px] font-black transition-all border flex items-center gap-2 ${
+                !activeCategory
+                  ? 'bg-[#0127AC] text-white border-[#0127AC] shadow-lg shadow-blue-900/10'
+                  : 'bg-white text-neutral-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+              }`}
+            >
+              <span>Todos</span>
+            </button>
+
+            {/* Categorías Dinámicas */}
+            {placeCategories.map((cat) => {
+              const count = groupedPlaces[cat.label]?.length || 0;
+              if (count === 0) return null;
+              const isActive = activeCategory === cat.label;
+              
+              return (
+                <button
+                  key={cat.type}
+                  onClick={() => setActiveCategory(isActive ? null : cat.label)}
+                  className={`shrink-0 px-4 py-2.5 rounded-xl text-[13px] font-bold transition-all border flex items-center gap-2.5 ${
+                    isActive
+                      ? 'text-white border-transparent shadow-lg'
+                      : 'bg-white text-neutral-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50 shadow-sm'
                   }`}
+                  style={
+                    isActive
+                      ? { backgroundColor: cat.color, boxShadow: `0 8px 15px ${cat.color}25` }
+                      : {}
+                  }
                 >
-                  ({count})
-                </span>
-              </button>
-            );
-          })}
+                  <span className={`shrink-0 ${isActive ? 'text-white' : ''}`} style={!isActive ? { color: cat.color } : {}}>
+                    {cat.icon}
+                  </span>
+                  <span className="whitespace-nowrap">{cat.label}</span>
+                  <span
+                    className={`text-[11px] font-black px-1.5 py-0.5 rounded-full ${
+                      isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+
+            {/* Espaciador final para el scroll en móvil */}
+            <div className="md:hidden shrink-0 w-4" />
+          </div>
+
+          {/* Sombras de desvanecimiento para indicar scroll lateral */}
+          <div className="absolute top-0 right-0 bottom-4 w-16 bg-gradient-to-l from-slate-50 to-transparent pointer-events-none md:hidden z-10" />
         </div>
+
 
         {/* Lista de lugares */}
         {loadingPlaces ? (
@@ -450,7 +537,7 @@ export default function PropertyLocationMap({ lat, lng, address, propertyTitle }
             </div>
 
             {/* Botón Ver más / Ver menos */}
-            {!activeCategory && nearbyPlaces.length > 8 && (
+            {!activeCategory && nearbyPlaces.length > 4 && (
               <div className="mt-6 text-center">
                 <button
                   onClick={() => setShowAllPlaces(!showAllPlaces)}

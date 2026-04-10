@@ -291,8 +291,8 @@ export default function SearchResults() {
             </div>
 
             {/* Fila 3: Título + Sort */}
-            <div className="flex items-center justify-between gap-2 border-t border-slate-50 pt-3">
-              <h2 className="text-[10px] font-black text-neutral-800 uppercase tracking-tight line-clamp-1">
+            <div className="flex flex-wrap items-center justify-between gap-y-2 border-t border-slate-50 pt-3">
+              <h2 className="text-[11px] font-black text-neutral-800 uppercase tracking-tight min-w-0 flex-1">
                 {(() => {
                   const typeMap: Record<string, string> = {
                     'casa': 'Casas',
@@ -300,9 +300,9 @@ export default function SearchResults() {
                     'oficina': 'Oficinas',
                     'terreno': 'Terrenos',
                     'local': 'Locales',
-                    '': 'Inmuebles'
+                    '': 'Propiedades'
                   };
-                  const type = typeMap[propertyType] || 'Inmuebles';
+                  const type = typeMap[propertyType] || 'Propiedades';
                   const op = operation === 'alquiler' ? 'en alquiler' : operation === 'venta' ? 'en venta' : 'en venta/alquiler';
                   const loc = location ? ` en ${location}` : '';
                   return `${type} ${op}${loc}`;
@@ -520,9 +520,18 @@ export default function SearchResults() {
       <section className={`w-full ${viewMode === 'map' ? 'flex-1 relative overflow-hidden bg-white' : 'px-6 lg:px-12 py-10 min-h-[600px]'}`}>
         <div className={viewMode === 'map' ? "absolute inset-0" : "max-w-7xl mx-auto"}>
           
-          {/* Header de Resultados (Solo en modo Grid) */}
+          {/* Mobile Count - Centered and full width as requested */}
           {viewMode === 'grid' && (
-            <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-8">
+            <div className="md:hidden flex justify-center mb-8 px-4">
+              <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">
+                Se encontraron <span className="text-[#0127AC]">{filteredProperties.length}</span> propiedades disponibles
+              </p>
+            </div>
+          )}
+
+          {/* Header de Resultados (Solo en modo Grid) - Hidden on Mobile due to redundancy */}
+          {viewMode === 'grid' && (
+            <div className="hidden md:flex flex-row items-end justify-between gap-4 mb-8">
               <div>
                 <h1 className="text-lg md:text-xl font-black text-neutral-800 tracking-tight leading-tight">
                   {(() => {
@@ -652,7 +661,7 @@ export default function SearchResults() {
                     exit={{ opacity: 0, x: -50 }}
                     className="absolute top-0 bottom-0 left-6 z-20 flex items-center w-[calc(100%-48px)] md:w-[380px] max-w-full pointer-events-none"
                   >
-                    <div className="bg-white w-full h-[620px] rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden flex flex-col group pointer-events-auto">
+                    <div className="bg-white w-full h-auto max-h-[580px] rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden flex flex-col group pointer-events-auto">
                       {/* Imagen con Altura Fija */}
                       <div className="relative h-64 flex-none overflow-hidden">
                         {filteredProperties.find(p => p.id === selectedPropertyId)?.image && (
@@ -680,24 +689,24 @@ export default function SearchResults() {
                       </div>
 
                       {/* Contenido con Distribución Fija */}
-                      <div className="p-6 flex-1 flex flex-col min-h-0">
-                        <div className="flex items-center justify-between mb-4">
+                      <div className="p-5 flex-1 flex flex-col min-h-0">
+                        <div className="flex items-center justify-between mb-2">
                           <span className="text-2xl font-black text-[#0127AC]">
                             {filteredProperties.find(p => p.id === selectedPropertyId)?.price}
                           </span>
                         </div>
                         
-                        <h3 className="text-neutral-800 font-black text-lg mb-2 leading-tight line-clamp-2 h-[3.5rem] flex-none">
+                        <h3 className="text-neutral-800 font-black text-lg mb-1 leading-tight line-clamp-2 flex-none">
                           {filteredProperties.find(p => p.id === selectedPropertyId)?.title || ''}
                         </h3>
                         
-                        <div className="flex items-center gap-2 text-neutral-400 text-xs font-bold mb-6 flex-none">
+                        <div className="flex items-center gap-2 text-neutral-400 text-[11px] font-bold mb-4 flex-none">
                           <MapPin className="h-4 w-4 text-[#0127AC]/50" />
                           <span className="line-clamp-1">{filteredProperties.find(p => p.id === selectedPropertyId)?.location || ''}</span>
                         </div>
 
                         {/* Características destacadas - Siempre en el mismo lugar */}
-                        <div className="grid grid-cols-2 gap-3 mb-auto">
+                        <div className="grid grid-cols-2 gap-3 mb-4">
                            <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
                               <div className="flex items-center gap-2 text-[#0127AC] mb-1">
                                 <Square className="h-4 w-4" />
@@ -716,7 +725,7 @@ export default function SearchResults() {
 
                         <button 
                           onClick={() => router.push(`/propiedades/${selectedPropertyId}`)}
-                          className="w-full mt-6 py-4 bg-neutral-900 text-white rounded-2xl text-xs font-black hover:bg-[#0127AC] shadow-xl shadow-black/10 transition-all flex items-center justify-center gap-2 group/btn"
+                          className="w-full mt-2 py-3.5 bg-neutral-900 text-white rounded-2xl text-[11px] font-black hover:bg-[#0127AC] shadow-xl shadow-black/10 transition-all flex items-center justify-center gap-2 group/btn"
                         >
                           VER DETALLES COMPLETOS
                           <ArrowUpRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
