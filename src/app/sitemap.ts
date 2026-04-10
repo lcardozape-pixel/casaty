@@ -29,12 +29,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Páginas dinámicas de propiedades
   try {
     const properties = await getPublicProperties();
-    const dynamicPages = properties.map((prop) => ({
-      url: `${baseUrl}/propiedades/${prop.slug || prop.id}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.6,
-    }));
+    const dynamicPages = properties.map((prop) => {
+      const isSoldOrRented = prop.status && ['sold', 'rented'].includes(prop.status.toLowerCase());
+      
+      return {
+        url: `${baseUrl}/propiedades/${prop.slug || prop.id}`,
+        lastModified: new Date(),
+        changeFrequency: (isSoldOrRented ? 'monthly' : 'daily') as any,
+        priority: isSoldOrRented ? 0.4 : 0.8,
+      };
+    });
 
     return [...staticPages, ...dynamicPages];
   } catch (error) {

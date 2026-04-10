@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
 
     // 4. Procesar la indexación
     for (const prop of toIndex) {
-      const url = `${baseUrl}/propiedades/${prop.id}`;
+      const url = `${baseUrl}/propiedades/${prop.slug || prop.id}`;
       
       console.log(`Indexando propiedad: ${prop.id} -> ${url}`);
       
