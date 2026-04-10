@@ -107,7 +107,13 @@ const nextConfig: NextConfig = {
         destination: '/propiedades',
         permanent: true,
       },
-      // Redirección de todas las propiedades viejas al catálogo actual
+      // Redirecciones específicas de propiedades antiguas a la nueva estructura de híbrida (ID + Slug)
+      {
+        source: '/propiedad/terreno-en-venta-urb-san-jose-piura',
+        destination: '/propiedades/bf908fa3-4bb6-488a-9aea-81530d070bd4-venta-terreno-urb-san-jose-piura',
+        permanent: true,
+      },
+      // Redirección de TODAS las demás propiedades viejas al catálogo actual
       // (Como los IDs cambiaron, se envían al listado para no perder al usuario)
       {
         source: '/propiedad/:slug',
