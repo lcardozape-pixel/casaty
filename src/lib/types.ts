@@ -12,6 +12,7 @@ export interface Property {
   image: string;
   images?: string[];
   sqft?: number;
+  floors?: number;
   label?: string;
   type: "Venta" | "Alquiler";
   propertyType?: string;
@@ -19,11 +20,16 @@ export interface Property {
   address?: string;
   city?: string;
   district?: string;
+  pricePEN?: string;
+  priceUSD?: string;
   priceUsd?: string;
   maintenance?: string;
   subType?: string;
   amenities?: string[];
   age?: string;
+  hasPool?: boolean;
+  hasElevator?: boolean;
+  floorNumber?: string | number;
   lat?: number;
   lng?: number;
   agent?: {

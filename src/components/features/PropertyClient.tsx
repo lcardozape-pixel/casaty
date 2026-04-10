@@ -25,7 +25,10 @@ import {
   Bell,
   Clock,
   ClipboardList,
-  FileText
+  FileText,
+  Waves,
+  Layers,
+  ArrowUpDown
 } from "lucide-react";
 
 import CalculadoraHipoteca from "@/components/CalculadoraHipoteca";
@@ -68,6 +71,33 @@ export default function PropertyClient({ property, similarProperties }: Property
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: property.title,
+          text: `Mira esta propiedad: ${property.title}`,
+          url: window.location.href,
+        });
+      } catch (err) {
+        console.log("Error compartiendo:", err);
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Enlace copiado al portapapeles");
+    }
+  };
+
+  const handleSave = () => {
+    if (!isSaved) {
+      setIsSaved(true);
+      alert("¡Propiedad agregada a tus favoritos! Próximamente podrás ver tu lista guardada en Casaty.");
+    } else {
+      setIsSaved(false);
+    }
+  };
 
   // Extraer información del agente para reutilizar
   const agencyName = property?.agent?.agency?.trim();
@@ -338,37 +368,43 @@ export default function PropertyClient({ property, similarProperties }: Property
                 <div className="flex flex-wrap items-center gap-2 text-neutral-600 font-medium text-[15px] mb-5">
                   <span>{property.address || property.location}</span>
                   <span className="text-neutral-300">|</span>
-                  <button className="flex items-center gap-1 text-[#0127AC] hover:underline">
+                  <button 
+                    onClick={() => document.getElementById('mapa-ubicacion')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="flex items-center gap-1 text-[#0127AC] hover:underline"
+                  >
                     <MapPin className="h-4 w-4" />
                     Ver mapa
                   </button>
                 </div>
 
-                {/* Bloque de Precios (Mantenido con sus badges) */}
+                {/* Bloque de Precios (Soles primero) */}
                 <div className="flex flex-wrap items-end gap-x-2 gap-y-4 mb-4">
                   {/* Precio Soles */}
                   <div className="flex flex-col items-start gap-1">
                     <span className="bg-[#0127AC]/10 text-[#0127AC] font-black text-[9px] uppercase tracking-widest px-2 py-1 rounded leading-none">Precio Soles</span>
-                    <h2 className="text-2xl md:text-3xl font-black text-neutral-900 leading-none">
-                      {property.price.replace('/mes', '')}
+                    <h2 className="text-2xl md:text-3xl font-black text-neutral-900 leading-none flex items-end">
+                      {property.pricePEN?.replace('/mes', '')}
+                      {property.type === 'Alquiler' && <span className="text-[14px] font-bold text-neutral-500 ml-1 mb-0.5 normal-case">x mes</span>}
                     </h2>
                   </div>
 
                   {/* Precio Dólares */}
-                  {property.priceUsd && (
+                  {property.priceUSD && (
                     <>
                       <h2 className="text-2xl md:text-3xl font-black text-neutral-300 leading-none">
                         -
                       </h2>
                       <div className="flex flex-col items-start gap-1">
                         <span className="bg-green-600/10 text-green-700 font-black text-[9px] uppercase tracking-widest px-2 py-1 rounded leading-none">Precio Dólares</span>
-                        <h2 className="text-2xl md:text-3xl font-black text-neutral-900 leading-none">
-                          {property.priceUsd}
+                        <h2 className="text-2xl md:text-3xl font-black text-neutral-900 leading-none flex items-end">
+                          {property.priceUSD?.replace('/mes', '')}
+                          {property.type === 'Alquiler' && <span className="text-[14px] font-bold text-neutral-500 ml-1 mb-0.5 normal-case">x mes</span>}
                         </h2>
                       </div>
                     </>
                   )}
                 </div>
+
 
                 {property.maintenance && (
                   <p className="text-neutral-600 font-medium text-[15px] mb-6">
@@ -378,11 +414,17 @@ export default function PropertyClient({ property, similarProperties }: Property
 
                 {/* Acciones */}
                 <div className="flex items-center gap-6 mt-6">
-                  <button className="flex items-center gap-2 text-[15px] font-bold text-[#0127AC] hover:underline underline-offset-4">
+                  <button 
+                    onClick={handleShare}
+                    className="flex items-center gap-2 text-[15px] font-bold text-[#0127AC] hover:underline underline-offset-4"
+                  >
                     <Share2 className="h-4 w-4" /> Compartir
                   </button>
-                  <button className="flex items-center gap-2 text-[15px] font-bold text-[#0127AC] hover:underline underline-offset-4">
-                    <Heart className="h-4 w-4" /> Guardar
+                  <button 
+                    onClick={handleSave}
+                    className="flex items-center gap-2 text-[15px] font-bold text-[#0127AC] hover:underline underline-offset-4"
+                  >
+                    <Heart className={`h-4 w-4 ${isSaved ? 'fill-current' : ''}`} /> {isSaved ? 'Guardado' : 'Guardar'}
                   </button>
                 </div>
               </div>
@@ -435,12 +477,59 @@ export default function PropertyClient({ property, similarProperties }: Property
                       </div>
                     </div>
                   )}
+                  {!!property.sqft && String(property.sqft) !== '0' && (
+                    <div className="flex items-center gap-4">
+                      <Square className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
+                      <div className="flex flex-col">
+                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">{property.sqft} m²</span>
+                        <span className="text-[12px] text-neutral-500">Área Techada</span>
+                      </div>
+                    </div>
+                  )}
+                  {!!property.floors && String(property.floors) !== '0' && (
+                    <div className="flex items-center gap-4">
+                      <div className="h-7 w-7 flex flex-col justify-center items-center text-[#465F76]">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 10v11"/><path d="M20 10v11"/><path d="M4 14h16"/><path d="M4 18h16"/><path d="M2 10h20"/><path d="m12 2-8 8"/><path d="m12 2 8 8"/></svg>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">{property.floors}</span>
+                        <span className="text-[12px] text-neutral-500">{property.floors === 1 ? 'Piso construido' : 'Pisos construidos'}</span>
+                      </div>
+                    </div>
+                  )}
                   {!!property.age && (
                     <div className="flex items-center gap-4">
                       <Clock className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
                       <div className="flex flex-col">
-                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">{property.age} años</span>
+                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">{property.age} {isNaN(Number(property.age)) ? '' : 'años'}</span>
                         <span className="text-[12px] text-neutral-500">Antigüedad</span>
+                      </div>
+                    </div>
+                  )}
+                  {!!property.floorNumber && String(property.floorNumber) !== '0' && (
+                    <div className="flex items-center gap-4">
+                      <Layers className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
+                      <div className="flex flex-col">
+                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">{property.floorNumber}</span>
+                        <span className="text-[12px] text-neutral-500">Piso ubicado</span>
+                      </div>
+                    </div>
+                  )}
+                  {!!property.hasElevator && (
+                    <div className="flex items-center gap-4">
+                      <ArrowUpDown className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
+                      <div className="flex flex-col">
+                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">Sí</span>
+                        <span className="text-[12px] text-neutral-500">Ascensor</span>
+                      </div>
+                    </div>
+                  )}
+                  {!!property.hasPool && (
+                    <div className="flex items-center gap-4">
+                      <Waves className="h-7 w-7 text-[#465F76] stroke-[1.5]" />
+                      <div className="flex flex-col">
+                        <span className="text-[17px] font-bold text-neutral-900 leading-tight">Sí</span>
+                        <span className="text-[12px] text-neutral-500">Piscina</span>
                       </div>
                     </div>
                   )}
@@ -467,12 +556,14 @@ export default function PropertyClient({ property, similarProperties }: Property
 
               {/* Mapa de Ubicación + Lugares Cercanos */}
               {property.lat && property.lng && (
-                <PropertyLocationMap
-                  lat={property.lat}
-                  lng={property.lng}
-                  address={property.address || property.location}
-                  propertyTitle={property.title}
-                />
+                <div id="mapa-ubicacion">
+                  <PropertyLocationMap
+                    lat={property.lat}
+                    lng={property.lng}
+                    address={property.address || property.location}
+                    propertyTitle={property.title}
+                  />
+                </div>
               )}
 
               {/* Amenities */}

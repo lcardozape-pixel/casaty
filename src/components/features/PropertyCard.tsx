@@ -67,9 +67,9 @@ export function PropertyCard({ property }: { property: Property }) {
             <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-[#0127AC]/5 text-[#0127AC] text-[9px] font-black uppercase tracking-wider leading-none">
               Precio Soles
             </span>
-            <span className="text-xl font-black text-neutral-800 leading-none tracking-tight">{formatPrice(property.price)}</span>
+            <span className="text-xl font-black text-neutral-800 leading-none tracking-tight">{formatPrice(property.pricePEN || "")}</span>
           </div>
-          {property.priceUsd && (
+          {property.priceUSD && (
             <>
               <div className="flex items-center self-end pb-2.5">
                 <div className="w-2.5 h-[3px] bg-neutral-200 rounded-full" />
@@ -78,11 +78,12 @@ export function PropertyCard({ property }: { property: Property }) {
                 <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase tracking-wider leading-none">
                   Precio Dólares
                 </span>
-                <span className="text-xl font-black text-neutral-800 leading-none tracking-tight">{formatPrice(property.priceUsd)}</span>
+                <span className="text-xl font-black text-neutral-800 leading-none tracking-tight">{formatPrice(property.priceUSD || "")}</span>
               </div>
             </>
           )}
         </div>
+
 
         {/* Title */}
         <h3 className="text-neutral-800 font-bold text-[15px] mb-2 leading-snug group-hover:text-[#0127AC] transition-colors line-clamp-1">

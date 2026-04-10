@@ -8,34 +8,24 @@ const HONECTA_API_KEY = process.env.HONECTA_API_KEY;
  * Mapea una propiedad de Honecta (API) al formato de Casaty
  */
 export function mapHonectaToCasaty(hp: Record<string, any>): Property {
-  // Manejo de moneda y precios
+  // Detectar tipo de operación
+  const listingType = (hp.listing_type || hp.operation_type || "").toLowerCase();
+  const isRent = listingType.includes("rent") || listingType.includes("alquiler");
+
+  // Manejo de moneda (La API de Honecta ahora proporciona ambos precios calculados al tipo de cambio real)
   const currency = hp.currency || hp.price_currency || "USD";
-  const currencySymbol = currency === "USD" ? "$" : "S/";
   const price = Number(hp.price || 0);
-  const formattedPrice = `${currencySymbol} ${price.toLocaleString("en-US", { minimumFractionDigits: 0 })}`;
   
-  // Precios numéricos para la calculadora
-  const apiPriceAmount = Number(hp.price_amount || 0);
-  const apiPriceAltAmount = Number(hp.price_alt_amount || 0);
+  const solesAmount = Number(hp.price_pen || 0);
+  const dollarsAmount = Number(hp.price_usd || 0);
 
-  let solesAmount = 0;
-  let dollarsAmount = 0;
 
-  if (currency === "PEN") {
-    solesAmount = price;
-    dollarsAmount = apiPriceAltAmount > 0 ? apiPriceAltAmount : Math.round(price / 3.8);
-  } else {
-    dollarsAmount = price;
-    solesAmount = apiPriceAltAmount > 0 ? apiPriceAltAmount : Math.round(price * 3.8);
-  }
+  // Precios formateados explícitos sin decimales
+  const suffix = isRent ? "/mes" : "";
+  const formattedPricePEN = `S/ ${Math.round(solesAmount).toLocaleString("en-US")}${suffix}`;
+  const formattedPriceUSD = `$ ${Math.round(dollarsAmount).toLocaleString("en-US")}${suffix}`;
+  const mainFormattedPrice = currency === "PEN" ? formattedPricePEN : formattedPriceUSD;
 
-  // Precio secundario
-  let priceUsdFormatted: string | undefined;
-  if (currency === "PEN") {
-    priceUsdFormatted = `$ ${dollarsAmount.toLocaleString("en-US")}`;
-  } else {
-    priceUsdFormatted = `S/ ${solesAmount.toLocaleString("en-US")}`;
-  }
 
   // Imágenes
   const defaultImage = "/Imagenes/piura-panorama.png";
@@ -59,15 +49,18 @@ export function mapHonectaToCasaty(hp: Record<string, any>): Property {
   };
   const propertyType = typeMap[(hp.property_type || hp.type || '').toLowerCase()] || hp.property_type || hp.type || 'Propiedad';
   
-  const rawType = (hp.listing_type || hp.operation_type || '').toLowerCase();
-  const isRent = rawType === 'rent' || rawType === 'alquiler' || rawType === 'renta';
-
-  // Características
   const features = hp.features || {};
   const rawTotalArea = Number(hp.total_area || features.landArea || 0);
   const rawBuiltArea = Number(hp.built_area || features.sqft || 0);
+  const rawFloors = Number(hp.floors || hp.built_floors || features.floors || 0);
+  const rawFloorNumber = features.floorNumber || hp.floor_number || hp.floor || features.floor || undefined;
+  const rawAge = hp.antiquity || features.antiquity || features.age || hp.age || hp.property_age || '';
+  
+  // Si no hay terreno (totalArea) pero sí hay área construida (ej. dpto), lo dejamos en vacío para no repetir el mismo valor
+  let formattedArea = rawTotalArea > 0 ? `${rawTotalArea} m²` : undefined;
 
-  let formattedArea = rawBuiltArea > 0 ? `${rawBuiltArea} m²` : (rawTotalArea > 0 ? `${rawTotalArea} m²` : "0 m²");
+  const resolvedAgeStr = String(rawAge).trim();
+  const resolvedAge = (resolvedAgeStr === '0' || resolvedAgeStr.toLowerCase() === 'a estrenar') ? 'A estrenar' : (rawAge ? String(rawAge) : undefined);
 
   const getNum = (v1: any, v2: any) => {
     const n1 = Number(v1); if (!isNaN(n1) && n1 > 0) return n1;
@@ -92,15 +85,22 @@ export function mapHonectaToCasaty(hp: Record<string, any>): Property {
     id: hp.id,
     title: hp.title || 'Propiedad sin título',
     location: `${hp.district || hp.city || "Piura"}`,
-    price: isRent ? `${formattedPrice}/mes` : formattedPrice,
+    price: mainFormattedPrice,
     priceAmount: solesAmount,
     priceAltAmount: dollarsAmount,
-    priceUsd: priceUsdFormatted,
+    pricePEN: formattedPricePEN,
+    priceUSD: formattedPriceUSD,
+    priceUsd: currency === "PEN" ? formattedPriceUSD : formattedPricePEN,
     beds: getNum(hp.bedrooms, features.beds),
     baths: getNum(hp.bathrooms, features.baths),
     garage: getNum(hp.parking_spaces, features.parkingSpaces),
-    area: formattedArea,
-    sqft: rawBuiltArea,
+    area: formattedArea as string,
+    sqft: rawBuiltArea > 0 ? rawBuiltArea : undefined,
+    floors: rawFloors > 0 ? rawFloors : undefined,
+    floorNumber: rawFloorNumber ? String(rawFloorNumber) : undefined,
+    age: resolvedAge,
+    hasPool: hp.has_pool === true || hp.has_pool === 'true' || hp.has_pool === 1 || features.hasPool === 'yes' || features.hasPool === 'si' || features.hasPool === true,
+    hasElevator: hp.has_elevator === true || hp.has_elevator === 'true' || hp.has_elevator === 1 || features.hasElevator === 'yes' || features.hasElevator === 'si' || features.hasElevator === true,
     description: hp.description || hp.summary || '',
     image: mainImage,
     images: allImages,

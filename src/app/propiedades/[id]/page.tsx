@@ -73,21 +73,30 @@ export default async function PropertyDetailPage({ params }: Props) {
   // Obtener todas las propiedades para buscar similares en el servidor
   const allProps = await getPublicProperties();
   
-  const similarProperties = allProps
-    .filter(p => p.id !== property.id)
-    .sort((a, b) => {
-        let scoreA = 0;
-        let scoreB = 0;
+  // Asignar un puntaje a las propiedades del mismo tipo de operación (Alquiler con Alquiler, Venta con Venta)
+  const similarWithScores = allProps
+    .filter(p => p.id !== property.id && p.type === property.type)
+    .map(p => {
+        let score = 0;
         
-        if (a.propertyType === property.propertyType) scoreA += 2;
-        if (b.propertyType === property.propertyType) scoreB += 2;
+        // 1. Tipo de Inmueble (Departamento / Casa) - Prioridad ALTA y Obligatoria (+5 pts)
+        if (p.propertyType === property.propertyType) score += 5;
         
-        if (a.district === property.district) scoreA += 1;
-        if (b.district === property.district) scoreB += 1;
+        // 2. Distrito (Ubicación exacta) - Prioridad MEDIA (+2 pts)
+        if (p.district && p.district === property.district) score += 2;
+
+        // 3. Ciudad (Ubicación general) - Prioridad BAJA (+1 pt)
+        if (p.city && p.city === property.city) score += 1;
         
-        return scoreB - scoreA;
-    })
-    .slice(0, 2);
+        return { property: p, score };
+    });
+
+  // Solo mostrar las que tengan un puntaje >= 5 (Es decir, que OBLIGATORIAMENTE sean del mismo tipo de inmueble)
+  const similarProperties = similarWithScores
+    .filter(item => item.score >= 5)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 2)
+    .map(item => item.property);
 
   return (
     <PropertyClient 
