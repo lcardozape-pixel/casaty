@@ -253,9 +253,7 @@ export default function PropertyLocationMap({ lat, lng, address, propertyTitle }
           </div>
           <div>
             <h3 className="text-xl font-black text-neutral-800">Ubicación</h3>
-            {address && (
-              <p className="text-sm text-neutral-500 font-medium tracking-tight">{address}</p>
-            )}
+            <p className="text-sm text-neutral-500 font-medium tracking-tight">Explora la zona y servicios cercanos</p>
           </div>
         </div>
 
@@ -336,9 +334,30 @@ export default function PropertyLocationMap({ lat, lng, address, propertyTitle }
 
         {/* Dirección debajo del mapa */}
         {address && (
-          <div className="mt-4 flex items-start gap-3 text-neutral-600">
-            <Navigation className="h-4 w-4 mt-0.5 shrink-0 text-[#0127AC]" />
-            <p className="text-[14px] font-medium">{address}</p>
+          <div className="mt-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex-1 flex flex-col md:flex-row items-center gap-3 text-neutral-600 min-w-0">
+              <div className="h-9 w-9 rounded-full bg-[#0127AC]/5 flex items-center justify-center shrink-0">
+                <Navigation className="h-4 w-4 text-[#0127AC]" />
+              </div>
+              <p className="text-[15px] font-medium text-neutral-700 truncate text-center md:text-left w-full" title={address}>
+                {address}
+              </p>
+            </div>
+            <a 
+              href={`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 bg-[#0127AC] hover:bg-[#001D8A] text-white rounded-xl font-bold text-[13px] shadow-lg shadow-blue-900/20 shrink-0 w-full md:w-fit transition-all active:scale-95 group"
+            >
+              <svg 
+                viewBox="0 0 24 24" 
+                className="h-4.5 w-4.5 fill-current transition-transform group-hover:scale-110" 
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+              </svg>
+              Ver en Google Maps
+            </a>
           </div>
         )}
       </div>

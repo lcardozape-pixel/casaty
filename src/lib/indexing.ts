@@ -31,9 +31,10 @@ export async function notifyGoogle(url: string, type: 'URL_UPDATED' | 'URL_DELET
       },
     });
 
+    console.log(`✅ Google Indexing API Success: ${url}`);
     return { success: true, data: res.data };
   } catch (error: any) {
-    console.error('Error notifying Google Indexing API:', error);
+    console.error(`❌ Google Indexing API Error for ${url}:`, error);
     const msg = error.response?.data?.error?.message || error.message || String(error);
     return { success: false, message: msg };
   }

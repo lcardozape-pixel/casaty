@@ -2,6 +2,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import { getHonectaPropertyById, getPublicProperties } from "@/lib/honecta";
 import { notFound } from "next/navigation";
 import PropertyClient from "@/components/features/PropertyClient";
+import { PropertySchema } from "@/components/SEO/PropertySchema";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -99,10 +100,13 @@ export default async function PropertyDetailPage({ params }: Props) {
     .map(item => item.property);
 
   return (
-    <PropertyClient 
-      property={property} 
-      similarProperties={similarProperties} 
-    />
+    <>
+      <PropertySchema property={property} />
+      <PropertyClient 
+        property={property} 
+        similarProperties={similarProperties} 
+      />
+    </>
   );
 }
 

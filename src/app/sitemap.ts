@@ -9,7 +9,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '',
     '/propiedades',
     '/sobre-nosotros',
-    '/contacto',
     '/vender-casa-en-piura',
     '/alquilar-mi-casa-departamento-en-piura',
     '/solicitar-credito-hipotecario-en-piura',
@@ -18,8 +17,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/contrato-de-alquiler',
     '/trabaja-con-nosotros',
     '/agente',
-    '/propiedades/venta',
-    '/propiedades/alquiler',
+    '/propiedades?operacion=venta',
+    '/propiedades?operacion=alquiler',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
