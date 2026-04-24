@@ -14,6 +14,33 @@ export function ScheduleVisitSection({ onSchedule }: ScheduleVisitSectionProps) 
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedMoveTime, setSelectedMoveTime] = useState("");
 
+  const timeSlots = [
+    "08:00 - 09:00 AM",
+    "09:00 - 10:00 AM",
+    "10:00 - 11:00 AM",
+    "11:00 - 12:00 PM",
+    "02:00 - 03:00 PM",
+    "03:00 - 04:00 PM",
+    "04:00 - 05:00 PM",
+    "05:00 - 06:00 PM"
+  ];
+
+  const getHourFromSlot = (slot: string) => {
+    const isPM = slot.includes('PM');
+    const startTime = slot.split(' - ')[0]; // "08:00"
+    let [hours] = startTime.split(':').map(Number);
+    
+    // Manejo especial para 11:00 - 12:00 PM (el 11 es AM)
+    if (hours === 11 && slot.includes('12:00 PM')) return 11;
+    
+    if (isPM && hours !== 12) hours += 12;
+    if (!isPM && hours === 12) hours = 0;
+    return hours;
+  };
+
+  const isToday = selectedDate?.toDateString() === new Date().toDateString();
+  const currentHour = new Date().getHours();
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const upcomingDates = Array.from({ length: 14 }, (_, i) => {
@@ -113,14 +140,16 @@ export function ScheduleVisitSection({ onSchedule }: ScheduleVisitSectionProps) 
                 className="w-full bg-white border border-slate-100 rounded-xl px-5 py-3.5 text-[14px] font-medium text-neutral-600 appearance-none cursor-pointer focus:outline-none focus:border-slate-300 transition-all hover:border-slate-200"
               >
                 <option value="">Seleccionar hora</option>
-                <option value="09:00 AM">09:00 AM</option>
-                <option value="10:00 AM">10:00 AM</option>
-                <option value="11:00 AM">11:00 AM</option>
-                <option value="12:00 PM">12:00 PM</option>
-                <option value="02:00 PM">02:00 PM</option>
-                <option value="03:00 PM">03:00 PM</option>
-                <option value="04:00 PM">04:00 PM</option>
-                <option value="05:00 PM">05:00 PM</option>
+                {timeSlots.map((slot) => {
+                  const slotHour = getHourFromSlot(slot);
+                  const isPast = isToday && slotHour <= currentHour;
+                  
+                  return (
+                    <option key={slot} value={slot} disabled={isPast} className={isPast ? "text-slate-300" : ""}>
+                      {slot} {isPast ? "(No disponible)" : ""}
+                    </option>
+                  );
+                })}
               </select>
               <Clock className="absolute right-6 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300 pointer-events-none" />
             </div>
