@@ -90,7 +90,8 @@ export default function ScheduleVisitModal({
       });
 
       if (!response.ok) {
-        throw new Error("Ocurrió un error al procesar tu solicitud.");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.details || errorData.error?.message || "Ocurrió un error al procesar tu solicitud.");
       }
 
       setSuccess(true);

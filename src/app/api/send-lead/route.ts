@@ -136,11 +136,13 @@ export async function POST(request: Request) {
       dbSaved, 
       dbErrorDetail 
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Error crítico en API send-lead:", err);
+    // Loguear a un archivo para diagnóstico (opcional)
+    const errorDetails = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ 
       error: 'Fallo al enviar el correo', 
-      details: err instanceof Error ? err.message : String(err) 
+      details: errorDetails 
     }, { status: 500 });
   }
 }
