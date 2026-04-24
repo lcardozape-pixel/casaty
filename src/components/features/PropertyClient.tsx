@@ -34,6 +34,7 @@ import {
 import CalculadoraHipoteca from "@/components/CalculadoraHipoteca";
 import { PropertyCard } from "@/components/features/PropertyCard";
 import { ScheduleVisitSection } from "@/components/features/ScheduleVisitSection";
+import ScheduleVisitModal from "./ScheduleVisitModal";
 import PropertyAlertModal from "./PropertyAlertModal";
 import dynamic from 'next/dynamic';
 
@@ -71,6 +72,7 @@ export default function PropertyClient({ property, similarProperties }: Property
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [isVisitModalOpen, setIsVisitModalOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
   const handleShare = async () => {
@@ -621,7 +623,7 @@ export default function PropertyClient({ property, similarProperties }: Property
                   onSchedule={(date, time) => {
                     setSelectedDate(date);
                     setSelectedTime(time);
-                    handleContactAction('whatsapp');
+                    setIsVisitModalOpen(true);
                   }}
                 />
               </div>
@@ -796,6 +798,16 @@ export default function PropertyClient({ property, similarProperties }: Property
         onClose={() => setIsAlertModalOpen(false)}
         initialCity={property?.address?.split(',').reverse()[1]?.trim() || property?.address?.split(',').pop()?.trim() || ""}
         initialType={property?.type}
+      />
+
+      <ScheduleVisitModal
+        isOpen={isVisitModalOpen}
+        onClose={() => setIsVisitModalOpen(false)}
+        selectedDate={selectedDate}
+        selectedTime={selectedTime}
+        propertyTitle={property.title}
+        propertyId={property.id}
+        propertyUrl={typeof window !== 'undefined' ? window.location.href : ''}
       />
 
       {/* Sticky Bottom Bar for Mobile */}

@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
-import { sendLeadToHonecta } from '@/lib/honecta';
+import { sendLeadToHonecta, scheduleVisitToHonecta } from '@/lib/honecta';
 import { supabase } from '@/lib/supabase';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -87,6 +87,7 @@ export async function POST(request: Request) {
 
     // 2. Sincronizar con Honecta (Opcional, no bloquea el éxito del correo)
     try {
+      // Siempre enviar como Lead
       await sendLeadToHonecta({
         name,
         phone,
@@ -97,7 +98,34 @@ export async function POST(request: Request) {
         property_id: formData.propertyId,
         tags: ["website", "casaty", serviceName.toLowerCase()]
       });
-      console.log("Sincronización con Honecta exitosa");
+      console.log("Sincronización de lead con Honecta exitosa");
+
+      // Si es una reserva de visita, intentar registrar en el calendario
+      if (serviceName === 'Reserva de Visita' && formData['Fecha de Visita'] && formData['Hora de Visita']) {
+        // Intentar parsear la fecha para Honecta si es necesario, o enviarla tal cual si el endpoint lo soporta
+        // Como no tenemos el formato exacto, enviamos lo que tenemos y lo que el CRM decida.
+        const visitResult = await scheduleVisitToHonecta({
+          name,
+          phone,
+          email,
+          property_id: formData.propertyId,
+          date: formData['Fecha de Visita'],
+          time: formData['Hora de Visita'],
+          notes: `Visita solicitada desde Casaty.pe. Propiedad: ${formData.propertyTitle}`,
+          agent_id: HONECTA_AGENT_ID
+        });
+
+        if (visitResult.success) {
+          console.log("Visita registrada en el calendario de Honecta");
+        } else {
+          console.error("No se pudo registrar la visita en el calendario:", visitResult.error);
+          // Si es un error de permisos o el endpoint no existe, podríamos incluirlo en la respuesta
+          // para avisar al administrador (vía logs o una bandera en la respuesta)
+          if (visitResult.status === 403 || visitResult.status === 404) {
+             console.warn("AVISO: La API de Honecta no tiene habilitado o no tiene permisos para el endpoint de calendario.");
+          }
+        }
+      }
     } catch (hError) {
       console.error("Fallo al sincronizar con Honecta:", hError);
     }

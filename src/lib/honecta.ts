@@ -245,5 +245,47 @@ export async function sendLeadToHonecta(lead: {
   }
 }
 
+/**
+ * Registra una visita/cita en el calendario de Honecta
+ */
+export async function scheduleVisitToHonecta(appointment: {
+  name: string;
+  phone: string;
+  email: string;
+  property_id: string;
+  date: string; // Formato YYYY-MM-DD o similar
+  time: string; // Formato HH:mm
+  notes?: string;
+  agent_id?: string;
+}) {
+  try {
+    const response = await fetch(`${HONECTA_API_URL}/appointments/external`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": HONECTA_API_KEY || ""
+      },
+      body: JSON.stringify({
+        ...appointment,
+        agent_id: appointment.agent_id || HONECTA_AGENT_ID,
+        source: "Casaty.pe Website",
+        status: "pending"
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Honecta Appointment API Error:", errorText);
+      // Retornamos el error para que el llamador pueda decidir qué hacer (ej. avisar al usuario sobre permisos)
+      return { success: false, status: response.status, error: errorText };
+    }
+
+    return { success: true, data: await response.json() };
+  } catch (error) {
+    console.error("Exception scheduling visit in Honecta:", error);
+    return { success: false, error: String(error) };
+  }
+}
+
 export const getHonectaProperties = getPublicProperties;
 
