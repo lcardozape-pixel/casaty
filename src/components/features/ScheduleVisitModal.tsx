@@ -70,9 +70,9 @@ export default function ScheduleVisitModal({
         },
         body: JSON.stringify({
           formData: {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: `+51${formData.phone.trim()}`,
             propertyId,
             propertyTitle,
             propertyUrl,
@@ -83,6 +83,8 @@ export default function ScheduleVisitModal({
               month: 'long',
               year: 'numeric'
             }),
+            'visitDateISO': selectedDate?.toISOString().split('T')[0],
+            'visitTimeRaw': selectedTime,
             'Hora de Visita': selectedTime
           },
           serviceName: 'Reserva de Visita'

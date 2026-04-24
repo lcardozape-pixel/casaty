@@ -2,6 +2,8 @@ import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 import { sendLeadToHonecta, scheduleVisitToHonecta } from '@/lib/honecta';
 import { supabase } from '@/lib/supabase';
+import fs from 'fs';
+import path from 'path';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const HONECTA_AGENT_ID = process.env.NEXT_PUBLIC_HONECTA_AGENT_ID;
@@ -87,30 +89,54 @@ export async function POST(request: Request) {
 
     // 2. Sincronizar con Honecta (Opcional, no bloquea el éxito del correo)
     try {
-      // Siempre enviar como Lead
-      await sendLeadToHonecta({
+      // Formatear notas para que sean legibles en el CRM
+      const visitNotes = serviceName === 'Reserva de Visita' 
+        ? `📅 SOLICITUD DE VISITA\n-------------------\nFECHA: ${formData['Fecha de Visita'] || 'No especificada'}\nHORA: ${formData['Hora de Visita'] || 'No especificada'}\nPROPIEDAD: ${formData.propertyTitle || 'No especificada'}\n-------------------\n\n`
+        : "";
+      
+      const otherDataText = Object.entries(otherData)
+        .filter(([key]) => !['visitDateISO', 'visitTimeRaw', 'Fecha de Visita', 'Hora de Visita', 'Visita Solicitada'].includes(key))
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('\n');
+
+      const fullNotes = `${visitNotes}Origen: Casaty.pe\n${otherDataText}`;
+
+      // Siempre enviar como Lead y capturar el ID para vincular la cita
+      const leadResult = await sendLeadToHonecta({
         name,
         phone,
         email,
-        source: "Casaty.pe Website",
-        notes: `Solicitud de ${serviceName}. Datos adicionales: ${JSON.stringify(otherData)}`,
+        source: "API Pública",
+        notes: fullNotes,
         agent_id: HONECTA_AGENT_ID,
         property_id: formData.propertyId,
-        tags: ["website", "casaty", serviceName.toLowerCase()]
+        tags: ["website", "casaty", serviceName.toLowerCase().replace(/\s+/g, '_')]
       });
-      console.log("Sincronización de lead con Honecta exitosa");
 
-      // Si es una reserva de visita, intentar registrar en el calendario
-      if (serviceName === 'Reserva de Visita' && formData['Fecha de Visita'] && formData['Hora de Visita']) {
-        // Intentar parsear la fecha para Honecta si es necesario, o enviarla tal cual si el endpoint lo soporta
-        // Como no tenemos el formato exacto, enviamos lo que tenemos y lo que el CRM decida.
+      const leadId = leadResult?.id || leadResult?.data?.id;
+      if (leadId) {
+        console.log("Lead sincronizado con ID:", leadId);
+      }
+
+      // Si es una reserva de visita, intentar registrar en el calendario VINCULADO al lead
+      if (serviceName === 'Reserva de Visita' && formData.visitDateISO && formData.visitTimeRaw) {
+        // Extraer la hora de inicio del rango (ej: "04:00 - 05:00 PM" -> "16:00")
+        const timeRaw = formData.visitTimeRaw || "";
+        const isPM = timeRaw.includes('PM');
+        const startTimeStr = timeRaw.split(' - ')[0]; // "04:00"
+        let [h, m] = startTimeStr.split(':').map(Number);
+        if (isPM && h !== 12) h += 12;
+        if (!isPM && h === 12) h = 0;
+        const formattedTime = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+
         const visitResult = await scheduleVisitToHonecta({
           name,
           phone,
           email,
+          lead_id: leadId, // Vínculo crucial para que aparezca en el Deal
           property_id: formData.propertyId,
-          date: formData['Fecha de Visita'],
-          time: formData['Hora de Visita'],
+          date: formData.visitDateISO,
+          time: formattedTime,
           notes: `Visita solicitada desde Casaty.pe. Propiedad: ${formData.propertyTitle}`,
           agent_id: HONECTA_AGENT_ID
         });
@@ -119,8 +145,17 @@ export async function POST(request: Request) {
           console.log("Visita registrada en el calendario de Honecta");
         } else {
           console.error("No se pudo registrar la visita en el calendario:", visitResult.error);
-          // Si es un error de permisos o el endpoint no existe, podríamos incluirlo en la respuesta
-          // para avisar al administrador (vía logs o una bandera en la respuesta)
+          
+          // Loguear error detallado a un archivo para que el usuario pueda revisarlo
+          try {
+            const logMsg = `[${new Date().toISOString()}] ERROR HONECTA CALENDAR: Status: ${visitResult.status} | Error: ${visitResult.error} | Payload: ${JSON.stringify({
+              date: formData.visitDateISO,
+              time: formattedTime,
+              propertyId: formData.propertyId
+            })}\n`;
+            fs.appendFileSync(path.join(process.cwd(), 'honecta_errors.log'), logMsg);
+          } catch (e) {}
+
           if (visitResult.status === 403 || visitResult.status === 404) {
              console.warn("AVISO: La API de Honecta no tiene habilitado o no tiene permisos para el endpoint de calendario.");
           }

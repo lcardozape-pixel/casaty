@@ -223,9 +223,10 @@ export async function sendLeadToHonecta(lead: {
       },
       body: JSON.stringify({
         name: lead.name,
+        full_name: lead.name,
         phone: lead.phone,
         email: lead.email,
-        source: lead.source,
+        source: "API Pública",
         notes: lead.notes,
         agent_id: lead.agent_id || HONECTA_AGENT_ID,
         property_id: lead.property_id,
@@ -257,6 +258,7 @@ export async function scheduleVisitToHonecta(appointment: {
   time: string; // Formato HH:mm
   notes?: string;
   agent_id?: string;
+  lead_id?: string;
 }) {
   try {
     const response = await fetch(`${HONECTA_API_URL}/appointments/external`, {
@@ -268,7 +270,7 @@ export async function scheduleVisitToHonecta(appointment: {
       body: JSON.stringify({
         ...appointment,
         agent_id: appointment.agent_id || HONECTA_AGENT_ID,
-        source: "Casaty.pe Website",
+        source: "API Pública",
         status: "pending"
       })
     });

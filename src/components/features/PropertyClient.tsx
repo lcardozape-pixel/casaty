@@ -144,9 +144,9 @@ export default function PropertyClient({ property, similarProperties }: Property
         },
         body: JSON.stringify({
           formData: {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: `+51${formData.phone.trim()}`,
             propertyId: property?.id,
             propertyTitle: property?.title,
             propertyUrl: window.location.href,
