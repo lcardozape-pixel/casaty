@@ -140,7 +140,12 @@ export function LeadWizard({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          formData,
+          formData: {
+            ...formData,
+            name: formData.name?.trim(),
+            email: formData.email?.trim(),
+            phone: formData.phone ? `+51${formData.phone.trim()}` : undefined
+          },
           serviceName,
         }),
         signal: controller.signal

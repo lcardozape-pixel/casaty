@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { GoogleMap, useJsApiLoader, InfoWindow, OverlayView, MarkerClusterer } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, OverlayView } from '@react-google-maps/api';
 import { motion } from 'framer-motion';
 import { Property } from '@/lib/types';
 
@@ -114,52 +114,46 @@ export function PropertyMap({ properties, onPropertyClick, selectedProperty }: P
           minZoom: 5,
         }}
       >
-        <MarkerClusterer>
-          {(clusterer) => (
-            <>
-              {geocodedProperties.map((p) => (
-                <OverlayView
-                  key={p.id}
-                  position={{ lat: p.lat!, lng: p.lng! }}
-                  mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                  getPixelPositionOffset={(width, height) => ({ 
-                    x: -(width / 2), 
-                    y: -height 
-                  })}
-                >
-                  <motion.div 
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    onClick={() => onPropertyClick && onPropertyClick(p)}
-                    className="flex flex-col items-center gap-0.5 cursor-pointer group"
-                    style={{ zIndex: selectedProperty?.id === p.id ? 100 : 1 }}
-                  >
-                    {/* Precio Compacto */}
-                    <div className={`px-2 py-1 rounded-md shadow-lg border-[1.5px] border-white transition-all duration-300
-                      ${selectedProperty?.id === p.id
-                        ? 'bg-[#0127AC] text-white scale-110' 
-                        : 'bg-[#0127AC] text-white'
-                      }`}
-                    >
-                      <span className="text-[10px] font-black tracking-tight whitespace-nowrap">
-                        {formatCompactPrice(p.price)}
-                      </span>
-                    </div>
+        {geocodedProperties.map((p) => (
+          <OverlayView
+            key={p.id}
+            position={{ lat: p.lat!, lng: p.lng! }}
+            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+            getPixelPositionOffset={(width, height) => ({ 
+              x: -(width / 2), 
+              y: -height 
+            })}
+          >
+            <motion.div 
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              whileHover={{ scale: 1.1, y: -2 }}
+              onClick={() => onPropertyClick && onPropertyClick(p)}
+              className="flex flex-col items-center gap-0.5 cursor-pointer group"
+              style={{ zIndex: selectedProperty?.id === p.id ? 100 : 1 }}
+            >
+              {/* Precio Compacto */}
+              <div className={`px-2 py-1 rounded-md shadow-lg border-[1.5px] border-white transition-all duration-300
+                ${selectedProperty?.id === p.id
+                  ? 'bg-[#0127AC] text-white scale-110' 
+                  : 'bg-[#0127AC] text-white'
+                }`}
+              >
+                <span className="text-[10px] font-black tracking-tight whitespace-nowrap">
+                  {formatCompactPrice(p.price)}
+                </span>
+              </div>
 
-                    {/* Punto de Ubicación (Dot) */}
-                    <div className={`w-3.5 h-3.5 rounded-full border-2 border-white shadow-md transition-all duration-300
-                      ${selectedProperty?.id === p.id
-                        ? 'bg-[#0127AC] scale-125' 
-                        : 'bg-[#0127AC]'
-                      }`} 
-                    />
-                  </motion.div>
-                </OverlayView>
-              ))}
-            </>
-          )}
-        </MarkerClusterer>
+              {/* Punto de Ubicación (Dot) */}
+              <div className={`w-3.5 h-3.5 rounded-full border-2 border-white shadow-md transition-all duration-300
+                ${selectedProperty?.id === p.id
+                  ? 'bg-[#0127AC] scale-125' 
+                  : 'bg-[#0127AC]'
+                }`} 
+              />
+            </motion.div>
+          </OverlayView>
+        ))}
       </GoogleMap>
     </div>
   );
