@@ -124,7 +124,13 @@ export default function PropertyLocationMap({ lat, lng, address, propertyTitle }
   useEffect(() => {
     if (!map || !isLoaded) return;
 
-    serviceRef.current = new google.maps.places.PlacesService(map);
+    if (google.maps.places) {
+      serviceRef.current = new google.maps.places.PlacesService(map);
+    } else {
+      console.error("Google Maps Places library not loaded");
+      setLoadingPlaces(false);
+      return;
+    }
     
     const allPlaces: NearbyPlace[] = [];
     let completedRequests = 0;
